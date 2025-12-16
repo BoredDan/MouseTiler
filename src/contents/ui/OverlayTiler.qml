@@ -1,7 +1,6 @@
 import QtQuick
 import org.kde.kwin
 import org.kde.plasma.core as PlasmaCore
-import org.kde.kirigami as Kirigami
 
 PlasmaCore.Dialog {
     id: overlayTiler
@@ -116,21 +115,20 @@ PlasmaCore.Dialog {
                 Rectangle {
                     anchors.fill: parent
                     anchors.margins: tilePadding
-                    border.color: "#0099FF"
+                    border.color: tileBorderColor
                     border.width: 2
                     color: "transparent"
                     radius: 12
 
                     Rectangle {
                         anchors.fill: parent
-                        color: "#0099FF"
                         radius: 12
-                        opacity: active || spanned ? 0.75 : 0.05
+                        color: active || spanned ? tileBackgroundColorActive : tileBackgroundColor
                     }
 
                     Text {
                         anchors.centerIn: parent
-                        color: "white"
+                        color: textColor
                         textFormat: Text.StyledText
                         text: spannedFrom ? "Stop spanning (<b>Ctrl+Space</b> by default)<br>Toggle visibility (<b>Meta+Space</b> by default)<br><br>Switch mode (<b>Ctrl+Meta+Space</b> by default)" : "Span from this tile (<b>Ctrl+Space</b> by default)<br>Toggle visibility (<b>Meta+Space</b> by default)<br><br>Switch mode (<b>Ctrl+Meta+Space</b> by default)"
                         font.pixelSize: 16

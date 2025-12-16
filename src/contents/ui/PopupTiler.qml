@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Layouts
 import org.kde.kwin
 import org.kde.plasma.core as PlasmaCore
-import org.kde.kirigami as Kirigami
 
 PlasmaCore.Dialog {
     id: popupTiler
@@ -40,6 +39,7 @@ PlasmaCore.Dialog {
         activeScreen = null;
         activeLayoutIndex = -1;
         activeTileIndex = -1;
+        showPopupDropHint = false;
     }
 
     function resetShowAll() {
@@ -122,7 +122,7 @@ PlasmaCore.Dialog {
                     popupDropHintWidth = layout.w / 100 * clientArea.width;
                     popupDropHintHeight = layout.h / 100 * clientArea.height;
                     showPopupDropHint = true;
-                    break;
+                    return; // Force return to avoid hiding popup
             }
             if (geometry != null) {
                 popupDropHintX = geometry.x;
@@ -130,6 +130,8 @@ PlasmaCore.Dialog {
                 popupDropHintWidth = geometry.width;
                 popupDropHintHeight = geometry.height;
                 showPopupDropHint = true;
+            } else {
+                showPopupDropHint = false;
             }
         }
     }
@@ -145,7 +147,7 @@ PlasmaCore.Dialog {
             anchors.topMargin: popupDropHintY
             width: popupDropHintWidth
             height: popupDropHintHeight
-            border.color: "#0099FF"
+            border.color: tileBorderColor
             border.width: 2
             color: "transparent"
             radius: 12
@@ -153,9 +155,8 @@ PlasmaCore.Dialog {
 
             Rectangle {
                 anchors.fill: parent
-                color: "#0099FF"
+                color: hintBackgroundColor
                 radius: 12
-                opacity: 0.35
             }
         }
 
@@ -163,8 +164,8 @@ PlasmaCore.Dialog {
             id: layouts
             width: layoutGrid.implicitWidth + layoutGrid.columnSpacing * 2
             height: layoutGrid.implicitHeight + layoutGrid.rowSpacing * 2
-            color: "#161925"
-            border.color: "#666666"
+            color: backgroundColor
+            border.color: borderColor
             border.width: 1
             radius: 8
 
@@ -175,11 +176,11 @@ PlasmaCore.Dialog {
 
             GridLayout {
                 id: layoutGrid
-                columns: showAll ? 4 : 3
-                columnSpacing: 10
-                rowSpacing: 10
+                columns: showAll ? 4 : root.config.gridColumns
+                columnSpacing: root.config.gridSpacing
+                rowSpacing: root.config.gridSpacing
                 anchors.fill: parent
-                anchors.margins: columnSpacing
+                anchors.margins: root.config.gridSpacing
                 uniformCellWidths: true
                 uniformCellHeights: true
 
@@ -189,10 +190,10 @@ PlasmaCore.Dialog {
 
                     Rectangle {
                         id: tiles
-                        width: 130
-                        height: 70
+                        width: root.config.gridWidth
+                        height: root.config.gridHeight
                         color: "transparent"
-                        border.color: "#666666"
+                        border.color: borderColor
                         border.width: 1
                         radius: 8
 
@@ -216,7 +217,7 @@ PlasmaCore.Dialog {
                                 Rectangle {
                                     anchors.fill: parent
                                     anchors.margins: tilePadding
-                                    border.color: "#0099FF"
+                                    border.color: tileBorderColor
                                     border.width: 1
                                     // color: "#152030"
                                     color: "transparent"
@@ -225,14 +226,13 @@ PlasmaCore.Dialog {
 
                                     Rectangle {
                                         anchors.fill: parent
-                                        color: "#0099FF"
+                                        color: layoutActive && tileActive ? tileBackgroundColorActive : tileBackgroundColor
                                         radius: 6
-                                        opacity: layoutActive && tileActive ? 0.75 : 0.05
                                     }
 
                                     Text {
                                         anchors.centerIn: parent
-                                        color: "white"
+                                        color: textColor
                                         textFormat: Text.StyledText
                                         text: modelData.t && modelData.t.length > 0 ? modelData.t : ""
                                         font.pixelSize: 16
@@ -252,8 +252,8 @@ PlasmaCore.Dialog {
             id: popupHint
             width: layoutGrid.implicitWidth + layoutGrid.columnSpacing * 2
             height: popupHintText.implicitHeight + layoutGrid.rowSpacing * 2
-            color: "#161925"
-            border.color: "#666666"
+            color: backgroundColor
+            border.color: borderColor
             border.width: 1
             radius: 8
 
@@ -264,9 +264,9 @@ PlasmaCore.Dialog {
 
             Text {
                 id: popupHintText
-                width: parent.width
+                width: parent.width - 4
                 anchors.centerIn: parent
-                color: "white"
+                color: textColor
                 textFormat: Text.StyledText
                 text: hint != null ? hint : showAll ? "Show default (<b>Ctrl+Space</b>) Visibility (<b>Meta+Space</b>) Mode (<b>Ctrl+Meta+Space</b>)" : "Show all (<b>Ctrl+Space</b>) Visibility (<b>Meta+Space</b>) Mode (<b>Ctrl+Meta+Space</b>)"
                 font.pixelSize: 12

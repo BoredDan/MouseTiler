@@ -132,6 +132,46 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="title">
+          <string>Colors</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_14">
+          <item>
+           <layout class="QFormLayout" name="formLayout_3">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_37">
+              <property name="text">
+               <string>Tiler colors</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="kcfg_theme">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>Follow Theme colors</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Alpha test blue</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="enabled">
           <bool>false</bool>
@@ -221,6 +261,7 @@
       <zorder>groupBox_defaultTiler</zorder>
       <zorder>label_25</zorder>
       <zorder>groupBox</zorder>
+      <zorder>groupBox_6</zorder>
      </widget>
      <widget class="QWidget" name="tab_mulltiWindowRestore">
       <attribute name="icon">
@@ -452,7 +493,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="title">
           <string>Grid Configuration</string>
@@ -496,7 +537,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="spinBox_4">
+             <widget class="QSpinBox" name="kcfg_gridColumns">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -504,10 +545,10 @@
                </sizepolicy>
               </property>
               <property name="minimum">
-               <number>3</number>
+               <number>1</number>
               </property>
               <property name="maximum">
-               <number>8</number>
+               <number>10</number>
               </property>
               <property name="value">
                <number>3</number>
@@ -515,7 +556,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="spinBox_5">
+             <widget class="QSpinBox" name="kcfg_gridSpacing">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -537,7 +578,7 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="spinBox_6">
+             <widget class="QSpinBox" name="kcfg_gridWidth">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -554,7 +595,7 @@
                <number>250</number>
               </property>
               <property name="singleStep">
-               <number>10</number>
+               <number>5</number>
               </property>
               <property name="value">
                <number>130</number>
@@ -562,7 +603,7 @@
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QSpinBox" name="spinBox_7">
+             <widget class="QSpinBox" name="kcfg_gridHeight">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -576,7 +617,7 @@
                <number>60</number>
               </property>
               <property name="maximum">
-               <number>125</number>
+               <number>160</number>
               </property>
               <property name="singleStep">
                <number>5</number>

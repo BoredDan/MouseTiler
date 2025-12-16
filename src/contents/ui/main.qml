@@ -1,6 +1,7 @@
 import QtQuick
 import QtCore
 import org.kde.kwin
+import org.kde.kirigami as Kirigami
 
 Item {
     // API and guides
@@ -21,6 +22,70 @@ Item {
     property bool usePopupTiler: false
     property var currentTiler: popupTiler
     property var currentMoveWindow: null
+
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+
+    property bool useSystemTheme: config.theme == 0
+
+    property bool lightTheme: {
+        return Kirigami.ColorUtils.brightnessForColor(Kirigami.Theme.backgroundColor) === Kirigami.ColorUtils.Light;
+    }
+
+    property var backgroundColor: {
+        if (useSystemTheme) {
+            return Kirigami.Theme.backgroundColor;
+        } else {
+            return "#161925";
+        }
+    }
+
+    property var borderColor: {
+        if (useSystemTheme) {
+            if (lightTheme) {
+                return Kirigami.ColorUtils.tintWithAlpha(Kirigami.Theme.backgroundColor, "black", 0.2);
+            } else {
+                return Kirigami.ColorUtils.tintWithAlpha(Kirigami.Theme.backgroundColor, "white", 0.2);
+            }
+        } else {
+            return "#666666";
+        }
+    }
+
+    property var textColor: {
+        return lightTheme ? "black" : "white";
+    }
+
+    property var hintBackgroundColor: {
+        if (useSystemTheme) {
+            return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.hoverColor, 0.35);
+        } else {
+            return "#590099FF";
+        }
+    }
+
+    property var tileBorderColor: {
+        if (useSystemTheme) {
+            return Kirigami.Theme.hoverColor;
+        } else {
+            return "#0099FF";
+        }
+    }
+
+    property var tileBackgroundColor: {
+        if (useSystemTheme) {
+            return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.hoverColor, 0.05);
+        } else {
+            return "#0C0099FF";
+        }
+    }
+
+    property var tileBackgroundColorActive: {
+        if (useSystemTheme) {
+            return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.hoverColor, 0.75);
+        } else {
+            return "#BE0099FF";
+        }
+    }
 
     function log(string) {
         if (!debugLogs) return;
@@ -99,11 +164,18 @@ SPECIAL_FILL-Fill
             usePopupTilerByDefault: KWin.readConfig("defaultTiler", 0) == 0,
             startHidden: KWin.readConfig("startHidden", false),
             rememberTiler: KWin.readConfig("rememberTiler", false),
+            theme: KWin.readConfig("theme", 0),
             overlay: convertOverlayLayout(KWin.readConfig("overlayLayout", defaultOverlayLayout), defaultOverlayLayout),
             rememberAllLayouts: KWin.readConfig("rememberAllLayouts", false),
             showTargetTileHint: KWin.readConfig("showTargetTileHint", true),
+            gridColumns: KWin.readConfig("gridColumns", 3),
+            gridSpacing: KWin.readConfig("gridSpacing", 10),
+            gridWidth: KWin.readConfig("gridWidth", 130),
+            gridHeight: KWin.readConfig("gridHeight", 70),
             layouts: convertLayouts(KWin.readConfig("popupLayout", defaultPopupLayouts), defaultPopupLayouts),
             allLayouts: convertLayouts(KWin.readConfig("allPopupLayouts", defaultAllLayouts), defaultAllLayouts)
+
+            // live settings
         };
 
         setDefaultTiler();
@@ -353,7 +425,7 @@ SPECIAL_FILL-Fill
 
         if (largestIndex >= 0) {
             let window = windows[largestIndex];
-            logE('Largest: ' + window.width + ' x ' + window.height + ' window: ' + JSON.stringify(window));
+            // logE('Largest: ' + window.width + ' x ' + window.height + ' window: ' + JSON.stringify(window));
             if (!window.resizeable) return null;
             let geometryFirst = vertical ? Qt.rect(window.x, window.y, window.width, window.height / 2) : Qt.rect(window.x, window.y, window.width / 2, window.height);
             let geometrySecond = vertical ? Qt.rect(window.x, window.y + window.height / 2, window.width, window.height / 2) : Qt.rect(window.x + window.width / 2, window.y, window.width / 2, window.height);

@@ -67,12 +67,15 @@ Allows you to tile your windows with minimum effort by moving the mouse just a f
 * Define better default script colors - currently they are more or less just hex values I randomly typed towards blueish theme
 * Use current theme colors instead (with option to use the default script colors - per user choice)
 * Implement all the settings (and more) currently disabled in the configuration dialog
+* Window spacing/margins
+* Grid Tiler mouse position (top / center / left / right)
 
 ### Feature requests to investigate
 
 * Option to enable automatic tiling
 * Add additional titlebar button ? - System Settings > Colours & Themes > Window Decorations > ... > Configure Titlebar Buttons...
 * Hide overlay/popup grid if mouse has not moved for X time
+* Restore previous window size when dragging starts
 
 ## <p id="how"></p>How it works
 
