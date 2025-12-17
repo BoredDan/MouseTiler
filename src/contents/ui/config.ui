@@ -163,7 +163,7 @@
               </property>
               <item>
                <property name="text">
-                <string>Follow Theme colors</string>
+                <string>Follow theme colors</string>
                </property>
               </item>
               <item>
@@ -178,12 +178,17 @@
               </item>
               <item>
                <property name="text">
-                <string>Red</string>
+                <string>Red (light background)</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Lime Green</string>
+                <string>Red (dark background)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Lime green</string>
                </property>
               </item>
               <item>

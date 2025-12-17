@@ -38,14 +38,16 @@ Item {
             case 3:
                 return "#FFFFFF";
             case 4:
-                return "#020900";
+                return "#110000";
             case 5:
-                return "#0A0010";
+                return "#020900";
             case 6:
-                return "#001100";
+                return "#0A0010";
             case 7:
-                return "#111100";
+                return "#001100";
             case 8:
+                return "#111100";
+            case 9:
                 return "#000710";
             default:
                 return Kirigami.Theme.backgroundColor;
@@ -61,14 +63,16 @@ Item {
             case 3:
                 return "#777777";
             case 4:
-                return "#587C00";
+                return "#780000";
             case 5:
-                return "#4A0076";
+                return "#587C00";
             case 6:
-                return "#225522";
+                return "#4A0076";
             case 7:
-                return "#555500";
+                return "#225522";
             case 8:
+                return "#555500";
+            case 9:
                 return "#004093";
             default:
                 if (lightTheme) {
@@ -97,6 +101,8 @@ Item {
                 return "white";
             case 8:
                 return "white";
+            case 9:
+                return "white";
             default:
                 return lightTheme ? "black" : "white";
         }
@@ -113,12 +119,14 @@ Item {
             case 4:
                 return "black";
             case 5:
-                return "white";
-            case 6:
                 return "black";
+            case 6:
+                return "white";
             case 7:
                 return "black";
             case 8:
+                return "black";
+            case 9:
                 return "white";
             default:
                 return lightTheme ? "black" : "white";
@@ -134,14 +142,16 @@ Item {
             case 3:
                 return "#59FF0000";
             case 4:
-                return "#59B5FF00";
+                return "#59FF0000";
             case 5:
-                return "#599F00FF";
+                return "#59B5FF00";
             case 6:
-                return "#5900FF00";
+                return "#599F00FF";
             case 7:
-                return "#59FFFF00";
+                return "#5900FF00";
             case 8:
+                return "#59FFFF00";
+            case 9:
                 return "#590067FF";
             default:
                 return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.highlightColor, 0.35);
@@ -157,14 +167,16 @@ Item {
             case 3:
                 return "#FF0000";
             case 4:
-                return "#B5FF00";
+                return "#FF0000";
             case 5:
-                return "#9F00FF";
+                return "#B5FF00";
             case 6:
-                return "#00FF00";
+                return "#9F00FF";
             case 7:
-                return "#FFFF00";
+                return "#00FF00";
             case 8:
+                return "#FFFF00";
+            case 9:
                 return "#0067FF";
             default:
                 return Kirigami.Theme.highlightColor;
@@ -180,14 +192,16 @@ Item {
             case 3:
                 return "#3CFF0000";
             case 4:
-                return "#3CB5FF00";
+                return "#3CFF0000";
             case 5:
-                return "#3C9F00FF";
+                return "#3CB5FF00";
             case 6:
-                return "#3C00FF00";
+                return "#3C9F00FF";
             case 7:
-                return "#3CFFFF00";
+                return "#3C00FF00";
             case 8:
+                return "#3CFFFF00";
+            case 9:
                 return "#3C0067FF";
             default:
                 return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.highlightColor, 0.05);
@@ -203,14 +217,16 @@ Item {
             case 3:
                 return "#BEFF0000";
             case 4:
-                return "#BEB5FF00";
+                return "#BEFF0000";
             case 5:
-                return "#BE9F00FF";
+                return "#BEB5FF00";
             case 6:
-                return "#BE00FF00";
+                return "#BE9F00FF";
             case 7:
-                return "#BEFFFF00";
+                return "#BE00FF00";
             case 8:
+                return "#BEFFFF00";
+            case 9:
                 return "#BE0067FF";
             default:
                 return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.highlightColor, 0.75);
