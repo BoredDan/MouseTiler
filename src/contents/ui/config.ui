@@ -128,6 +128,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QCheckBox" name="kcfg_restoreSize">
+            <property name="text">
+             <string>Restore previous window size when starting to move a window</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -174,7 +181,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="title">
           <string>Window Margins</string>
@@ -183,7 +190,7 @@
           <item>
            <widget class="QLabel" name="label_28">
             <property name="text">
-             <string>Set the margins around windows. It is recommended to have &quot;Screen edge margin&quot; twice as thick as the &quot;Between window margin&quot; when using margins.</string>
+             <string>Set the margins around windows. This allows for gaps between/around windows.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -193,21 +200,14 @@
           <item>
            <layout class="QFormLayout" name="formLayout">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_26">
-              <property name="text">
-               <string>Screen edge margin</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
              <widget class="QLabel" name="label_27">
               <property name="text">
-               <string>Between window margin</string>
+               <string>Window margins</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="spinBox">
+             <widget class="QSpinBox" name="kcfg_tileMargin">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -215,26 +215,16 @@
                </sizepolicy>
               </property>
               <property name="suffix">
-               <string>px</string>
+               <string> px</string>
               </property>
               <property name="maximum">
                <number>100</number>
               </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="spinBox_2">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+              <property name="singleStep">
+               <number>1</number>
               </property>
-              <property name="suffix">
-               <string>px</string>
-              </property>
-              <property name="maximum">
-               <number>100</number>
+              <property name="stepType">
+               <enum>QAbstractSpinBox::StepType::DefaultStepType</enum>
               </property>
              </widget>
             </item>
@@ -302,10 +292,10 @@
        <item>
         <widget class="QGroupBox" name="groupBox_3">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="title">
-          <string>Overlay Margin</string>
+          <string>Overlay Screen Edge Margin</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
           <item>
@@ -325,7 +315,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_3">
+             <widget class="QSpinBox" name="kcfg_overlayScreenEdgeMargin">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -333,7 +323,7 @@
                </sizepolicy>
               </property>
               <property name="suffix">
-               <string>px</string>
+               <string> px</string>
               </property>
               <property name="maximum">
                <number>100</number>
@@ -348,7 +338,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_multiWindowRestoreAttempts">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="title">
           <string>Mouse Position Polling Rate</string>
@@ -371,68 +361,36 @@
            </widget>
           </item>
           <item>
-           <widget class="QSlider" name="kcfg_multiWindowRestoreAttempts">
-            <property name="minimum">
-             <number>25</number>
-            </property>
-            <property name="maximum">
-             <number>1000</number>
-            </property>
-            <property name="singleStep">
-             <number>10</number>
-            </property>
-            <property name="pageStep">
-             <number>50</number>
-            </property>
-            <property name="value">
-             <number>90</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="invertedAppearance">
-             <bool>false</bool>
-            </property>
-            <property name="invertedControls">
-             <bool>false</bool>
-            </property>
-            <property name="tickPosition">
-             <enum>QSlider::TickPosition::TicksBelow</enum>
-            </property>
-            <property name="tickInterval">
-             <number>25</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="hBoxLayout_multiWindowRestoreAttempts">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <widget class="QLabel" name="label_multiWindowRestoreAttemptsMin">
+             <widget class="QLabel" name="label_26">
               <property name="text">
-               <string>25</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+               <string>Overlay polling rate</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_multiWindowRestoreAttemptInfo">
-              <property name="text">
-               <string>milliseconds</string>
+             <widget class="QSpinBox" name="kcfg_overlayPollingRate">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+              <property name="suffix">
+               <string> ms</string>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_multiWindowRestoreAttemptsMax">
-              <property name="text">
-               <string>1000</string>
+              <property name="minimum">
+               <number>30</number>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+              <property name="singleStep">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>100</number>
               </property>
              </widget>
             </item>
@@ -564,7 +522,7 @@
                </sizepolicy>
               </property>
               <property name="suffix">
-               <string>px</string>
+               <string> px</string>
               </property>
               <property name="minimum">
                <number>1</number>
@@ -586,7 +544,7 @@
                </sizepolicy>
               </property>
               <property name="suffix">
-               <string>px</string>
+               <string> px</string>
               </property>
               <property name="minimum">
                <number>120</number>
@@ -611,7 +569,7 @@
                </sizepolicy>
               </property>
               <property name="suffix">
-               <string>px</string>
+               <string> px</string>
               </property>
               <property name="minimum">
                <number>60</number>
@@ -635,7 +593,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="title">
           <string>Mouse Position Polling Rate</string>
@@ -652,59 +610,36 @@
            </widget>
           </item>
           <item>
-           <widget class="QSlider" name="horizontalSlider">
-            <property name="minimum">
-             <number>25</number>
-            </property>
-            <property name="maximum">
-             <number>1000</number>
-            </property>
-            <property name="singleStep">
-             <number>10</number>
-            </property>
-            <property name="pageStep">
-             <number>50</number>
-            </property>
-            <property name="value">
-             <number>90</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="tickPosition">
-             <enum>QSlider::TickPosition::TicksBelow</enum>
-            </property>
-            <property name="tickInterval">
-             <number>25</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QLabel" name="label_24">
+             <widget class="QLabel" name="label_38">
               <property name="text">
-               <string>25</string>
+               <string>Popup Grid polling rate</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_23">
-              <property name="text">
-               <string>milliseconds</string>
+             <widget class="QSpinBox" name="kcfg_popupGridPollingRate">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignCenter</set>
+              <property name="suffix">
+               <string> ms</string>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_22">
-              <property name="text">
-               <string>1000</string>
+              <property name="minimum">
+               <number>30</number>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+              <property name="singleStep">
+               <number>10</number>
+              </property>
+              <property name="value">
+               <number>100</number>
               </property>
              </widget>
             </item>

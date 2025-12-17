@@ -57,7 +57,7 @@ Item {
 
     property var hintBackgroundColor: {
         if (useSystemTheme) {
-            return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.hoverColor, 0.35);
+            return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.highlightColor, 0.35);
         } else {
             return "#590099FF";
         }
@@ -65,7 +65,7 @@ Item {
 
     property var tileBorderColor: {
         if (useSystemTheme) {
-            return Kirigami.Theme.hoverColor;
+            return Kirigami.Theme.highlightColor;
         } else {
             return "#0099FF";
         }
@@ -73,7 +73,7 @@ Item {
 
     property var tileBackgroundColor: {
         if (useSystemTheme) {
-            return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.hoverColor, 0.05);
+            return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.highlightColor, 0.05);
         } else {
             return "#0C0099FF";
         }
@@ -81,7 +81,7 @@ Item {
 
     property var tileBackgroundColorActive: {
         if (useSystemTheme) {
-            return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.hoverColor, 0.75);
+            return Kirigami.ColorUtils.tintWithAlpha("transparent", Kirigami.Theme.highlightColor, 0.75);
         } else {
             return "#BE0099FF";
         }
@@ -164,19 +164,26 @@ SPECIAL_FILL-Fill
             usePopupTilerByDefault: KWin.readConfig("defaultTiler", 0) == 0,
             startHidden: KWin.readConfig("startHidden", false),
             rememberTiler: KWin.readConfig("rememberTiler", false),
+            restoreSize: KWin.readConfig("restoreSize", false),
             theme: KWin.readConfig("theme", 0),
+            edgeMargin: KWin.readConfig("tileMargin", 0),
             overlay: convertOverlayLayout(KWin.readConfig("overlayLayout", defaultOverlayLayout), defaultOverlayLayout),
+            overlayScreenEdgeMargin: KWin.readConfig("overlayScreenEdgeMargin", 0),
+            overlayPollingRate: KWin.readConfig("overlayPollingRate", 100),
             rememberAllLayouts: KWin.readConfig("rememberAllLayouts", false),
             showTargetTileHint: KWin.readConfig("showTargetTileHint", true),
             gridColumns: KWin.readConfig("gridColumns", 3),
             gridSpacing: KWin.readConfig("gridSpacing", 10),
             gridWidth: KWin.readConfig("gridWidth", 130),
             gridHeight: KWin.readConfig("gridHeight", 70),
+            popupGridPollingRate: KWin.readConfig("popupGridPollingRate", 100),
             layouts: convertLayouts(KWin.readConfig("popupLayout", defaultPopupLayouts), defaultPopupLayouts),
             allLayouts: convertLayouts(KWin.readConfig("allPopupLayouts", defaultAllLayouts), defaultAllLayouts)
 
             // live settings
         };
+        config.tileMarginLeftTop = Math.floor(config.edgeMargin / 2);
+        config.tileMarginRightBottom = Math.ceil(config.edgeMargin / 2);
 
         setDefaultTiler();
     }
@@ -354,6 +361,10 @@ SPECIAL_FILL-Fill
 
         function onInteractiveMoveResizeStarted() {
             if (client.move) {
+                if (config.restoreSize && client.mt_originalSize) {
+                    client.frameGeometry = Qt.rect(Workspace.cursorPos.x - client.mt_originalSize.xOffset, client.frameGeometry.y, client.mt_originalSize.width, client.mt_originalSize.height);
+                    delete client.mt_originalSize;
+                }
                 moving = true;
                 currentMoveWindow = client;
                 showTiler();
@@ -371,9 +382,13 @@ SPECIAL_FILL-Fill
                 if (moved) {
                     var geometry = currentTiler.getGeometry();
                     if (geometry != null) {
+                        let xOffset = (Workspace.cursorPos.x - client.x) / client.width;
+                        client.mt_originalSize = {xOffset: xOffset, width: client.width, height: client.height};
+
                         switch (geometry.special) {
                             case 'SPECIAL_FILL':
                                 geometry = getFillGeometry(client, geometry.specialMode == 0);
+                                addMargins(geometry, true, true, true, true);
                                 if (geometry != null) {
                                     moveAndResizeWindow(client, geometry);
                                 }
@@ -391,6 +406,7 @@ SPECIAL_FILL-Fill
                                 }
                                 break;
                             default:
+                                addMargins(geometry, true, true, true, true);
                                 moveAndResizeWindow(client, geometry);
                                 break;
                         }
@@ -404,6 +420,30 @@ SPECIAL_FILL-Fill
             moving = false;
             moved = false;
             currentMoveWindow = null;
+        }
+    }
+
+    function addMargins(geometry, left, right, top, bottom) {
+        if (config.edgeMargin > 0) {
+            let clientArea = Workspace.clientArea(KWin.FullScreenArea, Workspace.activeScreen, Workspace.currentDesktop);
+            if (left) {
+                let isEdge = geometry.x == clientArea.left;
+                geometry.x += isEdge ? config.edgeMargin : config.tileMarginLeftTop;
+                geometry.width -= isEdge ? config.edgeMargin : config.tileMarginLeftTop;
+            }
+            if (right) {
+                let isEdge = geometry.x + geometry.width == clientArea.right;
+                geometry.width -= isEdge ? config.edgeMargin : config.tileMarginRightBottom;
+            }
+            if (top) {
+                let isEdge = geometry.y == clientArea.top;
+                geometry.y += isEdge ? config.edgeMargin : config.tileMarginLeftTop;
+                geometry.height -= isEdge ? config.edgeMargin : config.tileMarginLeftTop;
+            }
+            if (bottom) {
+                let isEdge = geometry.y + geometry.height == clientArea.bottom;
+                geometry.height -= isEdge ? config.edgeMargin : config.tileMarginRightBottom;
+            }
         }
     }
 
@@ -431,6 +471,13 @@ SPECIAL_FILL-Fill
             let geometrySecond = vertical ? Qt.rect(window.x, window.y + window.height / 2, window.width, window.height / 2) : Qt.rect(window.x + window.width / 2, window.y, window.width / 2, window.height);
 
             if (moveSplitted) {
+                if (vertical) {
+                    addMargins(geometryFirst, false, false, false, true);
+                    addMargins(geometrySecond, false, false, true, false);
+                } else {
+                    addMargins(geometryFirst, false, true, false, false);
+                    addMargins(geometrySecond, true, false, false, false);
+                }
                 moveAndResizeWindow(window, leftOrTop ? geometrySecond : geometryFirst);
             }
 

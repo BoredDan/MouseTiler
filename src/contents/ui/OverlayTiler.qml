@@ -16,10 +16,10 @@ PlasmaCore.Dialog {
     property int maxSpanX: -1
     property int maxSpanY: -1
 
-    width: clientArea.width
-    height: clientArea.height
-    x: clientArea.x
-    y: clientArea.y
+    width: clientArea.width - root.config.overlayScreenEdgeMargin * 2
+    height: clientArea.height - root.config.overlayScreenEdgeMargin * 2
+    x: clientArea.x + root.config.overlayScreenEdgeMargin
+    y: clientArea.y + root.config.overlayScreenEdgeMargin
     flags: Qt.Popup | Qt.BypassWindowManagerHint | Qt.FramelessWindowHint
     visible: false
     backgroundHints: PlasmaCore.Types.NoBackground
@@ -141,15 +141,15 @@ PlasmaCore.Dialog {
         }
 
         Timer {
-            interval: 100
+            interval: root.config.overlayPollingRate
             repeat: true
             running: overlayTiler.visible
             onTriggered: {
                 screenChanged();
 
                 let localCursorPos = Workspace.activeScreen.mapFromGlobal(Workspace.cursorPos);
-                let x = localCursorPos.x;
-                let y = localCursorPos.y;
+                let x = localCursorPos.x - root.config.overlayScreenEdgeMargin;
+                let y = localCursorPos.y - root.config.overlayScreenEdgeMargin;
                 let index = -1;
 
                 for (let i = 0; i < tileRepeater.count; i++) {

@@ -277,7 +277,7 @@ PlasmaCore.Dialog {
         }
 
         Timer {
-            interval: 100
+            interval: root.config.popupGridPollingRate
             repeat: true
             running: popupTiler.visible
             onTriggered: {
