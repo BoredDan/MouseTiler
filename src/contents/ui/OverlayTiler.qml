@@ -109,7 +109,7 @@ PlasmaCore.Dialog {
                 property: "opacity";
                 from: 0;
                 to: 0;
-                duration: 15;
+                duration: 32;
             }
 
             NumberAnimation {
