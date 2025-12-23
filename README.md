@@ -72,8 +72,10 @@ I might implement all/some of the features listed here in the future if the situ
 * GUI layout designer
 * GUI popup tiler configuration
 * GUI overlay tiler configuration
-* Default layout based on screen type (such as Standar - Wide - Ultra Wide - Rotated Standard - Rotated Wide - Rotated Ultra Wide)
+* Per screen layout configuration
+* Default layout based on screen type (such as Standard - Wide - Ultra Wide - Rotated Standard - Rotated Wide - Rotated Ultra Wide)
 * Theme color selection with preview of how the tiler looks
+* Manual color editor
 
 ### Feature requests to investigate
 
