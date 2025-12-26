@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>974</width>
-    <height>740</height>
+    <width>1060</width>
+    <height>911</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -97,13 +97,6 @@
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="kcfg_startHidden">
-            <property name="text">
-             <string>Start hidden (you need to press the Toggle Visibility shortcut (Meta+Space) to show the tiler).</string>
-            </property>
-           </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="kcfg_rememberTiler">
@@ -271,67 +264,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="kcfg_autoHide">
-         <property name="title">
-          <string>Auto-hide</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_15">
-          <item>
-           <widget class="QLabel" name="label_22">
-            <property name="text">
-             <string>Auto-hide the tiler if the window has not been moved within the specified time. Click the window titlebar without moving the window for the tiler to hide. A trick can be achieved by setting this to 5 - the tiler will only show when dragging a window (or worst case show for only 1 frame).</string>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QFormLayout" name="formLayout_4">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_23">
-              <property name="text">
-               <string>Auto-hide time</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QSpinBox" name="kcfg_autoHideTime">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="suffix">
-               <string> ms</string>
-              </property>
-              <property name="minimum">
-               <number>5</number>
-              </property>
-              <property name="maximum">
-               <number>3000</number>
-              </property>
-              <property name="singleStep">
-               <number>250</number>
-              </property>
-              <property name="value">
-               <number>1000</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
         <spacer name="verticalSpacer_general">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
@@ -352,7 +284,6 @@
       <zorder>groupBox_defaultTiler</zorder>
       <zorder>groupBox</zorder>
       <zorder>groupBox_6</zorder>
-      <zorder>kcfg_autoHide</zorder>
      </widget>
      <widget class="QWidget" name="tab_mulltiWindowRestore">
       <attribute name="icon">
@@ -381,7 +312,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_overlayModeLayout">
          <property name="title">
-          <string>Overlay Mode Layout</string>
+          <string>Layout</string>
          </property>
          <property name="checkable">
           <bool>false</bool>
@@ -407,12 +338,64 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="title">
+          <string>Visibility</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_19">
+          <item>
+           <widget class="QLabel" name="label_46">
+            <property name="text">
+             <string>Determines when the Overlay tiler is visible. Previous visibility is kept when changing modes using the keyboard shortcut.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QFormLayout" name="formLayout_7">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_47">
+              <property name="text">
+               <string>Overlay visibility</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="kcfg_overlayVisibility">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>Always visible</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Only visible if window is dragged right away (otherwise will remain hidden)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hidden until toggled on by shortcut (Meta+Space)</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox_3">
          <property name="enabled">
           <bool>true</bool>
          </property>
          <property name="title">
-          <string>Overlay Screen Edge Margin</string>
+          <string>Screen Edge Margin</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
           <item>
@@ -584,7 +567,7 @@
           <item>
            <widget class="QLabel" name="label_24">
             <property name="text">
-             <string>Determines where the Popup Grid will be displayed. You can chose to show it below mouse pointer, at a fixed screen position or at fixed screen position but hidden. When hidden, drag the window to the designated position to reveal the tiler.</string>
+             <string>Determines where the Popup Grid will be displayed. You can chose to show it below mouse pointer or at a fixed screen position.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -630,11 +613,6 @@
               <item>
                <property name="text">
                 <string>At fixed screen position</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>At fixed screen position - hidden (drag window to the specified location to reveal the tiler)</string>
                </property>
               </item>
              </widget>
@@ -689,23 +667,92 @@
               </item>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_43">
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="title">
+          <string>Visibility</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_18">
+          <item>
+           <widget class="QLabel" name="label_45">
+            <property name="text">
+             <string>Determines when the Popup Grid tiler is visible. Previous visibility is kept when changing modes using the keyboard shortcut.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QFormLayout" name="formLayout_6">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_44">
               <property name="text">
-               <string>Reveal hidden margin</string>
+               <string>Popup Grid visibility</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="0" column="1">
+             <widget class="QComboBox" name="kcfg_popupVisibility">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>Always visible</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Only visible if window is dragged right away (otherwise will remain hidden)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hidden until toggled on by shortcut (Meta+Space)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hidden until mouse is near tiler</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="1">
              <widget class="QSpinBox" name="kcfg_revealMargin">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="suffix">
-               <string> px - only applies when using the &quot;Show&quot; &quot;At fixed screen position - hidden&quot; option above</string>
+               <string> px - only applies when using the &quot;Hidden until mouse is near tiler&quot; option above</string>
+              </property>
+              <property name="minimum">
+               <number>0</number>
               </property>
               <property name="maximum">
                <number>2000</number>
               </property>
+              <property name="singleStep">
+               <number>10</number>
+              </property>
               <property name="value">
                <number>100</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_43">
+              <property name="text">
+               <string>Additional reveal margin</string>
               </property>
              </widget>
             </item>

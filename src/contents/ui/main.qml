@@ -101,15 +101,13 @@ SPECIAL_FILL-Fill
         config = {
             // user settings
             usePopupTilerByDefault: KWin.readConfig("defaultTiler", 0) == 0,
-            startHidden: KWin.readConfig("startHidden", false),
             rememberTiler: KWin.readConfig("rememberTiler", false),
             restoreSize: KWin.readConfig("restoreSize", false),
             theme: KWin.readConfig("theme", 0),
             edgeMargin: KWin.readConfig("tileMargin", 0),
-            autoHide: KWin.readConfig("autoHide", false),
-            autoHideTime: KWin.readConfig("autoHideTime", 650),
             showOverlayTextHint: KWin.readConfig("showOverlayTextHint", true),
             overlay: convertOverlayLayout(KWin.readConfig("overlayLayout", defaultOverlayLayout), defaultOverlayLayout),
+            overlayVisibility: KWin.readConfig("overlayVisibility", 0),
             overlayScreenEdgeMargin: KWin.readConfig("overlayScreenEdgeMargin", 0),
             overlayPollingRate: KWin.readConfig("overlayPollingRate", 100),
             rememberAllLayouts: KWin.readConfig("rememberAllLayouts", false),
@@ -118,6 +116,7 @@ SPECIAL_FILL-Fill
             popupGridAt: KWin.readConfig("popupGridAt", 0),
             horizontalAlignment: KWin.readConfig("horizontalAlignment", 1),
             verticalAlignment: KWin.readConfig("verticalAlignment", 1),
+            popupVisibility: KWin.readConfig("popupVisibility", 0),
             revealMargin: KWin.readConfig("revealMargin", 200),
             gridColumns: KWin.readConfig("gridColumns", 3),
             gridSpacing: KWin.readConfig("gridSpacing", 10),
@@ -315,7 +314,7 @@ SPECIAL_FILL-Fill
                 moving = true;
                 currentMoveWindow = client;
                 showTiler(true);
-                if (config.autoHide) {
+                if (currentTiler == popupTiler && config.popupVisibility == 1 || currentTiler == overlayTiler && config.overlayVisibility == 1) {
                     autoHideTimer.startAutoHideTimer();
                 }
             } else if (client.resize && client.mt_originalSize) {
@@ -546,7 +545,7 @@ SPECIAL_FILL-Fill
 
         function startAutoHideTimer() {
             if (!timerIsRunning) {
-                autoHideTimer.interval = config.autoHideTime;
+                autoHideTimer.interval = 5;
                 autoHideTimer.repeat = false;
                 autoHideTimer.triggered.connect(onTimeoutTriggered);
                 timerIsRunning = true;
@@ -683,7 +682,8 @@ SPECIAL_FILL-Fill
     }
 
     function showTiler(animate, force = false) {
-        if (!config.startHidden || force) {
+        let show = force || currentTiler == popupTiler && config.popupVisibility != 2 || currentTiler == overlayTiler && config.overlayVisibility != 2;
+        if (show) {
             currentTiler.reset();
             if (!config.rememberAllLayouts && currentTiler == popupTiler) {
                 currentTiler.resetShowAll();

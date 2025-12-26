@@ -5,9 +5,6 @@
         <entry name="defaultTiler" type="Int">
             <default>0</default>
         </entry>
-        <entry name="startHidden" type="Bool">
-            <default>false</default>
-        </entry>
         <entry name="rememberTiler" type="Bool">
             <default>false</default>
         </entry>
@@ -20,23 +17,20 @@
         <entry name="tileMargin" type="Int">
             <default>0</default>
         </entry>
-        <entry name="autoHide" type="Bool">
-            <default>false</default>
-        </entry>
-        <entry name="autoHideTime" type="Int">
-            <default>650</default>
-        </entry>
         <entry name="showOverlayTextHint" type="Bool">
             <default>true</default>
         </entry>
         <entry name="overlayLayout" type="String">
             <default>4x2</default>
         </entry>
-        <entry name="overlayPollingRate" type="Int">
-            <default>100</default>
+        <entry name="overlayVisibility" type="Int">
+            <default>0</default>
         </entry>
         <entry name="overlayScreenEdgeMargin" type="Int">
             <default>0</default>
+        </entry>
+        <entry name="overlayPollingRate" type="Int">
+            <default>100</default>
         </entry>
         <entry name="rememberAllLayouts" type="Bool">
             <default>false</default>
@@ -55,6 +49,9 @@
         </entry>
         <entry name="verticalAlignment" type="Int">
             <default>1</default>
+        </entry>
+        <entry name="popupVisibility" type="Int">
+            <default>0</default>
         </entry>
         <entry name="revealMargin" type="Int">
             <default>200</default>

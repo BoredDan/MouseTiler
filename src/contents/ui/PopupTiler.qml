@@ -86,56 +86,29 @@ PlasmaCore.Dialog {
                         positionY = localCursorPos.y - layouts.height + root.config.gridHeight / 2 + root.config.gridSpacing;
                         break;
                 }
-                revealBox = null;
-                revealed = true;
             } else {
-                var triggerLeft = 0;
-                let triggerRight = 0;
-                let triggerTop = 0;
-                let triggerBottom = 0;
                 switch (root.config.horizontalAlignment) {
                     default:
                         positionX = 0;
-                        triggerLeft = positionX;
-                        triggerRight = positionX + layouts.width + config.revealMargin;
                         break;
                     case 1:
                         positionX = clientArea.width / 2 - layouts.width / 2;
-                        triggerLeft = positionX - config.revealMargin;
-                        triggerRight = positionX + layouts.width + config.revealMargin;
                         break;
                     case 2:
                         positionX = clientArea.width - layouts.width;
-                        triggerLeft = positionX - config.revealMargin;
-                        triggerRight = positionX + layouts.width;
                         break;
                 }
 
                 switch (root.config.verticalAlignment) {
                     default:
                         positionY = 0;
-                        triggerTop = positionY;
-                        triggerBottom = positionY + layouts.height + config.revealMargin;
                         break;
                     case 1:
                         positionY = clientArea.height / 2 - layouts.height / 2;
-                        triggerTop = positionY - config.revealMargin;
-                        triggerBottom = positionY + layouts.height + config.revealMargin;
                         break;
                     case 2:
                         positionY = clientArea.height - layouts.height;
-                        triggerTop = positionY - config.revealMargin;
-                        triggerBottom = positionY + layouts.height;
                         break;
-                }
-                if (root.config.popupGridAt == 2) {
-                    let leftTop = Workspace.activeScreen.mapToGlobal(Qt.point(triggerLeft, triggerTop));
-                    let rightBottom = Workspace.activeScreen.mapToGlobal(Qt.point(triggerRight, triggerBottom));
-                    revealBox = { left: leftTop.x, right: rightBottom.x, top: leftTop.y, bottom: rightBottom.y };
-                    revealed = isRevealed();
-                } else {
-                    revealBox = null;
-                    revealed = true;
                 }
             }
 
@@ -154,6 +127,20 @@ PlasmaCore.Dialog {
                 positionY = popupTiler.height - layouts.height - popupHint.height - 2;
             } else if (!root.config.showTextHint && positionY + layouts.height > popupTiler.height) {
                 positionY = popupTiler.height - layouts.height;
+            }
+
+            if (root.config.popupVisibility == 3) {
+                let triggerLeft = Math.max(positionX - config.revealMargin, 0);
+                let triggerRight = Math.min(positionX + layouts.width + config.revealMargin, popupTiler.width);
+                let triggerTop = Math.max(positionY - config.revealMargin, 0);
+                let triggerBottom = Math.min(positionY + layouts.height + config.revealMargin, popupTiler.height);
+                let leftTop = Workspace.activeScreen.mapToGlobal(Qt.point(triggerLeft, triggerTop));
+                let rightBottom = Workspace.activeScreen.mapToGlobal(Qt.point(triggerRight, triggerBottom));
+                revealBox = { left: leftTop.x, right: rightBottom.x, top: leftTop.y, bottom: rightBottom.y };
+                revealed = isRevealed();
+            } else {
+                revealBox = null;
+                revealed = true;
             }
         }
     }
