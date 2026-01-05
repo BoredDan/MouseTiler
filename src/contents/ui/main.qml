@@ -813,7 +813,7 @@ SPECIAL_FILL-Fill
     ShortcutHandler {
         name: "Mouse Tiler: Change Mode"
         text: "Mouse Tiler: Change Mode"
-        sequence: "Ctrl+Meta+Space"
+        sequence: "Meta+Ctrl+Space"
         onActivated: {
             log('Change Mode triggered!');
             let wasVisible = hideTiler();
@@ -845,7 +845,7 @@ SPECIAL_FILL-Fill
     ShortcutHandler {
         name: "Mouse Tiler: Toggle Input Type"
         text: "Mouse Tiler: Toggle Input Type"
-        sequence: "Ctrl+I"
+        sequence: "Meta+Ctrl+I"
         onActivated: {
             log('Toggle Input Type triggered!');
             if (useMouseCursor && currentlyMovedWindow != null) {
