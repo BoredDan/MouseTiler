@@ -21,6 +21,8 @@ Item {
     property bool usePopupTiler: false
     property var currentTiler: popupTiler
     property var currentlyMovedWindow: null
+    property bool useMouseCursor: true
+    property var windowCursor: Qt.point(0,0)
 
     function log(string) {
         if (!debugLogs) return;
@@ -108,6 +110,7 @@ SPECIAL_FILL-Fill
             windowVisibility: KWin.readConfig("windowVisibility", 0),
             theme: KWin.readConfig("theme", 0),
             edgeMargin: KWin.readConfig("tileMargin", 0),
+            useMouseCursorByDefault: KWin.readConfig("defaultInput", 0) == 0,
             showOverlayTextHint: KWin.readConfig("showOverlayTextHint", true),
             overlay: convertOverlayLayout(KWin.readConfig("overlayLayout", defaultOverlayLayout), defaultOverlayLayout),
             overlayScreenEdgeMargin: KWin.readConfig("overlayScreenEdgeMargin", 0),
@@ -130,6 +133,8 @@ SPECIAL_FILL-Fill
         };
         config.tileMarginLeftTop = Math.floor(config.edgeMargin / 2);
         config.tileMarginRightBottom = Math.ceil(config.edgeMargin / 2);
+
+        useMouseCursor = config.useMouseCursorByDefault;
 
         setDefaultTiler();
     }
@@ -333,6 +338,10 @@ SPECIAL_FILL-Fill
         return index >= startIndex && index < startIndex + extraPercentage;
     }
 
+    function getCursorPosition() {
+        return useMouseCursor ? Workspace.cursorPos : windowCursor;
+    }
+
     function isValidWindow(client) {
         if (!client) return false;
         if (!client.normalWindow) return false;
@@ -361,8 +370,11 @@ SPECIAL_FILL-Fill
 
         function onInteractiveMoveResizeStarted() {
             if (client.move) {
+                if (!useMouseCursor) {
+                    windowCursor = Qt.point(client.x + client.width / 2, client.y);
+                }
                 if (config.restoreSize && client.mt_originalSize) {
-                    client.frameGeometry = Qt.rect(Workspace.cursorPos.x - client.mt_originalSize.xOffset, client.frameGeometry.y, client.mt_originalSize.width, client.mt_originalSize.height);
+                    client.frameGeometry = Qt.rect(getCursorPosition().x - client.mt_originalSize.xOffset, client.frameGeometry.y, client.mt_originalSize.width, client.mt_originalSize.height);
                     delete client.mt_originalSize;
                 }
                 moving = true;
@@ -377,20 +389,28 @@ SPECIAL_FILL-Fill
         }
 
         function onInteractiveMoveResizeStepped() {
-            if (moving && !moved) {
-                moved = true;
-                if (currentTiler.visible) {
-                    autoHideTimer.stopAutoHideTimer();
+            if (moving) {
+                if (!useMouseCursor) {
+                    windowCursor = Qt.point(client.x + client.width / 2, client.y);
+                }
+                if (!moved) {
+                    moved = true;
+                    if (currentTiler.visible) {
+                        autoHideTimer.stopAutoHideTimer();
+                    }
                 }
             }
         }
 
         function onInteractiveMoveResizeFinished() {
+            if (moving && !useMouseCursor) {
+                windowCursor = Qt.point(client.x + client.width / 2, client.y);
+            }
             if (currentTiler.visible) {
                 if (moved) {
                     var geometry = currentTiler.getGeometry();
                     if (geometry != null) {
-                        let xOffset = (Workspace.cursorPos.x - client.x) / client.width;
+                        let xOffset = (getCursorPosition().x - client.x) / client.width;
                         client.mt_originalSize = {xOffset: xOffset, width: client.width, height: client.height};
 
                         switch (geometry.special) {
@@ -819,6 +839,19 @@ SPECIAL_FILL-Fill
             } else if (popupTiler.visible) {
                 popupTiler.toggleShowAll();
             }
+        }
+    }
+
+    ShortcutHandler {
+        name: "Mouse Tiler: Toggle Input Type"
+        text: "Mouse Tiler: Toggle Input Type"
+        sequence: "Ctrl+I"
+        onActivated: {
+            log('Toggle Input Type triggered!');
+            if (useMouseCursor && currentlyMovedWindow != null) {
+                windowCursor = Qt.point(currentlyMovedWindow.x + currentlyMovedWindow.width / 2, currentlyMovedWindow.y);
+            }
+            useMouseCursor = !useMouseCursor;
         }
     }
 }

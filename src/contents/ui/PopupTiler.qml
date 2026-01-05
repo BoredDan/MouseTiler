@@ -61,7 +61,7 @@ PlasmaCore.Dialog {
             activeScreen = Workspace.activeScreen;
             clientArea = Workspace.clientArea(KWin.FullScreenArea, Workspace.activeScreen, Workspace.currentDesktop);
 
-            let localCursorPos = Workspace.activeScreen.mapFromGlobal(Workspace.cursorPos);
+            let localCursorPos = Workspace.activeScreen.mapFromGlobal(root.getCursorPosition());
 
             if (root.config.popupGridAt == 0) {
                 switch (root.config.horizontalAlignment) {
@@ -215,8 +215,8 @@ PlasmaCore.Dialog {
         if (revealBox == null) {
             updatedRevealed = true;
         } else {
-            let x = Workspace.cursorPos.x;
-            let y = Workspace.cursorPos.y;
+            let x = root.getCursorPosition().x;
+            let y = root.getCursorPosition().y;
             updatedRevealed = revealBox.left <= x && revealBox.right >= x && revealBox.top <= y && revealBox.bottom >= y;
         }
 
@@ -397,6 +397,30 @@ PlasmaCore.Dialog {
             }
         }
 
+        Rectangle {
+            id: popupWindowCursor
+            anchors.left: parent.left
+            anchors.leftMargin: root.getCursorPosition().x - clientArea.x
+            anchors.top: parent.top
+            anchors.topMargin: root.getCursorPosition().y - clientArea.y - 5
+            width: 12
+            height: 12
+            border.color: colors.tileBorderColor
+            border.width: 2
+            color: colors.tileBackgroundColorActive
+            radius: 6
+            visible: !root.useMouseCursor
+
+            Rectangle {
+                anchors.centerIn: parent
+                width: 2
+                height: 2
+                color: colors.textColor
+                radius: 1
+                opacity: 0.8
+            }
+        }
+
         Timer {
             interval: 1
             repeat: false
@@ -425,8 +449,8 @@ PlasmaCore.Dialog {
 
                 updateRevealed();
 
-                let x = Workspace.cursorPos.x;
-                let y = Workspace.cursorPos.y;
+                let x = root.getCursorPosition().x;
+                let y = root.getCursorPosition().y;
                 let layoutIndex = -1;
                 let tileIndex = -1;
 

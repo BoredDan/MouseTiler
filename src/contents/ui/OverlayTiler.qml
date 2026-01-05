@@ -173,6 +173,30 @@ PlasmaCore.Dialog {
             }
         }
 
+        Rectangle {
+            id: popupWindowCursor
+            anchors.left: parent.left
+            anchors.leftMargin: root.getCursorPosition().x - clientArea.x
+            anchors.top: parent.top
+            anchors.topMargin: root.getCursorPosition().y - clientArea.y - 5
+            width: 12
+            height: 12
+            border.color: colors.tileBorderColor
+            border.width: 2
+            color: colors.tileBackgroundColorActive
+            radius: 6
+            visible: !root.useMouseCursor
+
+            Rectangle {
+                anchors.centerIn: parent
+                width: 2
+                height: 2
+                color: colors.textColor
+                radius: 1
+                opacity: 0.8
+            }
+        }
+
         Timer {
             interval: root.config.overlayPollingRate
             repeat: true
@@ -180,7 +204,7 @@ PlasmaCore.Dialog {
             onTriggered: {
                 updateScreen();
 
-                let localCursorPos = Workspace.activeScreen.mapFromGlobal(Workspace.cursorPos);
+                let localCursorPos = Workspace.activeScreen.mapFromGlobal(root.getCursorPosition());
                 let x = localCursorPos.x - root.config.overlayScreenEdgeMargin;
                 let y = localCursorPos.y - root.config.overlayScreenEdgeMargin;
                 let index = -1;

@@ -385,6 +385,56 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="title">
+          <string>Input Type</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_18">
+          <item>
+           <widget class="QLabel" name="label_44">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Change the default input type (needed when you use certain Stylus or Touchpad as input). You can toggle between the input types with &lt;span style=&quot; font-weight:700;&quot;&gt;Ctrl+I&lt;/span&gt;. When using Window as input, an indicator will be displayed in the top-center indicating the position used by the tiler.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QFormLayout" name="formLayout_6">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_45">
+              <property name="text">
+               <string>Default input</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="kcfg_defaultInput">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>Mouse - the tiler will open at and use mouse cursor for its position</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Window - (use for Stylus or Touch input) the tiler will open at and use window top-center for its position</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_general">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
@@ -406,6 +456,7 @@
       <zorder>groupBox</zorder>
       <zorder>groupBox_6</zorder>
       <zorder>groupBox_11</zorder>
+      <zorder>groupBox_9</zorder>
      </widget>
      <widget class="QWidget" name="tab_mulltiWindowRestore">
       <attribute name="icon">
