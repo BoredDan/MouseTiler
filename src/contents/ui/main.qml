@@ -845,7 +845,7 @@ SPECIAL_FILL-Fill
     ShortcutHandler {
         name: "Mouse Tiler: Toggle Input Type"
         text: "Mouse Tiler: Toggle Input Type"
-        sequence: "Meta+Ctrl+I"
+        sequence: "Ctrl+Alt+I"
         onActivated: {
             log('Toggle Input Type triggered!');
             if (useMouseCursor && currentlyMovedWindow != null) {

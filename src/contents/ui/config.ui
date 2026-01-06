@@ -393,7 +393,7 @@
           <item>
            <widget class="QLabel" name="label_44">
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Change the default input type (needed when you use certain Stylus or Touchpad as input). You can toggle between the input types with &lt;span style=&quot; font-weight:700;&quot;&gt;Meta+Ctrl+I&lt;/span&gt;. When using Window as input, an indicator will be displayed in the top-center indicating the position used by the tiler.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Change the default input type (needed when you use certain Stylus or Touchpad as input). You can toggle between the input types with &lt;span style=&quot; font-weight:700;&quot;&gt;Ctrl+Alt+I&lt;/span&gt;. When using Window as input, an indicator will be displayed in the top-center indicating the position used by the tiler.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -1222,7 +1222,7 @@
            <item row="7" column="1">
             <widget class="QLabel" name="label_47">
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Meta+Ctrl+I&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Ctrl+Alt+I&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
