@@ -9,8 +9,10 @@ Allows you to tile your windows with minimum effort by moving the mouse just a f
 
 * Compatible with KDE Plasma 6+ (compatibility with previous versions is unknown).
 
-* Tested on Fedora 42 KDE running Wayland and X11 with Plasma version 6.5.2 and 6.5.4.
-* Tested on Debian 13 running Plasma version 6.3.6.
+* Tested on:
+    - Fedora 42 KDE running Wayland and X11 with Plasma version 6.5.2 and 6.5.4
+    - Debian 13 running Plasma version 6.3.6
+    - FreeBSD 15.0 running X11 with Plasma version 6.4.5
 
 [![kde-store](https://img.shields.io/badge/KDE%20Store-download-blue?logo=KDE)](https://store.kde.org/p/2334027)
 
@@ -50,6 +52,7 @@ Allows you to tile your windows with minimum effort by moving the mouse just a f
 * Multi-monitor support
 * Follow system theme or use one of pre-defined color themes
 * Highly customizable, from tile size to grid position (over 20 settings)
+* Tiling works using mouse, stylus, touch (including Wacom) - press Ctrl+Alt+I to toggle input modes, or change default input mode in settings
 
 ![](./assets/info_animation_v4.gif)<br>
 **Feature Preview**
