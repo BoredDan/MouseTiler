@@ -172,7 +172,7 @@ PlasmaCore.Dialog {
     function updateAndShowPopupDropHint() {
         if (root.config.showTargetTileHint) {
             let special = layoutRepeater.model[activeLayoutIndex].special;
-            let geometry;
+            let geometry = null;
             switch (special) {
                 case 'SPECIAL_FILL':
                     if (root.currentlyMovedWindow != null) {
@@ -188,6 +188,13 @@ PlasmaCore.Dialog {
                     if (root.currentlyMovedWindow != null) {
                         geometry = splitAndMoveSplitted(root.currentlyMovedWindow, false, activeTileIndex == 0, false);
                     }
+                    break;
+                case 'SPECIAL_NO_TITLEBAR_AND_FRAME':
+                case 'SPECIAL_KEEP_ABOVE':
+                case 'SPECIAL_KEEP_BELOW':
+                case 'SPECIAL_EMPTY':
+                case 'SPECIAL_MINIMIZE':
+                case 'SPECIAL_CLOSE':
                     break;
                 default:
                     let layout = layoutRepeater.model[activeLayoutIndex].tiles[activeTileIndex];
@@ -296,7 +303,7 @@ PlasmaCore.Dialog {
 
             GridLayout {
                 id: layoutGrid
-                columns: showAll ? 4 : root.config.gridColumns
+                columns: showAll ? root.config.gridAllColumns : root.config.gridColumns
                 columnSpacing: root.config.gridSpacing
                 rowSpacing: root.config.gridSpacing
                 anchors.fill: parent
@@ -493,6 +500,8 @@ PlasmaCore.Dialog {
                         break;
                     }
                 }
+                // TODO: Add support for negative values (-)
+                // TODO: Span more than 1 layout if x < 0 || y < 0 || w > 100 || h > 100 to support SPECIAL_EMPTY
                 if (layoutIndex != activeLayoutIndex || tileIndex != activeTileIndex) {
                     activeLayoutIndex = layoutIndex;
                     activeTileIndex = tileIndex;
@@ -500,7 +509,18 @@ PlasmaCore.Dialog {
                     if (activeLayoutIndex >= 0 && activeTileIndex >= 0) {
                         updateAndShowPopupDropHint();
                         if (layoutRepeater.model[activeLayoutIndex].tiles[activeTileIndex].hint) {
-                            hint = layoutRepeater.model[activeLayoutIndex].tiles[activeTileIndex].hint;
+                            let special = layoutRepeater.model[activeLayoutIndex].special;
+                            switch (special) {
+                                case 'SPECIAL_KEEP_ABOVE':
+                                    hint = layoutRepeater.model[activeLayoutIndex].tiles[activeTileIndex].hint + '<br>Currently <b>' + (root.currentlyMovedWindow.keepAbove ? 'Enabled' : 'Disabled') + '</b>';
+                                    break;
+                                case 'SPECIAL_KEEP_BELOW':
+                                    hint = layoutRepeater.model[activeLayoutIndex].tiles[activeTileIndex].hint + '<br>Currently <b>' + (root.currentlyMovedWindow.keepBelow ? 'Enabled' : 'Disabled') + '</b>';
+                                    break;
+                                default:
+                                    hint = layoutRepeater.model[activeLayoutIndex].tiles[activeTileIndex].hint;
+                                    break;
+                            }
                         } else {
                             hint = null;
                         }
