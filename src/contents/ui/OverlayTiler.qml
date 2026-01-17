@@ -14,6 +14,7 @@ PlasmaCore.Dialog {
     property int minSpanY: -1
     property int maxSpanX: -1
     property int maxSpanY: -1
+    property var convertedOverlay: ([])
 
     width: clientArea.width - root.config.overlayScreenEdgeMargin * 2
     height: clientArea.height - root.config.overlayScreenEdgeMargin * 2
@@ -44,7 +45,25 @@ PlasmaCore.Dialog {
             reset();
             activeScreen = Workspace.activeScreen;
             clientArea = Workspace.clientArea(KWin.FullScreenArea, activeScreen, Workspace.currentDesktop);
+            convertLayoutToScreen();
         }
+    }
+
+    function convertLayoutToScreen() {
+        let layout = root.config.overlay;
+        let converted = [];
+        for (let i = 0; i < layout.length; i++) {
+            let tile = layout[i];
+            let width = (tile.pxW == undefined ? tile.w / 100 * tiles.width : tile.pxW);
+            let height = (tile.pxH == undefined ? tile.h / 100 * tiles.height : tile.pxH);
+            converted.push({
+                pxX: (tile.pxX == undefined ? tile.x / 100 * tiles.width : tile.pxX) - (tile.aX == undefined ? 0 : tile.aX * width / 100),
+                pxY: (tile.pxY == undefined ? tile.y / 100 * tiles.height : tile.pxY) - (tile.aY == undefined ? 0 : tile.aY * height / 100),
+                pxW: width,
+                pxH: height
+            });
+        }
+        convertedOverlay = converted;
     }
 
     function toggleSpan() {
@@ -64,12 +83,12 @@ PlasmaCore.Dialog {
             maxSpanX = -1;
             maxSpanY = -1;
         } else {
-            let layoutActive = tileRepeater.model[activeIndex];
-            let layoutSpan = tileRepeater.model[spanFromIndex];
-            minSpanX = Math.min(layoutActive.x, layoutSpan.x);
-            minSpanY = Math.min(layoutActive.y, layoutSpan.y);
-            maxSpanX = Math.max(layoutActive.x + layoutActive.w, layoutSpan.x + layoutSpan.w);
-            maxSpanY = Math.max(layoutActive.y + layoutActive.h, layoutSpan.y + layoutSpan.h);
+            let itemActive = tileRepeater.itemAt(activeIndex);
+            let itemSpan = tileRepeater.itemAt(spanFromIndex);
+            minSpanX = Math.min(itemActive.x, itemSpan.x);
+            minSpanY = Math.min(itemActive.y, itemSpan.y);
+            maxSpanX = Math.max(itemActive.x + itemActive.width, itemSpan.x + itemSpan.width);
+            maxSpanY = Math.max(itemActive.y + itemActive.height, itemSpan.y + itemSpan.height);
         }
         root.log('Span activeIndex: ' + activeIndex + ' spanFromIndex: ' + spanFromIndex + ' minSpanX: ' + minSpanX + ' minSpanY: ' + minSpanY + ' maxSpanX: ' + maxSpanX + ' maxSpanY: ' + maxSpanY);
     }
@@ -78,18 +97,18 @@ PlasmaCore.Dialog {
         if (activeIndex >= 0) {
             if (spanFromIndex >= 0) {
                 return {
-                    x: clientArea.x + minSpanX / 100 * clientArea.width,
-                    y: clientArea.y + minSpanY / 100 * clientArea.height,
-                    width: (maxSpanX - minSpanX) / 100 * clientArea.width,
-                    height: (maxSpanY - minSpanY) / 100 * clientArea.height
+                    x: minSpanX,
+                    y: minSpanY,
+                    width: maxSpanX - minSpanX,
+                    height: maxSpanY - minSpanY
                 };
             } else {
-                let layout = tileRepeater.model[activeIndex];
+                let item = tileRepeater.itemAt(activeIndex);
                 return {
-                    x: clientArea.x + layout.x / 100 * clientArea.width,
-                    y: clientArea.y + layout.y / 100 * clientArea.height,
-                    width: layout.w / 100 * clientArea.width,
-                    height: layout.h / 100 * clientArea.height
+                    x: item.x,
+                    y: item.y,
+                    width: item.width,
+                    height: item.height
                 };
             }
         }
@@ -131,19 +150,19 @@ PlasmaCore.Dialog {
 
         Repeater {
             id: tileRepeater
-            model: root.config.overlay
+            model: overlayTiler.convertedOverlay
 
             Item {
                 id: tile
 
                 property bool active: activeIndex == index
-                property bool spanned: !active && modelData.x >= minSpanX && modelData.x + modelData.w <= maxSpanX && modelData.y >= minSpanY && modelData.y + modelData.h <= maxSpanY
+                property bool spanned: !active && Math.ceil(modelData.pxX) >= Math.floor(minSpanX) && Math.floor(modelData.pxX) + Math.floor(modelData.pxW) <= Math.ceil(maxSpanX) && Math.ceil(modelData.pxY) >= Math.floor(minSpanY) && Math.floor(modelData.pxY) + Math.floor(modelData.pxH) <= Math.ceil(maxSpanY)
                 property bool spannedFrom: spanFromIndex == index
 
-                x: modelData.x / 100 * tiles.width
-                y: modelData.y / 100 * tiles.height
-                width: modelData.w / 100 * tiles.width
-                height: modelData.h / 100 * tiles.height
+                x: modelData.pxX
+                y: modelData.pxY
+                width: modelData.pxW
+                height: modelData.pxH
 
                 Rectangle {
                     anchors.fill: parent

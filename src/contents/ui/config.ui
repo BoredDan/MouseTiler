@@ -497,7 +497,7 @@
           <item>
            <widget class="QLabel" name="label_overlayLayout">
             <property name="text">
-             <string>Set the layout for the Overlay mode. Valid format is either a grid [XxY] (example 4x2) or [X,Y,Width,Height] each value in percent (example 0,0,100,100 for a full screen tile equal to 1x1). The layout can be made of multiple grids and/or cells separated by a + (example 0,0,50,100+50,0,50,100 which is equal to a 2x1).</string>
+             <string>Set the layout for the Overlay mode. Valid format is either a grid [XxY] (example 4x2), [X,Y,Width,Height] each value in percent or pixels using a px suffix (example 0,0,100,100 for a full screen tile equal to 1x1), or [X,Y,Width,Height,AnchorX,AnchorY] - same as previous but anchored around the anchor (example 100,100,50,50,RIGHT,BOTTOM for a 50% wide and 50% high tile placed in the bottom right corner). The layout can be made of multiple grids and/or tiles separated by a + (example 0,0,50,100+50,0,50,100 which is equal to a 2x1). Please see the Popup Grid Layouts tab for more detailed description.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -1049,16 +1049,6 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_applicationBlacklist">
           <item>
-           <widget class="QLabel" name="label_popupLayoutDisclaimer">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;This was meant to be just a temporary solution - an UI designer was going to replace it (accessed via the &lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;Ctrl+.&lt;/span&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt; shortcut).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;However the UI designer is a lot of work, probaly at least 1-2 weeks full time. Sadly I got rent to pay and a 3 year old son to feed and based on my previous project Remember Window Positions, I will not be able to feed us from my contributions to Linux. (After over 3 months full time work I earned $100 total which I apreciate but it's not possible to survive on).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;I might implement it in the future if the situation changes.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QPlainTextEdit" name="kcfg_popupLayout">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
@@ -1077,8 +1067,7 @@
           <item>
            <widget class="QLabel" name="label_popupLayoutExplanation">
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set the layouts for the Popup mode - one layout per line.&lt;br/&gt;&lt;br/&gt;Valid format is either a grid [XxY] (example 4x2) or [X,Y,Width,Height]. Any of the values can be in percent (recommended) or pixels (using px suffix - not recommended).&lt;br/&gt;&lt;br/&gt;Example 0,0,100,100 for a full screen tile equal to 1x1 or 20,10,400px,200px for a 400 pixel wide, 200 pixel high tile placed at 20% screen width and 10% screen height.
-&lt;br/&gt;&lt;br/&gt; The layout can be made of multiple grids and/or cells separated by a + (example 0,0,50,100+50,0,50,100 which is equal to a 2x1).&lt;br/&gt;&lt;br/&gt;You can also use one of special layouts: SPECIAL_FILL, SPECIAL_SPLIT_VERTICAL, SPECIAL_SPLIT_HORIZONTAL, SPECIAL_MAXIMIZE, SPECIAL_MINIMIZE, SPECIAL_FULLSCREEN, SPECIAL_KEEP_ABOVE, SPECIAL_KEEP_BELOW, SPECIAL_NO_TITLEBAR_AND_FRAME, SPECIAL_CLOSE and SPECIAL_EMPTY.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set the layouts for the Popup mode - one layout per line.&lt;/p&gt;&lt;p&gt;Valid formats:&lt;/p&gt;&lt;p&gt;[&lt;span style=&quot; font-weight:700;&quot;&gt;WxH&lt;/span&gt;] - an W column wide and H rows high grid layout (example 4x2 will give 2 rows with 4 columns each for a total of 8 tiles)&lt;/p&gt;&lt;p&gt;[&lt;span style=&quot; font-weight:700;&quot;&gt;X,Y,Width,Height&lt;/span&gt;] - an Width wide and Height tall tile located at X and Y coordinates (example 20,10,400px,200px for a 400 pixel wide, 200 pixel high tile placed at 20% screen width and 10% screen height)&lt;/p&gt;&lt;p&gt;[&lt;span style=&quot; font-weight:700;&quot;&gt;X,Y,Width,Height,AnchorX,AnchorY&lt;/span&gt;] - same as above, except tile is placed using the tile anchor point (example 50,50,320px,240px,CENTER,CENTER to place a 320x240 pixel large tile in the middle of the screen - without the CENTER anchor, the top-left corner would end up in the middle of the screen instead)&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;X&lt;/span&gt;, &lt;span style=&quot; font-weight:700;&quot;&gt;Y&lt;/span&gt;, &lt;span style=&quot; font-weight:700;&quot;&gt;Width&lt;/span&gt; and &lt;span style=&quot; font-weight:700;&quot;&gt;Height&lt;/span&gt; can be be in percent (usually between 0 and 100 - recommended) or pixels (absolute pixel value using px suffix - not recommended).&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;AnchorX&lt;/span&gt; can be a percentage of tile Width or one of &lt;span style=&quot; font-weight:700;&quot;&gt;LEFT&lt;/span&gt;, &lt;span style=&quot; font-weight:700;&quot;&gt;CENTER&lt;/span&gt; or &lt;span style=&quot; font-weight:700;&quot;&gt;RIGHT&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;AnchorY&lt;/span&gt; can be a percentage of tile Height or one of &lt;span style=&quot; font-weight:700;&quot;&gt;TOP&lt;/span&gt;, &lt;span style=&quot; font-weight:700;&quot;&gt;CENTER&lt;/span&gt; or &lt;span style=&quot; font-weight:700;&quot;&gt;BOTTOM&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;The layout can be made of multiple grids and/or tiles separated by a + (example 0,0,50,100+50,0,50,100 which is equal to a 2x1 grid).&lt;/p&gt;&lt;p&gt;You can also use one of these special layouts: SPECIAL_FILL, SPECIAL_SPLIT_VERTICAL, SPECIAL_SPLIT_HORIZONTAL, SPECIAL_MAXIMIZE, SPECIAL_MINIMIZE, SPECIAL_FULLSCREEN, SPECIAL_KEEP_ABOVE, SPECIAL_KEEP_BELOW, SPECIAL_NO_TITLEBAR_AND_FRAME, SPECIAL_CLOSE and SPECIAL_EMPTY.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -1105,16 +1094,6 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_applicationWhitelist">
           <item>
-           <widget class="QLabel" name="label_allPopupLayoutsDisclaimer">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;This was meant to be just a temporary solution - an UI designer was going to replace it (accessed via the &lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;Ctrl+.&lt;/span&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt; shortcut).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;However the UI designer is a lot of work, probaly at least 1-2 weeks full time. Sadly I got rent to pay and a 3 year old son to feed and based on my previous project Remember Window Positions, I will not be able to feed us from my contributions to Linux. (After over 3 months full time work I earned $100 total which I apreciate but it's not possible to survive on).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;I might implement it in the future if the situation changes.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QPlainTextEdit" name="kcfg_allPopupLayouts">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
@@ -1130,8 +1109,7 @@
           <item>
            <widget class="QLabel" name="label_allPopupLayoutsExplanation">
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set all the layouts for the Popup mode - one layout per line.&lt;br/&gt;&lt;br/&gt;Valid format is either a grid [XxY] (example 4x2) or [X,Y,Width,Height]. Any of the values can be in percent (recommended) or pixels (using px suffix - not recommended).&lt;br/&gt;&lt;br/&gt;Example 0,0,100,100 for a full screen tile equal to 1x1 or 20,10,400px,200px for a 400 pixel wide, 200 pixel high tile placed at 20% screen width and 10% screen height.
-&lt;br/&gt;&lt;br/&gt; The layout can be made of multiple grids and/or cells separated by a + (example 0,0,50,100+50,0,50,100 which is equal to a 2x1).&lt;br/&gt;&lt;br/&gt;You can also use one of special layouts: SPECIAL_FILL, SPECIAL_SPLIT_VERTICAL, SPECIAL_SPLIT_HORIZONTAL, SPECIAL_MAXIMIZE, SPECIAL_MINIMIZE, SPECIAL_FULLSCREEN, SPECIAL_KEEP_ABOVE, SPECIAL_KEEP_BELOW, SPECIAL_NO_TITLEBAR_AND_FRAME, SPECIAL_CLOSE and SPECIAL_EMPTY.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set all the layouts for the Popup mode - one layout per line.&lt;/p&gt;&lt;p&gt;Valid formats:&lt;/p&gt;&lt;p&gt;[&lt;span style=&quot; font-weight:700;&quot;&gt;WxH&lt;/span&gt;] - an W column wide and H rows high grid layout (example 4x2 will give 2 rows with 4 columns each for a total of 8 tiles)&lt;/p&gt;&lt;p&gt;[&lt;span style=&quot; font-weight:700;&quot;&gt;X,Y,Width,Height&lt;/span&gt;] - an Width wide and Height tall tile located at X and Y coordinates (example 20,10,400px,200px for a 400 pixel wide, 200 pixel high tile placed at 20% screen width and 10% screen height)&lt;/p&gt;&lt;p&gt;[&lt;span style=&quot; font-weight:700;&quot;&gt;X,Y,Width,Height,AnchorX,AnchorY&lt;/span&gt;] - same as above, except tile is placed using the tile anchor point (example 50,50,320px,240px,CENTER,CENTER to place a 320x240 pixel large tile in the middle of the screen - without the CENTER anchor, the top-left corner would end up in the middle of the screen instead)&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;X&lt;/span&gt;, &lt;span style=&quot; font-weight:700;&quot;&gt;Y&lt;/span&gt;, &lt;span style=&quot; font-weight:700;&quot;&gt;Width&lt;/span&gt; and &lt;span style=&quot; font-weight:700;&quot;&gt;Height&lt;/span&gt; can be be in percent (usually between 0 and 100 - recommended) or pixels (absolute pixel value using px suffix - not recommended).&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;AnchorX&lt;/span&gt; can be a percentage of tile Width or one of &lt;span style=&quot; font-weight:700;&quot;&gt;LEFT&lt;/span&gt;, &lt;span style=&quot; font-weight:700;&quot;&gt;CENTER&lt;/span&gt; or &lt;span style=&quot; font-weight:700;&quot;&gt;RIGHT&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;AnchorY&lt;/span&gt; can be a percentage of tile Height or one of &lt;span style=&quot; font-weight:700;&quot;&gt;TOP&lt;/span&gt;, &lt;span style=&quot; font-weight:700;&quot;&gt;CENTER&lt;/span&gt; or &lt;span style=&quot; font-weight:700;&quot;&gt;BOTTOM&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;The layout can be made of multiple grids and/or tiles separated by a + (example 0,0,50,100+50,0,50,100 which is equal to a 2x1 grid).&lt;/p&gt;&lt;p&gt;You can also use one of these special layouts: SPECIAL_FILL, SPECIAL_SPLIT_VERTICAL, SPECIAL_SPLIT_HORIZONTAL, SPECIAL_MAXIMIZE, SPECIAL_MINIMIZE, SPECIAL_FULLSCREEN, SPECIAL_KEEP_ABOVE, SPECIAL_KEEP_BELOW, SPECIAL_NO_TITLEBAR_AND_FRAME, SPECIAL_CLOSE and SPECIAL_EMPTY.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>

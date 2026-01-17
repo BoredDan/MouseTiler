@@ -154,11 +154,13 @@ PlasmaCore.Dialog {
             };
         } else if (activeLayoutIndex >= 0 && activeTileIndex >= 0) {
             let layout = layoutRepeater.model[activeLayoutIndex].tiles[activeTileIndex];
+            let width = layout.w == undefined ? layout.pxW : layout.w / 100 * clientArea.width;
+            let height = layout.h == undefined ? layout.pxH : layout.h / 100 * clientArea.height;
             return {
-                x: clientArea.x + (layout.x == undefined ? layout.pxX : layout.x / 100 * clientArea.width),
-                y: clientArea.y + (layout.y == undefined ? layout.pxY : layout.y / 100 * clientArea.height),
-                width: layout.w == undefined ? layout.pxW : layout.w / 100 * clientArea.width,
-                height: layout.h == undefined ? layout.pxH : layout.h / 100 * clientArea.height
+                x: clientArea.x + (layout.x == undefined ? layout.pxX : layout.x / 100 * clientArea.width) - (layout.aX == undefined ? 0 : layout.aX * width / 100),
+                y: clientArea.y + (layout.y == undefined ? layout.pxY : layout.y / 100 * clientArea.height) - (layout.aY == undefined ? 0 : layout.aY * height / 100),
+                width: width,
+                height: height
             };
         }
         return null;
@@ -198,10 +200,10 @@ PlasmaCore.Dialog {
                     break;
                 default:
                     let layout = layoutRepeater.model[activeLayoutIndex].tiles[activeTileIndex];
-                    popupDropHintX = layout.x == undefined ? layout.pxX : layout.x / 100 * clientArea.width;
-                    popupDropHintY = layout.y == undefined ? layout.pxY : layout.y / 100 * clientArea.height;
                     popupDropHintWidth = layout.w == undefined ? layout.pxW : layout.w / 100 * clientArea.width;
                     popupDropHintHeight = layout.h == undefined ? layout.pxH : layout.h / 100 * clientArea.height;
+                    popupDropHintX = (layout.x == undefined ? layout.pxX : layout.x / 100 * clientArea.width) - (layout.aX == undefined ? 0 : layout.aX * popupDropHintWidth / 100);
+                    popupDropHintY = (layout.y == undefined ? layout.pxY : layout.y / 100 * clientArea.height) - (layout.aY == undefined ? 0 : layout.aY * popupDropHintHeight / 100);
                     showPopupDropHint = true;
                     return; // Force return to avoid hiding popup
             }
@@ -336,10 +338,10 @@ PlasmaCore.Dialog {
                                 property bool tileActive: activeTileIndex == index
                                 property bool tileDisabled: modelData.d ? true : false
 
-                                x: (modelData.x == undefined ? modelData.pxX / clientArea.width : modelData.x / 100) * (tiles.width - borderOffset * 2) + borderOffset
-                                y: (modelData.y == undefined ? modelData.pxY / clientArea.height : modelData.y / 100) * (tiles.height - borderOffset * 2) + borderOffset
                                 width: (modelData.w == undefined ? modelData.pxW / clientArea.width : modelData.w / 100) * (tiles.width - borderOffset * 2)
                                 height: (modelData.h == undefined ? modelData.pxH / clientArea.height : modelData.h / 100) * (tiles.height - borderOffset * 2)
+                                x: (modelData.x == undefined ? modelData.pxX / clientArea.width : modelData.x / 100) * (tiles.width - borderOffset * 2) + borderOffset - (modelData.aX == undefined ? 0 : modelData.aX * width / 100)
+                                y: (modelData.y == undefined ? modelData.pxY / clientArea.height : modelData.y / 100) * (tiles.height - borderOffset * 2) + borderOffset - (modelData.aY == undefined ? 0 : modelData.aY * height / 100)
 
                                 Rectangle {
                                     anchors.fill: parent

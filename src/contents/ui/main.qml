@@ -41,9 +41,9 @@ Item {
     function loadConfig() {
         log('Loading configuration');
 
-        const defaultAllLayouts = `SPECIAL_FILL-Fill
-SPECIAL_SPLIT_VERTICAL-Vertical Split
-SPECIAL_SPLIT_HORIZONTAL-Horizontal Split
+        const defaultAllLayouts = `SPECIAL_FILL;Fill
+SPECIAL_SPLIT_VERTICAL;Vertical Split
+SPECIAL_SPLIT_HORIZONTAL;Horizontal Split
 SPECIAL_MAXIMIZE
 SPECIAL_MINIMIZE
 SPECIAL_FULLSCREEN
@@ -59,7 +59,7 @@ SPECIAL_KEEP_BELOW
 0,0,25,50+0,50,25,50+25,0,25,50+25,50,25,50+50,0,50,50+50,50,50,50
 SPECIAL_NO_TITLEBAR_AND_FRAME
 SPECIAL_CLOSE
-1x1-Full Screen
+1x1;Full Screen
 2x1
 3x1
 4x1
@@ -69,38 +69,38 @@ SPECIAL_CLOSE
 1x3
 1x4
 1x5
-0,0,75,100+25,0,75,100+25,0,50,100-75 50 75 (%)
-0,0,75,50+25,0,75,50+25,0,50,50+0,50,75,50+25,50,75,50+25,50,50,50-75 50 75 (%) x2
+0,0,75,100+25,0,75,100+25,0,50,100;75 50 75 (%)
+0,0,75,50+25,0,75,50+25,0,50,50+0,50,75,50+25,50,75,50+25,50,50,50;75 50 75 (%) x2
 2x2
 3x2
 4x2
 5x2
-0,0,67,100+33,0,67,100+17,0,66,100-67 66 67 (%)
-0,0,67,50+33,0,67,50+17,0,66,50+0,50,67,50+33,50,67,50+17,50,66,50-67 66 67 (%) x2
+0,0,67,100+33,0,67,100+17,0,66,100;67 66 67 (%)
+0,0,67,50+33,0,67,50+17,0,66,50+0,50,67,50+33,50,67,50+17,50,66,50;67 66 67 (%) x2
 2x3
 3x3
 4x3
 5x3
-1x1+17,0,66,100+33,0,34,100-100 66 34 (%)
-1x2+17,0,66,50+33,0,34,50+17,50,66,50+33,50,34,50-100 66 34 (%) x2
+1x1+17,0,66,100+33,0,34,100;100 66 34 (%)
+1x2+17,0,66,50+33,0,34,50+17,50,66,50+33,50,34,50;100 66 34 (%) x2
 11,25,26,50+37,25,26,50+63,25,26,50
 11,0,26,100+37,0,26,100+63,0,26,100
 11,0,26,50+37,0,26,50+63,0,26,50 + 11,50,26,50+37,50,26,50+63,50,26,50
 11,0,26,100+37,0,26,100+63,0,26,100 + 11,12,26,76+37,12,26,76+63,12,26,76 + 11,25,26,50+37,25,26,50+63,25,26,50
-1x1+12,0,76,100+25,0,50,100+37,0,26,100-100 76 50 26 (%)
-1x2+12,0,76,50+25,0,50,50+37,0,26,50+12,50,76,50+25,50,50,50+37,50,26,50-100 76 50 26 (%) x2
+1x1+12,0,76,100+25,0,50,100+37,0,26,100;100 76 50 26 (%)
+1x2+12,0,76,50+25,0,50,50+37,0,26,50+12,50,76,50+25,50,50,50+37,50,26,50;100 76 50 26 (%) x2
 0,25,37,50+37,25,26,50+63,25,37,50
-0,0,37,100+37,0,26,100+63,0,37,100 - 37 26 37 (%)
-0,0,37,50+37,0,26,50+63,0,37,50 + 0,50,37,50+37,50,26,50+63,50,37,50 - 37 26 37 (%) x2
+0,0,37,100+37,0,26,100+63,0,37,100 ; 37 26 37 (%)
+0,0,37,50+37,0,26,50+63,0,37,50 + 0,50,37,50+37,50,26,50+63,50,37,50 ; 37 26 37 (%) x2
 0,0,37,100+37,0,26,100+63,0,37,100 + 0,12,37,76+37,12,26,76+63,12,37,76 + 0,25,37,50+37,25,26,50+63,25,37,50
-1x1+17,17,66,66+33,33,34,34-100 66 34 (%)
-1x1+12,12,76,76+25,25,50,50+37,37,26,26-100 76 50 26 (%)
-0,0,25,100+75,0,25,100+25,0,50,100-25 50 25 (%)
-0,0,25,67+75,0,25,67+25,0,50,67+0,67,25,33+75,67,25,33+25,67,50,33-25 50 25 (%)
-0,0,25,33+75,0,25,33+25,0,50,33+0,33,25,67+75,33,25,67+25,33,50,67-25 50 25 (%)
-0,0,25,67+75,0,25,67+25,0,50,67+0,33,25,67+75,33,25,67+25,33,50,67-25 50 25 (%)
-0,0,33,67+33,0,34,67+67,0,33,67+0,67,33,33+33,67,34,33+67,67,33,33-67 x3 37 x3 (%)
-0,0,33,33+33,0,34,33+67,0,33,33+0,33,33,67+33,33,34,67+67,33,33,67-33 x3 67 x3 (%)
+1x1+17,17,66,66+33,33,34,34;100 66 34 (%)
+1x1+12,12,76,76+25,25,50,50+37,37,26,26;100 76 50 26 (%)
+0,0,25,100+75,0,25,100+25,0,50,100;25 50 25 (%)
+0,0,25,67+75,0,25,67+25,0,50,67+0,67,25,33+75,67,25,33+25,67,50,33;25 50 25 (%)
+0,0,25,33+75,0,25,33+25,0,50,33+0,33,25,67+75,33,25,67+25,33,50,67;25 50 25 (%)
+0,0,25,67+75,0,25,67+25,0,50,67+0,33,25,67+75,33,25,67+25,33,50,67;25 50 25 (%)
+0,0,33,67+33,0,34,67+67,0,33,67+0,67,33,33+33,67,34,33+67,67,33,33;67 x3 37 x3 (%)
+0,0,33,33+33,0,34,33+67,0,33,33+0,33,33,67+33,33,34,67+67,33,33,67;33 x3 67 x3 (%)
 0,0,67,100+67,0,33,100
 0,0,33,100+33,0,67,100
 0,0,67,100+67,0,33,50+67,50,33,50
@@ -111,11 +111,11 @@ SPECIAL_CLOSE
         const defaultPopupLayouts = `1x1
 2x1
 3x1
-SPECIAL_SPLIT_HORIZONTAL-Horizontal Split
-0,0,75,100+25,0,75,100+25,0,50,100-75 50 75 (%)
+SPECIAL_SPLIT_HORIZONTAL;Horizontal Split
+0,0,75,100+25,0,75,100+25,0,50,100;75 50 75 (%)
 4x1
 2x2
-SPECIAL_FILL-Fill
+SPECIAL_FILL;Fill
 4x2`;
 
         config = {
@@ -203,7 +203,15 @@ SPECIAL_FILL-Fill
 
         let layout = { tiles: [] };
 
-        let sections = userLayout.split('-');
+        const anchorValue = {
+            left: "0",
+            top: "0",
+            center: "50",
+            right: "100",
+            bottom: "100"
+        };
+
+        let sections = userLayout.split(';');
         for (let sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
             if (sections[sectionIndex].startsWith('d') && !hasDefault) {
                 hasDefault = true;
@@ -302,9 +310,9 @@ SPECIAL_FILL-Fill
                                 logE('Invalid user layout: ' + tiles[tileIndex]);
                             }
                         }
-                    } else if (coordinates.length == 4) {
-                        // x,y,w,h
-                        let x, pxX, y, pxY, w, pxW, h, pxH;
+                    } else if (coordinates.length == 4 || coordinates.length == 6) {
+                        // x, pixel x, y, pixel y, w, pixel w, h, pixel h, anchorX, anchorY
+                        let x, pxX, y, pxY, w, pxW, h, pxH, aX, aY;
                         isValid = true;
                         if (coordinates[0].endsWith('px')) {
                             pxX = parseInt(coordinates[0]);
@@ -354,8 +362,22 @@ SPECIAL_FILL-Fill
                             }
                         }
 
+                        if (coordinates.length == 6) {
+                            let numericAX = coordinates[4].replace(/\b(?:left|center|right)\b/gi, value => anchorValue[value.toLowerCase()]);
+                            aX = parseInt(numericAX);
+                            if (Number.isNaN(aX)) {
+                                isValid = false;
+                            }
+
+                            let numericAY = coordinates[5].replace(/\b(?:top|center|bottom)\b/gi, value => anchorValue[value.toLowerCase()]);
+                            aY = parseInt(numericAY);
+                            if (Number.isNaN(aY)) {
+                                isValid = false;
+                            }
+                        }
+
                         if (isValid) {
-                            layout.tiles.push({x: x, pxX: pxX, y: y, pxY: pxY, w: w, pxW: pxW, h: h, pxH: pxH});
+                            layout.tiles.push({x: x, pxX: pxX, y: y, pxY: pxY, w: w, pxW: pxW, h: h, pxH: pxH, aX: aX, aY: aY});
                         } else {
                             logE('Invalid user layout: ' + tiles[tileIndex]);
                         }
