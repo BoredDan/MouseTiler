@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import org.kde.kwin
 import org.kde.kirigami as Kirigami
+import QtWebView
 
 ApplicationWindow {
     property var overrides: {}
@@ -110,6 +111,12 @@ ApplicationWindow {
         id: mainGroupBox
         anchors.fill: parent
         anchors.topMargin: 35
+
+        // WebView {
+        //     id: webView
+        //     anchors.fill: parent
+        //     url: "https://rxweb.epizy.com/mousetiler/editor.html"
+        // }
 
         ColumnLayout {
             id: mainChoice

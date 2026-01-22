@@ -66,6 +66,9 @@ Allows you to tile your windows with minimum effort by moving the mouse just a f
 ![](./assets/overlay_tiler.png)<br>
 **Overlay Tiler**
 
+![](./assets/center_in_tile_v1.gif)<br>
+**Center In Tile**
+
 ### <p id="features_planned"></p>Planned for the future (maybe)
 
 The text configuration was meant to be just a temporary solution - an GUI designer was going to replace it (accessed via the Ctrl+. shortcut).

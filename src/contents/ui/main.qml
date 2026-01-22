@@ -149,6 +149,17 @@ SPECIAL_FILL;Fill
             popupGridPollingRate: KWin.readConfig("popupGridPollingRate", 100),
             layouts: convertLayouts(KWin.readConfig("popupLayout", defaultPopupLayouts), defaultPopupLayouts),
             allLayouts: convertLayouts(KWin.readConfig("allPopupLayouts", defaultAllLayouts), defaultAllLayouts),
+            shortcutChangeMode: KWin.readConfig("shortcutChangeMode", "Meta+Ctrl+Space"),
+            shortcutShowAllSpan: KWin.readConfig("shortcutShowAllSpan", "Ctrl+Space"),
+            shortcutVisibility: KWin.readConfig("shortcutVisibility", "Meta+Space"),
+            shortcutInputType: KWin.readConfig("shortcutInputType", "Ctrl+Alt+I"),
+            shortcutCenterInTile: KWin.readConfig("shortcutCenterInTile", "Meta+Ctrl+C"),
+            hintChangeMode: KWin.readConfig("hintChangeMode", true),
+            hintShowAllSpan: KWin.readConfig("hintShowAllSpan", true),
+            hintVisibility: KWin.readConfig("hintVisibility", true),
+            hintInputType: KWin.readConfig("hintInputType", false),
+            hintCenterInTile: KWin.readConfig("hintCenterInTile", true),
+            showHintHint: KWin.readConfig("showHintHint", true),
             showPositionHint: KWin.readConfig("showPositionHint", false),
             showPositionHintInPixels: KWin.readConfig("positionHintFormat", 0) == 0,
             showSizeHint: KWin.readConfig("showSizeHint", false),
@@ -238,8 +249,8 @@ SPECIAL_FILL;Fill
                         if (coordinates[0].startsWith('SPECIAL_')) {
                             switch (coordinates[0]) {
                                 case 'SPECIAL_FILL':
-                                    layout.tiles.push({x: 0, y: 0, w: 75, h: 100, t: "«&nbsp; FILL &nbsp;»", hint: "Fill largest empty space (if any available)"});
-                                    layout.tiles.push({x: 75, y: 0, w: 25, h: 100, t: "« »", d: false, hint: "Fill smallest empty space (if any available)"});
+                                    layout.tiles.push({x: 0, y: 0, w: 75, h: 100, t: "«&nbsp; FILL &nbsp;»", hint: "Fill largest empty space"});
+                                    layout.tiles.push({x: 75, y: 0, w: 25, h: 100, t: "« »", d: false, hint: "Fill smallest empty space"});
                                     layout.special = 'SPECIAL_FILL';
                                     isValid = true;
                                     break;
@@ -266,7 +277,7 @@ SPECIAL_FILL;Fill
                                     isValid = true;
                                     break;
                                 case 'SPECIAL_FULLSCREEN':
-                                    layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "<br>FULLSCREEN<br>🗖", hint: "Set window to 🗖 Fullscreen<br><b>WARNING</b> you might need to press <b>Alt+F3</b> to exit"});
+                                    layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "<br>FULLSCREEN<br>🗖", hint: "Set window to 🗖 Fullscreen<br><font color='orange'>⚠</font> <b>WARNING</b> you might need to press <b>Alt+F3</b> to exit"});
                                     layout.special = 'SPECIAL_FULLSCREEN';
                                     isValid = true;
                                     break;
@@ -285,7 +296,7 @@ SPECIAL_FILL;Fill
                                     isValid = true;
                                     break;
                                 case 'SPECIAL_NO_TITLEBAR_AND_FRAME':
-                                    layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "NO TITLEBAR<br>AND FRAME", hint: "Toggle window ⊘ No Titlebar and Frame<br><b>WARNING</b> you might need to press <b>Alt+F3</b> to re-enable"});
+                                    layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "NO TITLEBAR<br>AND FRAME", hint: "Toggle window <font size='1'>⊘</font> No Titlebar and Frame<br><font color='orange'>⚠</font> <b>WARNING</b> you might need to press <b>Alt+F3</b> to re-enable"});
                                     layout.special = 'SPECIAL_NO_TITLEBAR_AND_FRAME';
                                     isValid = true;
                                     break;

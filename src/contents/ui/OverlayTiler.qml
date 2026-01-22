@@ -195,12 +195,53 @@ PlasmaCore.Dialog {
                         color: colors.overlayTextColor
                         textFormat: Text.StyledText
                         text: {
-                            let defaultHint = spannedFrom ? "Stop spanning (<b>Ctrl+Space</b> by default)<br>Toggle visibility (<b>Meta+Space</b> by default)<br><br>Switch mode (<b>Ctrl+Meta+Space</b> by default)" : "Span from this tile (<b>Ctrl+Space</b> by default)<br>Toggle visibility (<b>Meta+Space</b> by default)<br><br>Switch mode (<b>Ctrl+Meta+Space</b> by default)";
+                            let defaultHint = "";
+                            let insertExtraBreak = false;
+
+                            if (root.config.showHintHint) {
+                                defaultHint += (defaultHint.length > 0 ? "<br>" : "") + "Configure tiler visibility and these hints in settings.";
+                                insertExtraBreak = true;
+                            }
+                            if (root.config.hintShowAllSpan) {
+                                if (insertExtraBreak) {
+                                    defaultHint += "<br>";
+                                    insertExtraBreak = false;
+                                }
+                                defaultHint += (defaultHint.length > 0 ? "<br>" : "") + (spannedFrom ? "Stop spanning (<b>" + root.config.shortcutShowAllSpan + "</b>)" : "Span from this tile (<b>" + root.config.shortcutShowAllSpan + "</b>)");
+                                insertExtraBreak = true;
+                            }
+                            if (root.config.hintVisibility) {
+                                if (insertExtraBreak) {
+                                    defaultHint += "<br>";
+                                    insertExtraBreak = false;
+                                }
+                                defaultHint += (defaultHint.length > 0 ? "<br>" : "") + "Toggle visibility (<b>" + root.config.shortcutVisibility + "</b>)";
+                            }
+                            if (root.config.hintInputType) {
+                                if (insertExtraBreak) {
+                                    defaultHint += "<br>";
+                                    insertExtraBreak = false;
+                                }
+                                defaultHint += (defaultHint.length > 0 ? "<br>" : "") + "Input type: " + (root.useMouseCursor ? "Mouse" : "Window") + " (<b>" + root.config.shortcutInputType + "</b>)";
+                            }
+                            if (root.config.hintCenterInTile) {
+                                if (insertExtraBreak) {
+                                    defaultHint += "<br>";
+                                    insertExtraBreak = false;
+                                }
+                                defaultHint += (defaultHint.length > 0 ? "<br>" : "") + "Center in tile: " + (root.centerInTile ? "Enabled" : "Disabled") + " (<b>" + root.config.shortcutCenterInTile + "</b>)";
+                            }
+                            if (root.config.hintChangeMode) {
+                                insertExtraBreak = false;
+                                defaultHint += (defaultHint.length > 0 ? "<br><br>" : "") + "Switch mode (<b>" + root.config.shortcutChangeMode + "</b>)";
+                            }
+
                             if (root.centerInTile) {
                                 return (spannedFrom ? "<b>Center in spanned tiles</b><br><br>" : "<b>Center in this tile</b><br><br>") + defaultHint;
                             } else {
                                 return defaultHint;
                             }
+                            return defaultHint;
                         }
                         font.pixelSize: 16
                         font.family: "Hack"

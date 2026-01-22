@@ -46,6 +46,7 @@ PlasmaCore.Dialog {
         activeTileIndex = -1;
         hint = null;
         showPopupDropHint = false;
+        updateHintContent();
     }
 
     function resetShowAll() {
@@ -257,13 +258,22 @@ PlasmaCore.Dialog {
             popupDropHintIsCenterInTile = root.centerInTile;
             let special = layoutRepeater.model[activeLayoutIndex].special;
             let tile = layoutRepeater.model[activeLayoutIndex].tiles[activeTileIndex];
-            if (tile.hint) {
+            if (root.centerInTile && hasValidPopupDropHint) {
+                hint = '<b>Center in tile</b> - will not resize the window' + (root.config.hintCenterInTile ? '<br>Toggle with <b>' + root.config.shortcutCenterInTile + '</b>' : '');
+            } else if (tile.hint) {
                 switch (special) {
                     case 'SPECIAL_KEEP_ABOVE':
                         hint = tile.hint + '<br>Currently <b>' + (root.currentlyMovedWindow.keepAbove ? 'Enabled' : 'Disabled') + '</b>';
                         break;
                     case 'SPECIAL_KEEP_BELOW':
                         hint = tile.hint + '<br>Currently <b>' + (root.currentlyMovedWindow.keepBelow ? 'Enabled' : 'Disabled') + '</b>';
+                        break;
+                    case 'SPECIAL_FILL':
+                        hint = hasValidPopupDropHint ? tile.hint : '<font color="orange">⚠</font> No free space available';
+                        break;
+                    case 'SPECIAL_SPLIT_HORIZONTAL':
+                    case 'SPECIAL_SPLIT_VERTICAL':
+                        hint = hasValidPopupDropHint ? tile.hint : '<font color="orange">⚠</font> No window available for splitting';
                         break;
                     default:
                         hint = tile.hint;
@@ -296,6 +306,39 @@ PlasmaCore.Dialog {
             hasValidPopupDropHint = false;
             showPopupDropHint = false;
             hint = null;
+        }
+
+        if (hint == null) {
+            let defaultHint = "";
+            let hasShortcutHint = false;
+
+            if (root.config.showHintHint) {
+                defaultHint += (defaultHint.length > 0 ? " " : "") + "Configure tiler visibility and these hints in settings.<br>";
+            }
+            if (root.config.hintShowAllSpan) {
+                defaultHint += (hasShortcutHint ? " - " : "") + (showAll ? "Show default (<b>" + root.config.shortcutShowAllSpan + "</b>)" : "Show all (<b>" + root.config.shortcutShowAllSpan + "</b>)");
+                hasShortcutHint = true;
+            }
+            if (root.config.hintVisibility) {
+                defaultHint += (hasShortcutHint ? " - " : "") + "Visibility (<b>" + root.config.shortcutVisibility + "</b>)";
+                hasShortcutHint = true;
+            }
+            if (root.config.hintChangeMode) {
+                defaultHint += (hasShortcutHint ? " - " : "") + "Mode (<b>" + root.config.shortcutChangeMode + "</b>)";
+                hasShortcutHint = true;
+            }
+            if (root.config.hintInputType) {
+                defaultHint += (hasShortcutHint ? " - " : "") + "Input type (<b>" + root.config.shortcutInputType + "</b>)";
+                hasShortcutHint = true;
+            }
+            if (root.config.hintCenterInTile) {
+                defaultHint += (hasShortcutHint ? " - " : "") + "Center in tile (<b>" + root.config.shortcutCenterInTile + "</b>)";
+                hasShortcutHint = true;
+            }
+
+            if (defaultHint.length > 0) {
+                hint = defaultHint;
+            }
         }
     }
 
@@ -443,7 +486,8 @@ PlasmaCore.Dialog {
                                         anchors.centerIn: parent
                                         color: colors.textColor
                                         textFormat: Text.StyledText
-                                        text: root.centerInTile && layoutActive && tileActive && hasValidPopupDropHint ? "·" : (modelData.t && modelData.t.length > 0 ? modelData.t : "")
+                                        // ⸰ ·
+                                        text: root.centerInTile && layoutActive && tileActive && hasValidPopupDropHint ? "⸰" : (modelData.t && modelData.t.length > 0 ? modelData.t : "")
                                         font.pixelSize: 14
                                         font.family: "Hack"
                                         horizontalAlignment: Text.AlignHCenter
@@ -465,7 +509,7 @@ PlasmaCore.Dialog {
             border.color: colors.borderColor
             border.width: 1
             radius: 8
-            visible: root.config.showTextHint
+            visible: root.config.showTextHint && hint != null
 
             anchors.left: parent.left
             anchors.leftMargin: positionX
@@ -478,7 +522,7 @@ PlasmaCore.Dialog {
                 anchors.centerIn: parent
                 color: colors.textColor
                 textFormat: Text.StyledText
-                text: hint != null ? hint : showAll ? "Show default (<b>Ctrl+Space</b>) Visibility (<b>Meta+Space</b>) Mode (<b>Ctrl+Meta+Space</b>)" : "Show all (<b>Ctrl+Space</b>) Visibility (<b>Meta+Space</b>) Mode (<b>Ctrl+Meta+Space</b>)"
+                text: hint != null ? hint : ""
                 font.pixelSize: 12
                 font.family: "Hack"
                 horizontalAlignment: Text.AlignHCenter
