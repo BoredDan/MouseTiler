@@ -129,7 +129,8 @@ SPECIAL_FILL;Fill
             revealMargin: KWin.readConfig("revealMargin", 200),
             windowVisibility: KWin.readConfig("windowVisibility", 0),
             theme: KWin.readConfig("theme", 0),
-            edgeMargin: KWin.readConfig("tileMargin", 0),
+            tileMargin: KWin.readConfig("tileMargin", 0),
+            screenMargin: KWin.readConfig("screenMargin", 0),
             useMouseCursorByDefault: KWin.readConfig("defaultInput", 0) == 0,
             showOverlayTextHint: KWin.readConfig("showOverlayTextHint", true),
             overlay: convertOverlayLayout(KWin.readConfig("overlayLayout", defaultOverlayLayout), defaultOverlayLayout),
@@ -167,8 +168,8 @@ SPECIAL_FILL;Fill
 
             // live settings
         };
-        config.tileMarginLeftTop = Math.floor(config.edgeMargin / 2);
-        config.tileMarginRightBottom = Math.ceil(config.edgeMargin / 2);
+        config.tileMarginLeftTop = Math.floor(config.tileMargin / 2);
+        config.tileMarginRightBottom = Math.ceil(config.tileMargin / 2);
         config.rememberCenterInTile = config.centerInTileMode == 1 || config.centerInTileMode == 3;
 
         useMouseCursor = config.useMouseCursorByDefault;
@@ -577,25 +578,25 @@ SPECIAL_FILL;Fill
     }
 
     function addMargins(geometry, left, right, top, bottom) {
-        if (config.edgeMargin > 0) {
+        if (config.tileMargin > 0 || config.screenMargin != 0) {
             let clientArea = Workspace.clientArea(KWin.FullScreenArea, Workspace.activeScreen, Workspace.currentDesktop);
             if (left) {
-                let isEdge = geometry.x == clientArea.left;
-                geometry.x += isEdge ? config.edgeMargin : config.tileMarginLeftTop;
-                geometry.width -= isEdge ? config.edgeMargin : config.tileMarginLeftTop;
+                let isEdge = Math.abs(geometry.x - clientArea.left) < 0.1;
+                geometry.x += isEdge ? config.tileMargin + config.screenMargin : config.tileMarginLeftTop;
+                geometry.width -= isEdge ? config.tileMargin + config.screenMargin : config.tileMarginLeftTop;
             }
             if (right) {
-                let isEdge = geometry.x + geometry.width == clientArea.right;
-                geometry.width -= isEdge ? config.edgeMargin : config.tileMarginRightBottom;
+                let isEdge = Math.abs(geometry.x + geometry.width - clientArea.right) < 0.1;
+                geometry.width -= isEdge ? config.tileMargin + config.screenMargin : config.tileMarginRightBottom;
             }
             if (top) {
-                let isEdge = geometry.y == clientArea.top;
-                geometry.y += isEdge ? config.edgeMargin : config.tileMarginLeftTop;
-                geometry.height -= isEdge ? config.edgeMargin : config.tileMarginLeftTop;
+                let isEdge = Math.abs(geometry.y - clientArea.top) < 0.1;
+                geometry.y += isEdge ? config.tileMargin + config.screenMargin : config.tileMarginLeftTop;
+                geometry.height -= isEdge ? config.tileMargin + config.screenMargin : config.tileMarginLeftTop;
             }
             if (bottom) {
-                let isEdge = geometry.y + geometry.height == clientArea.bottom;
-                geometry.height -= isEdge ? config.edgeMargin : config.tileMarginRightBottom;
+                let isEdge = Math.abs(geometry.y + geometry.height - clientArea.bottom) < 0.1;
+                geometry.height -= isEdge ? config.tileMargin + config.screenMargin : config.tileMarginRightBottom;
             }
         }
     }
