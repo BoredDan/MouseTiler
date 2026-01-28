@@ -1269,7 +1269,7 @@
           <item>
            <widget class="QCheckBox" name="kcfg_moveBackOnDrop">
             <property name="text">
-             <string>Move back to previous virtual desktop after dropping window on a Virtual Desktop drop zone (can be temporarily toggled with Meta+Ctrl+V)</string>
+             <string>Move back to previous virtual desktop after dropping window on a virtual desktop Drop Zone (can be temporarily toggled with Meta+Ctrl+V)</string>
             </property>
            </widget>
           </item>
@@ -1283,7 +1283,7 @@
           <item>
            <widget class="QCheckBox" name="kcfg_showAddVirtualDesktopButton">
             <property name="text">
-             <string>Show add new virtual desktop drop zone</string>
+             <string>Show add new virtual desktop Drop Zone</string>
             </property>
            </widget>
           </item>

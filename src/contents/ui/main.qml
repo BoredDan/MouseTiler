@@ -25,12 +25,13 @@ Item {
     property var windowCursor: Qt.point(0,0)
     property bool centerInTile: false
     property list<var> virtualDesktops: ([])
-    property var currentVirtualDesktopIndex: 0
+    property var currentVirtualDesktopIndex: Workspace.desktops.indexOf(Workspace.currentDesktop)
     property bool virtualDesktopVisibile: false
     property bool moveToVirtualDesktopOnDrop: false
     property bool moveToVirtualDesktopOnTile: false
     property var positionAtMoveStart: ({x: 0, y: 0})
     property var virtualDesktopAtMoveStart: Workspace.currentDesktop
+    property var virtualDesktopIndexAtMoveStart: Workspace.desktops.indexOf(Workspace.currentDesktop)
     property var virtualDesktopChangedSinceMoveStart: false
 
     function log(string) {
@@ -158,7 +159,7 @@ SPECIAL_FILL;Fill
             popupGridPollingRate: KWin.readConfig("popupGridPollingRate", 100),
             virtualDesktopVisibility: KWin.readConfig("virtualDesktopVisibility", 0),
             virtualDesktopDropAction: KWin.readConfig("virtualDesktopDropAction", 0),
-            virtualDesktopHoverTime: KWin.readConfig("virtualDesktopHoverTime", 0),
+            virtualDesktopHoverTime: KWin.readConfig("virtualDesktopHoverTime", 500),
             moveBackOnDrop: KWin.readConfig("moveBackOnDrop", false),
             moveBackOnTile: KWin.readConfig("moveBackOnTile", false),
             showAddVirtualDesktopButton: KWin.readConfig("showAddVirtualDesktopButton", true),
@@ -503,6 +504,7 @@ SPECIAL_FILL;Fill
                 }
                 positionAtMoveStart = {x: client.x, y: client.y};
                 virtualDesktopAtMoveStart = Workspace.currentDesktop;
+                virtualDesktopIndexAtMoveStart = Workspace.desktops.indexOf(virtualDesktopAtMoveStart);
                 virtualDesktopChangedSinceMoveStart = false;
                 moving = true;
                 currentlyMovedWindow = client;

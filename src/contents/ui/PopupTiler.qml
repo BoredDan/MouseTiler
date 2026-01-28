@@ -315,30 +315,38 @@ PlasmaCore.Dialog {
                 }
             } else {
                 let virtualDesktopName = root.virtualDesktops[activeVirtualDesktopIndex].desktop.name;
+                let virtualDesktopHoverChanged = activeVirtualDesktopIndex != root.virtualDesktopIndexAtMoveStart;
                 switch (config.virtualDesktopDropAction) {
                     case 0:
-                        if (root.moveToVirtualDesktopOnDrop) {
+                        if (!virtualDesktopHoverChanged) {
+                            hint = '<b>Drop</b> - Cancel move';
+                        } else if (root.moveToVirtualDesktopOnDrop) {
                             // hint = '<b>Hover</b> - Switch to ' + virtualDesktopName + '<br><b>Drop</b> - Move window, and switch to ' + virtualDesktopName;
-                            hint = '<b>Hover</b> - Switch to ' + virtualDesktopName + '<br><b>Drop</b> - Move window to ' + virtualDesktopName + ', and switch to it';
+                            hint = '<b>Drop</b> - Move window to ' + virtualDesktopName + ', and switch to it';
                         } else {
                             // hint = '<b>Hover</b> - Switch to ' + virtualDesktopName + '<br><b>Drop</b> - Move window to ' + virtualDesktopName;
                             // hint = '<b>Hover</b> - Switch to ' + virtualDesktopName + '<br><b>Drop</b> - Move window to ' + virtualDesktopName + ' without switching';
-                            hint = '<b>Hover</b> - Switch to ' + virtualDesktopName + '<br><b>Drop</b> - Move window to ' + virtualDesktopName + ' without switching';
+                            hint = '<b>Drop</b> - Move window to ' + virtualDesktopName + ' then go back to ' + root.virtualDesktopAtMoveStart.name;
                         }
                         break;
                     case 1:
-                        if (root.moveToVirtualDesktopOnDrop) {
+                        if (!virtualDesktopHoverChanged) {
+                            hint = '<b>Drop</b> - Maximize window on current virtual desktop';
+                        } else if (root.moveToVirtualDesktopOnDrop) {
                             // hint = '<b>Hover</b> - Switch to ' + virtualDesktopName + '<br><b>Drop</b> - Maximize window on, and switch to ' + virtualDesktopName;
-                            hint = '<b>Hover</b> - Switch to ' + virtualDesktopName + '<br><b>Drop</b> - Maximize window on ' + virtualDesktopName + ', and switch to it';
+                            hint = '<b>Drop</b> - Maximize window on ' + virtualDesktopName + ', and switch to it';
                         } else {
                             // hint = '<b>Hover</b> - Switch to ' + virtualDesktopName + '<br><b>Drop</b> - Maximize window on ' + virtualDesktopName;
                             // hint = '<b>Hover</b> - Switch to ' + virtualDesktopName + '<br><b>Drop</b> - Maximize window on ' + virtualDesktopName + ' without switching';
-                            hint = '<b>Hover</b> - Switch to ' + virtualDesktopName + '<br><b>Drop</b> - Maximize window on ' + virtualDesktopName + ' then go back to ' + root.virtualDesktopAtMoveStart.name;
+                            hint = '<b>Drop</b> - Maximize window on ' + virtualDesktopName + ' then go back to ' + root.virtualDesktopAtMoveStart.name;
                         }
                         break;
                 }
-                if (root.config.hintMoveOnDrop) {
+                if (virtualDesktopHoverChanged && root.config.hintMoveOnDrop) {
                     hint += ' (<b>' + root.config.shortcutMoveOnDrop + '</b>)';
+                }
+                if (root.currentVirtualDesktopIndex != activeVirtualDesktopIndex) {
+                    hint += '<br><b>Hover</b> - Switch to ' + virtualDesktopName;
                 }
             }
         } else if (!virtualDesktopVisibilityOverride && root.config.virtualDesktopVisibility == 1) {
@@ -822,6 +830,7 @@ PlasmaCore.Dialog {
                     updateHintContent();
                 } else if (switchVirtualDesktop && config.virtualDesktopHoverTime > 0 && Date.now() - activeVirtualDesktopHoverTime > config.virtualDesktopHoverTime) {
                     Workspace.currentDesktop = root.virtualDesktops[activeVirtualDesktopIndex].desktop;
+                    updateHintContent();
                 }
 
                 // TODO: Add support for negative values (-)
