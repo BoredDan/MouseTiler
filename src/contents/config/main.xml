@@ -295,7 +295,7 @@ SPECIAL_AUTO_TILER_3</default>
             <default>8</default>
         </entry>
         <entry name="autoTilerMode2" type="Int">
-            <default>7</default>
+            <default>1</default>
         </entry>
         <entry name="autoTilerMode3" type="Int">
             <default>12</default>
