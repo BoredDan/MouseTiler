@@ -37,6 +37,9 @@ QtObject {
 
     property var sessionStartTime: (Date.now())
 
+    property bool shouldShowLeftScreenEdge: false
+    property bool shouldShowRightScreenEdge: false
+
     function logDev(text) {
         root.logDev('AutoTiler - ' + text);
     }
@@ -183,13 +186,36 @@ QtObject {
         logAutoTiler('updateAutoTilersInPopupTiler 3');
     }
 
+    function updateShouldShowScreenEdges() {
+        if (root.autoTilerEdgeScroll) {
+            let edges = shouldShowAutoTileScroll();
+            shouldShowLeftScreenEdge = edges.left;
+            shouldShowRightScreenEdge = edges.right;
+        } else {
+            shouldShowLeftScreenEdge = false;
+            shouldShowRightScreenEdge = false;
+        }
+    }
+
     function shouldShowAutoTileScroll() {
         let currentMapping = getMappingForCurrentScreenAndDesktop();
-        if (currentMapping.autoTilerIndex == -1) return false;
-        if (currentMapping.windows.lenght == 0) return false;
-        if (currentMapping.isCarousel) return true;
-        if (currentMapping.windows.lenght > autoLayouts[currentMapping.autoTilerIndex].lenght) return true;
-        return false;
+        if (currentMapping.autoTilerIndex == -1) return {left: false, right: false};
+        if (currentMapping.windows.length < 2) return {left: false, right: false};
+        if (currentMapping.isCarousel) return {left: true, right: true};
+        if (currentMapping.windows.length > autoLayouts[currentMapping.autoTilerIndex].length) {
+            let left = false;
+            let right = false;
+            if (currentMapping.primaryWindowIndex > 0) {
+                left = true;
+            }
+            let maxLength = autoLayouts[currentMapping.autoTilerIndex][Math.min(currentMapping.windowCount - 1, currentMapping.layoutIndex)].tiles.length;
+            if (currentMapping.primaryWindowIndex < currentMapping.windowCount - maxLength) {
+                right = true;
+            }
+
+            return {left: left, right: right};
+        }
+        return {left: false, right: false};
     }
 
     function windowActivated(window) {
@@ -345,6 +371,7 @@ QtObject {
                 }
             }
             if (currentMapping.primaryWindowIndex != primaryWindowIndexBefore) {
+                updateShouldShowScreenEdges();
                 internalRetileAll(currentMapping);
             }
             logAutoTiler('modifyPrimaryIndex: ' + currentMapping.primaryWindowIndex);
@@ -388,6 +415,7 @@ QtObject {
                 if (currentMapping.windowCount == 0) {
                     currentMapping.autoTilerIndex = -1;
                 }
+                updateShouldShowScreenEdges();
             }
             logAutoTiler('### Disable 4');
             delete window.mt_auto;
@@ -586,6 +614,8 @@ QtObject {
             logAutoTiler('INSERT NEW index: ' + currentMapping.layoutIndex + ' ' + currentMapping.autoTilerIndex + ' ' + autoLayouts[currentMapping.autoTilerIndex].length);
             // TODO: Add it to auto-tiling
 
+            updateShouldShowScreenEdges();
+
             internalRetileAll(currentMapping);
         }
     }
@@ -701,6 +731,7 @@ QtObject {
                     currentMapping.geometryIndex = -1;
                     currentMapping.layoutIndex = Math.max(Math.min(currentMapping.windowCount, autoLayouts[tiler].length - 1), 0);
                     // internalSwapTwoTiles(window, index);
+                    updateShouldShowScreenEdges();
                     internalRetileAll(currentMapping);
                 } else if (currentMapping.windows[targetIndex].internalId == window.internalId) {
                     logAutoTiler('windowDropped 7');

@@ -1499,7 +1499,7 @@ SPECIAL_AUTO_TILER_3`;
     }
 
     ScreenEdgeHandler {
-        enabled: autoTilerEdgeScroll
+        enabled: autoTiler.shouldShowLeftScreenEdge
         edge: ScreenEdgeHandler.LeftEdge
         onActivated: {
             log('LEFT Edge triggered!');
@@ -1508,7 +1508,7 @@ SPECIAL_AUTO_TILER_3`;
     }
 
     ScreenEdgeHandler {
-        enabled: autoTilerEdgeScroll
+        enabled: autoTiler.shouldShowRightScreenEdge
         edge: ScreenEdgeHandler.RightEdge
         onActivated: {
             log('RIGHT Edge triggered!');

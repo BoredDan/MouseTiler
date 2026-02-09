@@ -71,6 +71,7 @@ PlasmaCore.Dialog {
             if (activeScreen != Workspace.activeScreen) {
                 autoTiler.updateAutoTilersInPopupTiler();
             }
+            autoTiler.updateShouldShowScreenEdges();
             // shouldShowAutoTileScroll = autoTiler.shouldShowAutoTileScroll();
             activeScreen = Workspace.activeScreen;
             clientArea = Workspace.clientArea(KWin.FullScreenArea, Workspace.activeScreen, Workspace.currentDesktop);
