@@ -253,7 +253,7 @@
               </item>
               <item>
                <property name="text">
-                <string>Hidden if window is dragged right away (otherwise will appear if you click and hold the mouse still for a short duration)</string>
+                <string>Hidden if window is dragged right away (otherwise will appear if you click and hold - Firefox is not compatible with this mode and you need to press Meta+Space to show the tiler)</string>
                </property>
               </item>
              </widget>
