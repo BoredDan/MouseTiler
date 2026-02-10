@@ -14,6 +14,7 @@ QtObject {
     property int configAutoTileMinimizedFocusAction: 0
     property int configAutoTileMinimizedFocusIndex: 0
     property int configAutoTileDragSwapAction: 0
+    property int configAutoTileLayer: 0
     property int configMaxAutoTileDelay: 5
     property int configMaxAutoTileDelaySessionStart: 10
     property var configAutoTileBlacklist: []
@@ -39,6 +40,8 @@ QtObject {
 
     property bool shouldShowLeftScreenEdge: false
     property bool shouldShowRightScreenEdge: false
+
+    property var activeWindow: Workspace.activeWindow
 
     function logDev(text) {
         root.logDev('AutoTiler - ' + text);
@@ -220,6 +223,8 @@ QtObject {
 
     function windowActivated(window) {
         if (!window) return;
+        let previousWindow = activeWindow;
+        activeWindow = window;
         if (ignoreActivates) return;
         logAutoTiler('Window activated: ' + window.caption);
 
@@ -263,42 +268,47 @@ QtObject {
                     switch (autoLayoutConfigs[currentMapping.autoTilerIndex].focusAction) {
                         case 0: // scroll to focused
                             modifyPrimaryIndex(index - currentMapping.primaryWindowIndex, currentMapping);
+                            internalSetActiveWindow(window, currentMapping.autoTilerIndex);
                             break;
                         case 1: // insert focused window at index
                             internalMoveToTile(window, replaceIndex);
-                            ignoreActivates = true;
-                            Workspace.activeWindow = window;
-                            ignoreActivates = false;
+                            internalSetActiveWindow(window, currentMapping.autoTilerIndex);
                             break;
                         case 2: // insert focused window at index - ignore primary
                             if (index != currentMapping.primaryWindowIndex) {
                                 internalMoveToTile(window, replaceIndex);
-                                ignoreActivates = true;
-                                Workspace.activeWindow = window;
-                                ignoreActivates = false;
+                                internalSetActiveWindow(window, currentMapping.autoTilerIndex);
                             }
                             break;
                         case 3: // swap place with window at index
                             internalSwapTwoTiles(window, replaceIndex, false, currentMapping);
-                            ignoreActivates = true;
-                            Workspace.activeWindow = window;
-                            ignoreActivates = false;
+                            internalSetActiveWindow(window, currentMapping.autoTilerIndex);
                             break;
                         case 4: // swap place with window at index - ignore primary
                             if (index != currentMapping.primaryWindowIndex) {
                                 internalSwapTwoTiles(window, replaceIndex, false, currentMapping);
-                                ignoreActivates = true;
-                                Workspace.activeWindow = window;
-                                ignoreActivates = false;
+                                internalSetActiveWindow(window, currentMapping.autoTilerIndex);
                             }
                             break;
                         case 5: // do nothing
+                            internalSetActiveWindow(window, currentMapping.autoTilerIndex);
                             break;
                     }
                 }
             }
         }
         delete window.mt_minimized;
+
+        if (Workspace.activeWindow != previousWindow) {
+            if (previousWindow.mt_auto) {
+                let previousMapping = getMappingById(previousWindow.mt_auto);
+                if (previousMapping.autoTilerIndex != -1) {
+                    if (!previousWindow.keepBelow) {
+                        internalUpdateLayer(previousWindow, previousMapping.autoTilerIndex, false);
+                    }
+                }
+            }
+        }
 
         printCurrentInfo();
     }
@@ -397,7 +407,7 @@ QtObject {
     function internalDisableAutoTiling(window) {
         logAutoTiler('### Disable 1');
         if (window.mt_auto) {
-            let currentWindow = Workspace.activeWindow;
+            let previousWindow = Workspace.activeWindow;
             let currentMapping = getMappingById(window.mt_auto);
             logAutoTiler('### Disable 2');
             let index = currentMapping.windows.indexOf(window);
@@ -419,12 +429,18 @@ QtObject {
             }
             logAutoTiler('### Disable 4');
             delete window.mt_auto;
+            window.keepBelow = false;
+            window.keepAbove = false;
             // TODO: Remove it from the auto-tiling
 
-            if (!currentWindow.minimized) {
+            if (!previousWindow.minimized) {
                 logAutoTiler('### Disable 4.1');
                 ignoreActivates = true;
-                Workspace.activeWindow = currentWindow;
+                if (previousWindow.my_auto) {
+                    let previousMapping = getMappingById(previousWindow.mt_auto);
+                    internalUpdateLayer(window, previousMapping.autoTilerIndex, true);
+                }
+                Workspace.activeWindow = previousWindow;
                 ignoreActivates = false;
             }
 
@@ -461,6 +477,8 @@ QtObject {
         if (mapping.autoTilerIndex < 0) {
             return;
         }
+        let previousWindow = Workspace.activeWindow;
+        let updateLayerKeepBelow = autoLayoutConfigs[mapping.autoTilerIndex].layer == 0;
         let layout = autoLayouts[mapping.autoTilerIndex][mapping.geometryIndex];
         logAutoTiler('LAYOUT: ' + JSON.stringify(layout));
         let isVisible = Array.from({ length: mapping.windowCount }, () => false);
@@ -515,6 +533,9 @@ QtObject {
             root.moveAndResizeWindow(mapping.windows[windowIndex], data.geometry);
             logAutoTiler('RETILE 2.2 - width after: ' + mapping.windows[windowIndex].width);
             isVisible[windowIndex] = true;
+            if (updateLayerKeepBelow) {
+                mapping.windows[windowIndex].keepBelow = true;
+            }
             if (mapping.windows[windowIndex].minimized) {
                 mapping.windows[windowIndex].minimized = false;
                 delete mapping.windows[windowIndex].mt_minimized
@@ -541,8 +562,6 @@ QtObject {
             }
         }
 
-        ignoreActivates = false;
-
         logAutoTiler('RETILE 3 ' + JSON.stringify(isVisible));
         for (let i = 0; i < mapping.windowCount; i++) {
             if (!isVisible[i]) {
@@ -551,9 +570,38 @@ QtObject {
                 mapping.windows[i].minimized = true;
             }
         }
+
+        if (previousWindow.mt_auto && mapping.id == previousWindow.mt_auto) {
+        //     // Window is already updated
+        //     if (updateLayerKeepBelow) {
+        //         Workspace.activeWindow.keepBelow = false;
+        //     }
+            if (!previousWindow.minimized && internalIsFullyOnScreen(previousWindow, mapping)) {
+                Workspace.activeWindow = previousWindow;
+                Workspace.activeWindow.keepBelow = false;
+            } else {
+                Workspace.activeWindow = mapping.windows[mapping.primaryWindowIndex];
+                Workspace.activeWindow.keepBelow = false;
+            }
+        } else {
+            Workspace.activeWindow = previousWindow;
+        }
+
+        ignoreActivates = false;
         // if (currentVirtualDesktop.id != Workspace.currentDesktop.id) {
         //     Workspace.currentDesktop = currentVirtualDesktop;
         // }
+    }
+
+    function internalIsFullyOnScreen(window, mapping) {
+        let screenIndex = Workspace.screens.findIndex(screen => screen.name == mapping.screenName);
+        let desktopIndex = Workspace.desktops.findIndex(desktop => desktop.id == mapping.desktopId);
+
+        if (screenIndex != -1 && desktopIndex != -1) {
+            let clientArea = Workspace.clientArea(KWin.FullScreenArea, Workspace.screens[screenIndex], Workspace.desktops[desktopIndex]);
+            return (window.frameGeometry.left + 0.01 > clientArea.left && window.frameGeometry.right - 0.01 < clientArea.right && window.frameGeometry.top + 0.01 > clientArea.top && window.frameGeometry.bottom - 0.01 < clientArea.bottom);
+        }
+        return false;
     }
 
     function internalInsertNewWindow(window, index, lookUpIndex = false, tiler = -1, forcedMapping = null) {
@@ -612,12 +660,55 @@ QtObject {
             logAutoTiler('INSERT 2');
             currentMapping.layoutIndex = Math.min(currentMapping.windowCount, autoLayouts[currentMapping.autoTilerIndex].length - 1);
             logAutoTiler('INSERT NEW index: ' + currentMapping.layoutIndex + ' ' + currentMapping.autoTilerIndex + ' ' + autoLayouts[currentMapping.autoTilerIndex].length);
-            // TODO: Add it to auto-tiling
 
             updateShouldShowScreenEdges();
 
             internalRetileAll(currentMapping);
+            internalInitLayer(window, currentMapping.autoTilerIndex);
         }
+    }
+
+    function internalInitLayer(window, tilerIndex) {
+        switch (autoLayoutConfigs[tilerIndex].layer) {
+            case 0: // keep below except active window
+                window.keepBelow = window != Workspace.activeWindow;
+                break;
+            case 1: // keep below
+                window.keepBelow = true;
+                break;
+            case 2: // keep normal
+                window.keepAbove = false;
+                window.keepBelow = false;
+                break;
+            case 3: // keep above
+                window.keepAbove = true;
+                break;
+        }
+    }
+
+    function internalUpdateLayer(window, tilerIndex, active) {
+        switch (autoLayoutConfigs[tilerIndex].layer) {
+            case 0: // keep below except active window
+                window.keepBelow = !active;
+                break;
+            case 1: // keep below
+                window.keepBelow = true;
+                break;
+            case 2: // keep normal
+                window.keepAbove = false;
+                window.keepBelow = false;
+                break;
+            case 3: // keep above
+                window.keepAbove = true;
+                break;
+        }
+    }
+
+    function internalSetActiveWindow(window, tiler) {
+        ignoreActivates = true;
+        internalUpdateLayer(window, tiler, true);
+        Workspace.activeWindow = window;
+        ignoreActivates = false;
     }
 
     function internalGetWindowIndexAtTileIndex(mapping, index, layoutIndex) {
@@ -710,7 +801,6 @@ QtObject {
             let targetIndex = internalGetWindowIndexAtTileIndex(currentMapping, index, layoutIndex);
             logAutoTiler('windowDropped 4.2');
             if (targetIndex == '*') {
-
                 let geometryIndex = index;
                 logAutoTiler('windowDropped 4.3');
                 // TODO? currentMapping.layoutIndex = Math.max(Math.min(currentMapping.windowCount, autoLayouts[currentMapping.autoTilerIndex].length - 1), 0);
@@ -725,14 +815,7 @@ QtObject {
 
                 if (currentMapping.autoTilerIndex != tiler) {
                     logAutoTiler('windowDropped 6');
-                    currentMapping.autoTilerIndex = tiler;
-                    window.mt_autoRestore = 256 + currentMapping.autoTilerIndex;
-                    currentMapping.isCarousel = autoLayoutConfigs[tiler].carousel == true;
-                    currentMapping.geometryIndex = -1;
-                    currentMapping.layoutIndex = Math.max(Math.min(currentMapping.windowCount, autoLayouts[tiler].length - 1), 0);
-                    // internalSwapTwoTiles(window, index);
-                    updateShouldShowScreenEdges();
-                    internalRetileAll(currentMapping);
+                    changeToTiler(tiler, currentMapping);
                 } else if (currentMapping.windows[targetIndex].internalId == window.internalId) {
                     logAutoTiler('windowDropped 7');
                     internalRetileAll(currentMapping);
@@ -755,6 +838,40 @@ QtObject {
                 internalInsertNewWindow(window, index, true, tiler, currentMapping);
             }
             logAutoTiler('windowDropped 10');
+
+            if (Workspace.activeWindow == window && window.mt_auto) {
+                let activeMapping = getMappingById(window.mt_auto);
+                internalUpdateLayer(window, activeMapping.autoTilerIndex, true);
+            }
+        }
+    }
+
+    function changeToTiler(tiler, currentMapping) {
+        if (tiler == -1 || currentMapping.autoTilerIndex == -1 || tiler == currentMapping.autoTilerIndex) return;
+        currentMapping.autoTilerIndex = tiler;
+        for (let i = 0; i < currentMapping.windows.length; i++) {
+            currentMapping.windows[i].mt_autoRestore = 256 + currentMapping.autoTilerIndex;
+        }
+        currentMapping.isCarousel = autoLayoutConfigs[tiler].carousel == true;
+        currentMapping.geometryIndex = -1;
+        currentMapping.layoutIndex = Math.max(Math.min(currentMapping.windowCount, autoLayouts[tiler].length - 1), 0);
+        updateShouldShowScreenEdges();
+        internalRetileAll(currentMapping);
+    }
+
+    function changeToPreviousTiler() {
+        let mapping = getMappingForCurrentScreenAndDesktop();
+        let nextTiler = mapping.autoTilerIndex - 1;
+        if (nextTiler >= 0) {
+            changeToTiler(nextTiler, mapping);
+        }
+    }
+
+    function changeToNextTiler() {
+        let mapping = getMappingForCurrentScreenAndDesktop();
+        let nextTiler = mapping.autoTilerIndex + 1;
+        if (mapping.autoTilerIndex != -1 && nextTiler < 3) {
+            changeToTiler(nextTiler, mapping);
         }
     }
 
@@ -786,11 +903,14 @@ QtObject {
             }
 
             internalInsertNewWindow(window, insertIndex, false, tiler, currentMapping);
-            if (!window.minimized) {
-                ignoreActivates = true;
-                Workspace.activeWindow = window;
-                ignoreActivates = false;
+            if (Workspace.activeWindow == window) {
+                if (currentMapping.autoTilerIndex != -1) {
+                    internalUpdateLayer(window, currentMapping.autoTilerIndex, true);
+                }
             }
+            // if (!window.minimized) {
+            //     internalSetActiveWindow(window, currentMapping.autoTilerIndex);
+            // }
         } else {
             internalDisableAutoTiling(window);
             if (configAutoTileRestoreSize && window.mt_originalSize) {
@@ -1043,6 +1163,7 @@ QtObject {
         configAutoTileMinimizedFocusAction = KWin.readConfig("autoTileMinimizedFocusAction", 0);
         configAutoTileMinimizedFocusIndex = KWin.readConfig("autoTileMinimizedFocusIndex", 0);
         configAutoTileDragSwapAction = KWin.readConfig("autoTileDragSwapAction", 0);
+        configAutoTileLayer = KWin.readConfig("autoTileLayer", 2);
         configMaxAutoTileDelay = KWin.readConfig("maxAutoTileDelay", 5);
         configMaxAutoTileDelaySessionStart = KWin.readConfig("maxAutoTileDelaySessionStart", 10);
         configAutoTileBlacklist = KWin.readConfig("autoTileBlacklist", defaultBlacklist).replace(/\s+/g, '').split(',');
@@ -1187,6 +1308,21 @@ QtObject {
 *:0,50,25,50+0:25,0,50,100+*:75,50,25,50
 *:0,50,25,50+0:25,0,50,100+1:75,0,25,50+*:75,50,25,50
 -1:0,0,25,50+*:0,50,25,50+0:25,0,50,100+1:75,0,25,50+*:75,50,25,50`;
+                case 17:
+                    name = '76% CAROUSEL';
+                    return `{"carousel":true,"focusAction":0}
+0:12,0,76,100
+0:12,0,76,100+1:88,0,76,100
+-1:-64,0,76,100+0:12,0,76,100+1:88,0,76,100
+-1:-64,0,76,100+0:12,0,76,100+1:88,0,76,100+2:152,0,76,100
+-2:-140,0,76+-1:-64,0,76,100+0:12,0,76,100+1:88,0,76,100+2:164,0,76,100`;
+                case 18:
+                    name = '50% + 50% CAROUSEL';
+                    return `{"carousel":true,"focusAction":5}
+0:0,0,50,100
+0:0,0,50,100+1:50,0,50,100
+-1:-50,0,50,100+0:0,0,50,100+1:50,0,50,100
+-1:-50,0,50,100+0:0,0,50,100+1:50,0,50,100+2:100,0,50,100`;
             }
         }
 
@@ -1222,6 +1358,9 @@ QtObject {
         }
         if (config.sortZ === undefined) {
             config.sortZ = true;
+        }
+        if (config.layer === undefined) {
+            config.layer = configAutoTileLayer;
         }
 
         config.name = name;

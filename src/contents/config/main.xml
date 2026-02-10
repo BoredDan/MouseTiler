@@ -285,6 +285,9 @@ SPECIAL_AUTO_TILER_3</default>
         <entry name="autoTileDragSwapAction" type="Int">
             <default>0</default>
         </entry>
+        <entry name="autoTileLayer" type="Int">
+            <default>2</default>
+        </entry>
         <entry name="maxAutoTileDelay" type="Int">
             <default>5</default>
         </entry>

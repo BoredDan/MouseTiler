@@ -187,6 +187,31 @@ Improved scrolling experience compared to SINGLE TILE CAROUSEL at the cost of mu
 -1:0,0,25,50+*:0,50,25,50+0:25,0,50,100+1:75,0,25,50+*:75,50,25,50
 ```
 
+## 76% CAROUSEL
+❌ Multi-monitor friendly
+
+![](./assets/auto_17.png)
+```
+{"carousel":true,"focusAction":0}
+0:12,0,76,100
+0:12,0,76,100+1:88,0,76,100
+-1:-64,0,76,100+0:12,0,76,100+1:88,0,76,100
+-1:-64,0,76,100+0:12,0,76,100+1:88,0,76,100+2:152,0,76,100
+-2:-140,0,76+-1:-64,0,76,100+0:12,0,76,100+1:88,0,76,100+2:164,0,76,100
+```
+
+## 50% + 50% CAROUSEL
+❌ Multi-monitor friendly
+
+![](./assets/auto_18.png)
+```
+{"carousel":true,"focusAction":5}
+0:0,0,50,100
+0:0,0,50,100+1:50,0,50,100
+-1:-50,0,50,100+0:0,0,50,100+1:50,0,50,100
+-1:-50,0,50,100+0:0,0,50,100+1:50,0,50,100+2:100,0,50,100
+```
+
 # Custom auto tiler configuration
 
 Example:
@@ -196,6 +221,7 @@ Example:
 ## Valid configuration options
 
 ### "carousel":true|false
+
 default: system settings value - will always be true if any negative tiles are included in the layout even if manual value is set to false
 
 ### "clip":true|false
@@ -211,6 +237,7 @@ default: true if carousel is true otherwise false
 default: system settings value
 
 ### "autoTileIndex":-1|0|1|2|...|16
+
 default: system settings value
 
 ### "focusAction":0|1|2|3|4|5
@@ -224,6 +251,7 @@ default: system settings value
 default: system settings value
 
 ### "focusIndex":-1|0|1|2|...|16
+
 default: system settings value
 
 ### "minimizedFocusAction":0|1|2
@@ -234,6 +262,7 @@ default: system settings value
 default: system settings value
 
 ### "minimizedFocusIndex":-1|0|1|2|...|16
+
 default: system settings value
 
 ### "dragSwapAction":0|1
@@ -252,4 +281,13 @@ default: 0
 ### "sortZ":true|false
 * true = tiles will be sorted by their priority index, the lower the priority the higher the tile is - focused tile is always on top
 * false = tiles will be sorted by their order, with last tile being higher - focused tile is always on top
+
 default: true
+
+### "layer":0|1|2|3
+* 0 = keep below except active window
+* 1 = keep below
+* 2 = keep normal
+* 3 = keep above
+
+default: 0

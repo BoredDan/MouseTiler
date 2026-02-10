@@ -1498,6 +1498,26 @@ SPECIAL_AUTO_TILER_3`;
         }
     }
 
+    ShortcutHandler {
+        name: "Mouse Tiler: Change To Previous Auto Tiler"
+        text: "Mouse Tiler: Change To Previous Auto Tiler"
+        sequence: "Ctrl+Alt+X"
+        onActivated: {
+            log('Change To Previous Auto Tiler triggered!');
+            autoTiler.changeToPreviousTiler();
+        }
+    }
+
+    ShortcutHandler {
+        name: "Mouse Tiler: Change To Next Auto Tiler"
+        text: "Mouse Tiler: Change To Next Auto Tiler"
+        sequence: "Ctrl+Alt+C"
+        onActivated: {
+            log('Change To Next Auto Tiler triggered!');
+            autoTiler.changeToNextTiler();
+        }
+    }
+
     ScreenEdgeHandler {
         enabled: autoTiler.shouldShowLeftScreenEdge
         edge: ScreenEdgeHandler.LeftEdge
