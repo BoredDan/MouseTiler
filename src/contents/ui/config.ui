@@ -1631,7 +1631,7 @@
            <item row="12" column="0">
             <widget class="QLabel" name="label_93">
              <property name="text">
-              <string>Mouse Tiler: Auto Tiler - Increase Scroll Position</string>
+              <string>Mouse Tiler: Auto Tiler - Scroll To Next Window</string>
              </property>
             </widget>
            </item>
@@ -2111,7 +2111,7 @@
            <item row="11" column="0">
             <widget class="QLabel" name="label_92">
              <property name="text">
-              <string>Mouse Tiler: Auto Tiler - Decrease Scroll Position</string>
+              <string>Mouse Tiler: Auto Tiler - Scroll To Previous Window</string>
              </property>
             </widget>
            </item>

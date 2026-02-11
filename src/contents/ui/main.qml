@@ -1480,7 +1480,7 @@ SPECIAL_AUTO_TILER_3`;
 
     ShortcutHandler {
         name: "Mouse Tiler: Auto Tiler - Decrease Scroll Position"
-        text: "Mouse Tiler: Auto Tiler - Decrease Scroll Position"
+        text: "Mouse Tiler: Auto Tiler - Scroll To Previous Window"
         sequence: "Ctrl+Alt+Left"
         onActivated: {
             log('Decrease Scroll Position triggered!');
@@ -1490,7 +1490,7 @@ SPECIAL_AUTO_TILER_3`;
 
     ShortcutHandler {
         name: "Mouse Tiler: Auto Tiler - Increase Scroll Position"
-        text: "Mouse Tiler: Auto Tiler - Increase Scroll Position"
+        text: "Mouse Tiler: Auto Tiler - Scroll To Next Window"
         sequence: "Ctrl+Alt+Right"
         onActivated: {
             log('Auto Tiler - Increase Scroll Position triggered!');
