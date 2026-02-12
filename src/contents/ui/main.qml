@@ -310,7 +310,7 @@ SPECIAL_AUTO_TILER_3`;
         var hasLayout = false;
         var hasName = false;
         var isValid = false;
-        var name = "Default";
+        var name = 'Default';
 
         let layout = { tiles: [] };
 
@@ -321,11 +321,11 @@ SPECIAL_AUTO_TILER_3`;
         let currentAutoTileHint = '';
 
         const anchorValue = {
-            left: "0",
-            top: "0",
-            center: "50",
-            right: "100",
-            bottom: "100"
+            left: '0',
+            top: '0',
+            center: '50',
+            right: '100',
+            bottom: '100'
         };
 
         let sections = userLayout.split(';');
@@ -406,35 +406,35 @@ SPECIAL_AUTO_TILER_3`;
                             if (coordinates[0].startsWith('SPECIAL_')) {
                                 switch (coordinates[0]) {
                                     case 'SPECIAL_FILL':
-                                        layout.tiles.push({x: 0, y: 0, w: 75, h: 100, t: "«&nbsp; FILL &nbsp;»", hint: "Fill largest empty space"});
-                                        layout.tiles.push({x: 75, y: 0, w: 25, h: 100, t: "« »", d: false, hint: "Fill smallest empty space"});
+                                        layout.tiles.push({x: 0, y: 0, w: 75, h: 100, t: '«&nbsp; FILL &nbsp;»', hint: 'Fill largest empty space'});
+                                        layout.tiles.push({x: 75, y: 0, w: 25, h: 100, t: '« »', d: false, hint: 'Fill smallest empty space'});
                                         layout.special = 'SPECIAL_FILL';
                                         isValid = true;
                                         break;
                                     case 'SPECIAL_SPLIT_VERTICAL':
-                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 50, t: "SPLIT", hint: "Split largest window and place on top"});
-                                        layout.tiles.push({x: 0, y: 50, w: 100, h: 50, t: "SPLIT", d: false, hint: "Split largest window and place on bottom"});
+                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 50, t: 'SPLIT', hint: 'Split largest window and place on top'});
+                                        layout.tiles.push({x: 0, y: 50, w: 100, h: 50, t: 'SPLIT', d: false, hint: 'Split largest window and place on bottom'});
                                         layout.special = 'SPECIAL_SPLIT_VERTICAL';
                                         isValid = true;
                                         break;
                                     case 'SPECIAL_SPLIT_HORIZONTAL':
-                                        layout.tiles.push({x: 0, y: 0, w: 50, h: 100, t: "SPLIT", hint: "Split largest window and place to the left"});
-                                        layout.tiles.push({x: 50, y: 0, w: 50, h: 100, t: "SPLIT", d: false, hint: "Split largest window and place to the right"});
+                                        layout.tiles.push({x: 0, y: 0, w: 50, h: 100, t: 'SPLIT', hint: 'Split largest window and place to the left'});
+                                        layout.tiles.push({x: 50, y: 0, w: 50, h: 100, t: 'SPLIT', d: false, hint: 'Split largest window and place to the right'});
                                         layout.special = 'SPECIAL_SPLIT_HORIZONTAL';
                                         isValid = true;
                                         break;
                                     case 'SPECIAL_MAXIMIZE':
-                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "<br>MAXIMIZE<br>⌞⌝", hint: "Set window to ⌞⌝ Maximized<br>It will return to previous size when moved"});
+                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: '<br>MAXIMIZE<br>⌞⌝', hint: 'Set window to ⌞⌝ Maximized<br>It will return to previous size when moved'});
                                         layout.special = 'SPECIAL_MAXIMIZE';
                                         isValid = true;
                                         break;
                                     case 'SPECIAL_MINIMIZE':
-                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "<br>MINIMIZE<br>🗕", hint: "Set window to 🗕 Minimized<br>Useful for windows without a titlebar"});
+                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: '<br>MINIMIZE<br>🗕', hint: 'Set window to 🗕 Minimized<br>Useful for windows without a titlebar'});
                                         layout.special = 'SPECIAL_MINIMIZE';
                                         isValid = true;
                                         break;
                                     case 'SPECIAL_FULLSCREEN':
-                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "<br>FULLSCREEN<br>🗖", hint: "Set window to 🗖 Fullscreen<br><font color='orange'>⚠</font> <b>WARNING</b> you might need to press <b>Alt+F3</b> to exit"});
+                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: '<br>FULLSCREEN<br>🗖', hint: 'Set window to 🗖 Fullscreen<br><font color="orange">⚠</font> <b>WARNING</b> you might need to press <b>Alt+F3</b> to exit'});
                                         layout.special = 'SPECIAL_FULLSCREEN';
                                         isValid = true;
                                         break;
@@ -443,27 +443,27 @@ SPECIAL_AUTO_TILER_3`;
                                         isValid = true;
                                         break;
                                     case 'SPECIAL_KEEP_ABOVE':
-                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "<br>KEEP ABOVE<br>▲", hint: "Toggle window ▲ Keep Above"});
+                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: '<br>KEEP ABOVE<br>▲', hint: 'Toggle window ▲ Keep Above'});
                                         layout.special = 'SPECIAL_KEEP_ABOVE';
                                         isValid = true;
                                         break;
                                     case 'SPECIAL_KEEP_BELOW':
-                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "<br>KEEP BELOW<br>▼", hint: "Toggle window ▼ Keep Below"});
+                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: '<br>KEEP BELOW<br>▼', hint: 'Toggle window ▼ Keep Below'});
                                         layout.special = 'SPECIAL_KEEP_BELOW';
                                         isValid = true;
                                         break;
                                     case 'SPECIAL_NO_TITLEBAR_AND_FRAME':
-                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "NO TITLEBAR<br>AND FRAME", hint: "Toggle window <font size='1'>⊘</font> No Titlebar and Frame<br><font color='orange'>⚠</font> <b>WARNING</b> you might need to press <b>Alt+F3</b> to re-enable"});
+                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: 'NO TITLEBAR<br>AND FRAME', hint: 'Toggle window <font size="1">⊘</font> No Titlebar and Frame<br><font color="orange">⚠</font> <b>WARNING</b> you might need to press <b>Alt+F3</b> to re-enable'});
                                         layout.special = 'SPECIAL_NO_TITLEBAR_AND_FRAME';
                                         isValid = true;
                                         break;
                                     case 'SPECIAL_CLOSE':
-                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "<br>CLOSE<br>🗙", hint: "🗙 Close the window<br>Useful for windows without a titlebar"});
+                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: '<br>CLOSE<br>🗙', hint: '🗙 Close the window<br>Useful for windows without a titlebar'});
                                         layout.special = 'SPECIAL_CLOSE';
                                         isValid = true;
                                         break;
                                     case 'SPECIAL_AUTO_TILER_TOGGLE':
-                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: "TOGGLE<br>AUTO TILE", hint: "Toggle auto tile"});
+                                        layout.tiles.push({x: 0, y: 0, w: 100, h: 100, t: 'TOGGLE<br>AUTO TILE', hint: 'Toggle auto tile'});
                                         layout.special = 'SPECIAL_AUTO_TILER_TOGGLE';
                                         isValid = true;
                                         break;
@@ -517,9 +517,9 @@ SPECIAL_AUTO_TILER_3`;
                                     isValid = false;
                                 }
                             } else {
-                                if(coordinates[0].includes("/")) {
-                                    let xFraction = coordinates[0].split("/")
-                                    x = xFraction.length == 2 ? 100 * parseInt(xFraction[0]) / parseInt(xFraction[1]) : NaN
+                                if (coordinates[0].includes('/')) {
+                                    let xFraction = coordinates[0].split('/');
+                                    x = xFraction.length == 2 ? 100 * parseInt(xFraction[0]) / parseInt(xFraction[1]) : NaN;
                                 } else {
                                     x = parseFloat(coordinates[0]); 
                                 }
@@ -534,9 +534,9 @@ SPECIAL_AUTO_TILER_3`;
                                     isValid = false;
                                 }
                             } else {
-                                if(coordinates[1].includes("/")) {
-                                    let yFraction = coordinates[1].split("/")
-                                    y = yFraction.length == 2 ? 100 * parseInt(yFraction[0]) / parseInt(yFraction[1]) : NaN
+                                if (coordinates[1].includes('/')) {
+                                    let yFraction = coordinates[1].split('/');
+                                    y = yFraction.length == 2 ? 100 * parseInt(yFraction[0]) / parseInt(yFraction[1]) : NaN;
                                 } else {
                                     y = parseFloat(coordinates[1]); 
                                 }
@@ -551,9 +551,9 @@ SPECIAL_AUTO_TILER_3`;
                                     isValid = false;
                                 }
                             } else {
-                                if(coordinates[2].includes("/")) {
-                                    let wFraction = coordinates[2].split("/")
-                                    w = wFraction.length == 2 ? 100 * parseInt(wFraction[0]) / parseInt(wFraction[1]) : NaN
+                                if (coordinates[2].includes('/')) {
+                                    let wFraction = coordinates[2].split('/');
+                                    w = wFraction.length == 2 ? 100 * parseInt(wFraction[0]) / parseInt(wFraction[1]) : NaN;
                                 } else {
                                     w = parseFloat(coordinates[2]); 
                                 }
@@ -568,11 +568,11 @@ SPECIAL_AUTO_TILER_3`;
                                     isValid = false;
                                 }
                             } else {
-                                if(coordinates[3].includes("/")) {
-                                    let hFraction = coordinates[3].split("/")
-                                    h = hFraction.length == 2 ? 100 * parseInt(hFraction[0]) / parseInt(hFraction[1]) : NaN
+                                if (coordinates[3].includes('/')) {
+                                    let hFraction = coordinates[3].split('/');
+                                    h = hFraction.length == 2 ? 100 * parseInt(hFraction[0]) / parseInt(hFraction[1]) : NaN;
                                 } else {
-                                    h = parseFloat(coordinates[3]); 
+                                    h = parseFloat(coordinates[3]);
                                 }
                                 if (Number.isNaN(h)) {
                                     isValid = false;
@@ -581,9 +581,9 @@ SPECIAL_AUTO_TILER_3`;
 
                             if (coordinates.length == 6) {
                                 let numericAX = coordinates[4].replace(/\b(?:left|center|right)\b/gi, value => anchorValue[value.toLowerCase()]);
-                                if(numericAX.includes("/")) {
-                                    let aXFraction = numericAX.split("/")
-                                    aX = aXFraction.length == 2 ? 100 * parseInt(aXFraction[0]) / parseInt(aXFraction[1]) : NaN
+                                if (numericAX.includes('/')) {
+                                    let aXFraction = numericAX.split('/');
+                                    aX = aXFraction.length == 2 ? 100 * parseInt(aXFraction[0]) / parseInt(aXFraction[1]) : NaN;
                                 } else {
                                     aX = parseFloat(numericAX);
                                 }
@@ -593,9 +593,9 @@ SPECIAL_AUTO_TILER_3`;
                                 }
 
                                 let numericAY = coordinates[5].replace(/\b(?:top|center|bottom)\b/gi, value => anchorValue[value.toLowerCase()]);
-                                if(numericAY.includes("/")) {
-                                    let aYFraction = numericAY.split("/")
-                                    aY = aYFraction.length == 2 ? 100 * parseInt(aYFraction[0]) / parseInt(aYFraction[1]) : NaN
+                                if (numericAY.includes('/')) {
+                                    let aYFraction = numericAY.split('/');
+                                    aY = aYFraction.length == 2 ? 100 * parseInt(aYFraction[0]) / parseInt(aYFraction[1]) : NaN;
                                 } else {
                                     aY = parseFloat(numericAY);
                                 }

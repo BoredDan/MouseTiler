@@ -251,7 +251,7 @@ PlasmaCore.Dialog {
             case 'SPECIAL_AUTO_TILER_1':
             case 'SPECIAL_AUTO_TILER_2':
             case 'SPECIAL_AUTO_TILER_3':
-                if(!layoutRepeater.model[activeLayoutIndex].activeAutoTiler) {
+                if (!layoutRepeater.model[activeLayoutIndex].activeAutoTiler) {
                     break;
                 }
             default:
