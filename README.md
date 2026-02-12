@@ -69,20 +69,17 @@ Allows you to tile your windows with minimum effort by moving the mouse just a f
 ![](./assets/center_in_tile_v1.gif)<br>
 **Center In Tile**
 
-### <p id="features_planned"></p>Planned for the future (maybe)
+### <p id="features_planned"></p>Planned for the future
 
-The text configuration was meant to be just a temporary solution - an GUI designer was going to replace it (accessed via the Ctrl+. shortcut).
-However the GUI designer is a lot of work, probaly at least 1-2 weeks full time. Sadly I got rent to pay and a 3 year old son to feed and based on my previous project Remember Window Positions, I will not be able to feed us from my contributions to Linux. (After over 3 months full time work I earned $100 total which I apreciate but it's not possible to survive on).
-I might implement all/some of the features listed here in the future if the situation changes - but for now I need to do actual work that pays.
+The future features depend on you.
 
-* Optional automatic tiling (when a new window opens, follow a set of rules to tile it such as 1st window: maximize, 2nd window: split horizontally and place on right...)
-* GUI layout designer
-* GUI popup tiler configuration
-* GUI overlay tiler configuration
-* Per screen layout configuration
-* Default layout based on screen type (such as Standard - Wide - Ultra Wide - Rotated Standard - Rotated Wide - Rotated Ultra Wide)
-* Theme color selection with preview of how the tiler looks
-* Manual color editor
+Read this for details:
+[Planned features and donation goals](https://github.com/rxappdev/MouseTiler/blob/main/PLANNEDFEATURES.md)
+
+Voting and current results:
+
+[![poll](https://wakatime.com/polls/0e8054f0-e168-4f00-b31b-ed6c17bd51af.png)](https://wakatime.com/polls/0e8054f0-e168-4f00-b31b-ed6c17bd51af)
+
 
 ### Feature requests to investigate
 

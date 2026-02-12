@@ -1,8 +1,10 @@
 # Short version:
 Sadly new features are now based on donations. I will still implement bugfixes and do bringups for upcoming versions of KDE Plasma.
 
+Vote below to decide which feature will be implemented next.
+
 # Long version:
-I spent exactly 5 months, working full time, minimum 8 hours a day (maximum over 30 hour non-stop sessions), including several weekends (Saturdays and Sundays), and even during Christmas Eve.
+I spent exactly 5 months (from 11th September 2025 when I started working on the first prototype of Mouse Tiler for myself until 11th February 2026 when I write this). I have been working full time most of this time, usually minimum 8 hours a day (maximum over 30 hour non-stop sessions), including several weekends (Saturdays and Sundays), and even during Christmas.
 
 During that time, I have received under $500 in donations which does not even cover rent for a single month.
 
@@ -12,19 +14,19 @@ My rent is $700 a month + utilities (electricity, internet, etc) + food + other 
 Lets say $15 a day for food just for me (I also got a 4 year old son) is another $450.
 Probably minimum $1200 a month. That means I need to earn $2400 a month minimum just to cover my own basic costs.
 
-Which means I'm around $11500 behind on bills in the time I've invested into Mouse Tiler and Remember Window Positions.
+Which means I'm minimum $11500 behind on bills during the time I've invested into Mouse Tiler and Remember Window Positions.
 
 From now on, I will use a donation system (prices might change in the future) to implement new features.
 
 ## What I'm doing next
-I will spend a few months working on my games before going back to a regular employment.
+I will spend a few months working on my games before going back to a regular employment. I will from time to time fix bugs, and if donations ever take off, implement new features for Mouse Tiler or Remember Window Positions.
 
 ## How implementation works
-Remember, for each feature - even if it's just a minor 5 line change, I need to do most (if not all) of the following:
+For each feature - even if it's just a minor 5 line change, I need to do most (if not all) of the following:
 - Test locally in developer mode
 - Test so script works correctly after a reboot (close everyhing I do and restart computer)
 - Test on my wife's computer if it is anything that could affect multi-monitor users (most features)
-- Make sure both Overlay and Popup Grid modes work correctly
+- For Mouse Tiler, make sure both Overlay and Popup Grid modes work correctly
 - Update settings UI so it reflects the changes or includes new configuration options
 - Consider what other features the change affects and test them or make them compatible
 - Release it on github
