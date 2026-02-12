@@ -8,6 +8,8 @@ I spent exactly 5 months (from 11th September 2025 when I started working on the
 
 During that time, I have received under $500 in donations which does not even cover rent for a single month.
 
+I had all the features I needed myself done in the first two weeks. Rest of the time I have spent working on making the code "presentable" so it could be released to the public, adding additonal settings. Once the initial versions were released, I have received feature request after feature request (often for things I did not even knew existed, like activities, the built in tiler or specific application or distribution support).
+
 Salary in Sweden (in my field) per hour is $60-$100 depending on experience and such. We pay around 30% for self-employment / employer fee, and around 30% for taxes. So a $100 donation/salary ends up being around $50 after all fees and taxes (sadly we need to pay taxes/fees on donations).
 
 My rent is $700 a month + utilities (electricity, internet, etc) + food + other costs.
