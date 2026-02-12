@@ -14,7 +14,7 @@ My rent is $700 a month + utilities (electricity, internet, etc) + food + other 
 Lets say $15 a day for food just for me (I also got a 4 year old son) is another $450.
 Probably minimum $1200 a month. That means I need to earn $2400 a month minimum just to cover my own basic costs.
 
-Which means I'm minimum $11500 behind on bills during the time I've invested into Mouse Tiler and Remember Window Positions.
+Which means I'm minimum $11500 behind on bills during the time I've invested into Mouse Tiler and Remember Window Positions. I need to start doing work that provides me with an income so I can pay my bills and eat food.
 
 From now on, I will use a donation system (prices might change in the future) to implement new features.
 
