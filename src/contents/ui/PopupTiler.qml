@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import org.kde.kwin
 import org.kde.plasma.core as PlasmaCore
 
-PlasmaCore.Dialog {
+Window {
     id: popupTiler
 
     property var activeScreen: null
@@ -39,12 +39,14 @@ PlasmaCore.Dialog {
     height: clientArea.height
     x: clientArea.x
     y: clientArea.y
-    flags: Qt.Popup | Qt.BypassWindowManagerHint | Qt.FramelessWindowHint
+    //flags: Qt.Popup | Qt.BypassWindowManagerHint | Qt.FramelessWindowHint
+    flags: Qt.Tool | Qt.BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.WindowDoesNotAcceptFocus
+    color: "transparent"
     visible: false
-    backgroundHints: PlasmaCore.Types.NoBackground
-    outputOnly: true
+    // backgroundHints: PlasmaCore.Types.NoBackground
+    // outputOnly: true
     // type: PlasmaCore.Dialog.OnScreenDisplay
-    location: PlasmaCore.Types.Desktop
+    // location: PlasmaCore.Types.Desktop
 
     function reset() {
         activeScreen = null;

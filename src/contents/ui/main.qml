@@ -2,7 +2,7 @@ import QtQuick
 import QtCore
 import org.kde.kwin
 
-Item {
+Window {
     // API and guides
     // https://develop.kde.org/docs/plasma/kwin/
     // https://develop.kde.org/docs/plasma/kwin/api/
@@ -12,6 +12,15 @@ Item {
     // https://doc.qt.io/qt-6/qtquick-qmlmodule.html
 
     id: root
+
+    x: 69
+    y: -7
+    width: 1
+    height: 1
+    flags: Qt.BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.WindowDoesNotAcceptFocus
+    color: "transparent"
+
+    visible: true
 
     property var debugLogs: false
     property var config: ({})
