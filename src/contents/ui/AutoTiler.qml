@@ -299,7 +299,7 @@ QtObject {
         }
         delete window.mt_minimized;
 
-        if (Workspace.activeWindow != previousWindow) {
+        if (Workspace.activeWindow != previousWindow && previousWindow != null) {
             if (previousWindow.mt_auto) {
                 let previousMapping = getMappingById(previousWindow.mt_auto);
                 if (previousMapping.autoTilerIndex != -1) {
@@ -433,7 +433,7 @@ QtObject {
             window.keepAbove = false;
             // TODO: Remove it from the auto-tiling
 
-            if (!previousWindow.minimized) {
+            if (previousWindow != null && !previousWindow.minimized) {
                 logAutoTiler('### Disable 4.1');
                 ignoreActivates = true;
                 if (previousWindow.my_auto) {
@@ -458,8 +458,10 @@ QtObject {
         let currentMapping = getMappingForCurrentScreenAndDesktop();
         logAutoTiler('Tiler: ' + currentMapping.autoTilerIndex + ' windowCount: ' + currentMapping.windowCount + '(' + currentMapping.windows.length + ') isCarousel: ' + currentMapping.isCarousel);
         logAutoTiler('primaryWindowIndex: ' + currentMapping.primaryWindowIndex + ' geometryIndex: ' + currentMapping.geometryIndex + ' geometries #: ' + currentMapping.geometries.length);
-        logAutoTiler('Current window auto-tiled: ' + Workspace.activeWindow.mt_auto  + ' autoRestore: ' + Workspace.activeWindow.mt_autoRestore);
-        logAutoTiler('Current window id: ' + Workspace.activeWindow.internalId);
+        if (Workspace.activeWindow != null) {
+            logAutoTiler('Current window auto-tiled: ' + Workspace.activeWindow.mt_auto  + ' autoRestore: ' + Workspace.activeWindow.mt_autoRestore);
+            logAutoTiler('Current window id: ' + Workspace.activeWindow.internalId);
+        }
         for (let i = 0; i < currentMapping.windows.length; i++) {
             logAutoTiler('Window #' + i + ': ' + currentMapping.windows[i].internalId);
         }
@@ -571,7 +573,7 @@ QtObject {
             }
         }
 
-        if (previousWindow.mt_auto && mapping.id == previousWindow.mt_auto) {
+        if (previousWindow != null && previousWindow.mt_auto && mapping.id == previousWindow.mt_auto) {
         //     // Window is already updated
         //     if (updateLayerKeepBelow) {
         //         Workspace.activeWindow.keepBelow = false;

@@ -48,7 +48,9 @@ Allows you to tile your windows with minimum effort by moving the mouse just a f
 ## <p id="features"></p>Features
 
 * Two mouse tiling modes - Popup Grid and Overlay ( similar to FancyZones ) - you can use one or both
-* Manual text configuration of the modes
+* Virtual desktop management
+* Auto tiling (carousel or stacking style)
+* Manual text configuration of the modes or [web layout editor](https://rxweb.epizy.com/mousetiler/editor.html)
 * Multi-monitor support
 * Follow system theme or use one of pre-defined color themes
 * Highly customizable, from tile size to grid position (over 20 settings)
@@ -66,8 +68,14 @@ Allows you to tile your windows with minimum effort by moving the mouse just a f
 ![](./assets/overlay_tiler.png)<br>
 **Overlay Tiler**
 
+![](./assets/virtual_desktop_v1.gif)<br>
+**Virtual Desktop Manager**
+
 ![](./assets/center_in_tile_v1.gif)<br>
 **Center In Tile**
+
+**Auto Tiling**
+[See video overview of auto-tiling here](https://www.youtube.com/watch?v=wKhfUGHrgIw)<br>
 
 ### <p id="features_planned"></p>Planned for the future
 
@@ -89,6 +97,18 @@ Voting and current results:
 ## <p id="how"></p>How it works
 
 Use one of two mouse adapted tilers (or both). The Grid tiler lets you quickly place your window by moving the window a few pixels. The Overlay tiler is a classical full screen overlay that lets you place your window into one tile, or span multiple tiles. Define your own layouts or use some of the many predefined ones.
+
+### Use auto tiling
+
+If you like using auto-tiling, there is fairly advanced support for carousel and regular auto tiling. Switch between up to three auto-tilers on the fly (Ctrl+Alt+X and Ctrl+Alt+C). Scroll overflowing windows by using left and right screen edges (or Ctrl+Alt+Left and Ctrl+Alt+Right). Toggle auto-tiling with Ctrl+Alt+A.
+
+### Manage your virtual desktops
+
+You can add new virtual destkops, auto-remove empty destkops, move apps between desktops and more.
+
+### Center in tile
+
+If you want to keep a window size, but center it in a certain place, you can use the center in tile shortcut (Meta+Ctrl+C).
 
 ## <p id="installation"></p>Installation
 
@@ -154,6 +174,14 @@ The application/window data is stored in `~/.config/kde.org/kwin.conf` under the
 The system user settings data is stored in `~/.config/kwinrc` under `[Script-mousetiler]`.
 
 ## <p id="troubleshooting"></p>Troubleshooting
+
+### Remove screen edge highlight
+
+To remove the visual screen edge highlighting when using the auto-tiler go to:
+
+`System Settings` > `Window Management` > `Desktop Effects`
+
+And disable "`Highligt Screen Edges and Hot Corners`".
 
 ### <p id="commandline"></p>Command line
 
