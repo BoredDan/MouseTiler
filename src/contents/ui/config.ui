@@ -2396,7 +2396,7 @@
           <item>
            <widget class="QLabel" name="label_91">
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;WARNING&lt;/span&gt; Add &amp;quot;Auto tile for id&amp;quot; and enable &amp;quot;Auto tile newly opened windows&amp;quot; at own risk especially if you got a lot of windows open. It is preferrable to manually auto tile each app/window and save/restore the auto tile status with Remember Window Positions (v5.3.1 or newer). Please report problematic apps on Discord so I can add them to default blacklist.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;WARNING&lt;/span&gt; Add &amp;quot;Auto tile for id&amp;quot; or enable &amp;quot;Auto tile newly opened windows&amp;quot; at own risk especially if you got a lot of windows open. It is preferrable to manually auto tile each app/window and save/restore the auto tile status with Remember Window Positions (v5.4.1 or newer). Please report problematic apps on Discord so I can add them to default blacklist.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -2406,7 +2406,7 @@
           <item>
            <widget class="QCheckBox" name="kcfg_autoTileNewWindows">
             <property name="text">
-             <string>Auto tile newly opened windows - if not enabled, and &quot;Auto tile for id&quot; is not set, you can still auto tile using your mouse or keyboard shortcut (Ctrl+Alt+A) (SPECIAL_AUTO_TILER_1 is default)</string>
+             <string>Auto tile newly opened windows - will auto-tile all new valid windows. If you want to do it per desktop, use &quot;Auto tile for id&quot; instead. You can still auto tile using your mouse or keyboard shortcut (Ctrl+Alt+A)</string>
             </property>
            </widget>
           </item>
@@ -2459,7 +2459,7 @@
             <item row="0" column="1">
              <widget class="QLineEdit" name="kcfg_autoTileIds">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Will auto tile new windows on the desktop with specified id even if &amp;quot;Auto tile newly opened windows&amp;quot; is not enabled.&lt;/p&gt;&lt;p&gt;Comma separated - click Ctrl+Alt+A to toggle auto tiling for current window and print id to logs. Check logs by running this command in a terminal/konsole:&lt;/p&gt;&lt;p&gt;journalctl -f | grep MouseTiler&lt;/p&gt;&lt;p&gt;And copy the id here. Each screen + virtual desktop + activity have their own unique id (screen name + dektop id + activity id smashed together into a long string).&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Example &lt;/span&gt;(2 ids, one on screen HDMI-A-1 and one on DP-1):&lt;/p&gt;&lt;p&gt;HDMI-A-11a35dac2-5432-4011-c65f-e36d11c00345f436e08c-e9df-438e-3d74-401cb56dd6bb,DP-16c35dac2-7955-4053-a66b-e36d11c00345f436e08c-e9df-438e-3d74-401cb56dd6bb&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Will auto tile new windows on the desktop with specified id even if &amp;quot;Auto tile newly opened windows&amp;quot; is not enabled.&lt;/p&gt;&lt;p&gt;Click Ctrl+Alt+A to toggle auto tiling for current window and print id to logs. Check logs by running this command in a terminal/konsole:&lt;/p&gt;&lt;p&gt;journalctl -f | grep MouseTiler&lt;/p&gt;&lt;p&gt;Copy the ids here. Add multiple ids by separating them by a comma.&lt;/p&gt;&lt;p&gt;Each screen + virtual desktop + activity have their own unique id (screen name + desktop id + activity id smashed together into a long string).&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Example &lt;/span&gt;(2 ids, one on screen HDMI-A-1 and one on DP-1):&lt;/p&gt;&lt;p&gt;HDMI-A-11a35dac2-5432-4011-c65f-e36d11c00345f436e08c-e9df-438e-3d74-401cb56dd6bb,DP-16c35dac2-7955-4053-a66b-e36d11c00345f436e08c-e9df-438e-3d74-401cb56dd6bb&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="placeholderText">
                <string>READ TOOLTIP. Comma separated - click Ctrl+Alt+A to toggle auto tiling for current window and print id to journalctl -f | grep MouseTiler</string>
