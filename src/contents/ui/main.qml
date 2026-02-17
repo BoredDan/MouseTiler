@@ -1392,6 +1392,10 @@ SPECIAL_AUTO_TILER_3`;
         AutoTiler {
             id: autoTiler
         }
+
+        // WindowSuggestions {
+        //     id: windowSuggestions
+        // }
     }
 
     Component {
@@ -1551,7 +1555,7 @@ SPECIAL_AUTO_TILER_3`;
         sequence: "Ctrl+Alt+A"
         onActivated: {
             log('Toggle Auto Tile For Active Window triggered!');
-            if (autoTiler.isValidAutoTileWindow(Workspace.activeWindow)) {
+            if (autoTiler.isValidAutoTileWindow(Workspace.activeWindow, true)) {
                 autoTiler.toggleAutoTile(Workspace.activeWindow);
             }
         }
@@ -1592,6 +1596,18 @@ SPECIAL_AUTO_TILER_3`;
         onActivated: {
             log('RIGHT Edge triggered!');
             autoTiler.modifyPrimaryIndex(1);
+        }
+    }
+
+    DBusCall {
+        id: onScreenDisplay
+        service: "org.kde.plasmashell"
+        path: "/org/kde/osdService"
+        method: "showText"
+
+        function show(message) {
+            this.arguments = ['dialog-error', message];
+            this.call();
         }
     }
 }

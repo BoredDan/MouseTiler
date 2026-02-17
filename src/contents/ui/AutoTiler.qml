@@ -53,16 +53,55 @@ QtObject {
         console.warn('MouseTiler: AutoTiler - ' + text);
     }
 
-    function isValidAutoTileWindow(window) {
+    function isValidAutoTileWindow(window, inform = false) {
         if (!window) return false;
-        if (!window.normalWindow) return false;
-        if (window.skipTaskbar) return false;
-        if (window.popupWindow) return false;
+        if (!window.normalWindow) {
+            if (inform) {
+                onScreenDisplay.show('Unable to auto tile window!\nReason: Window is not a normal window');
+            }
+            return false;
+        }
+        if (window.skipTaskbar) {
+            if (inform) {
+                onScreenDisplay.show('Unable to auto tile window!\nReason: Window is not in taskbar');
+            }
+            return false;
+        }
+        if (window.popupWindow) {
+            if (inform) {
+                onScreenDisplay.show('Unable to auto tile window!\nReason: Window is a popup');
+            }
+            return false;
+        }
         if (window.deleted) return false;
-        if (window.transient) return false;
-        if (window.desktops.length != 1) return false;
-        if (window.activities.length != 1) return false;
-        if (configAutoTileBlacklist.includes(window.resourceClass)) return false;
+        if (window.transient) {
+            if (inform) {
+                onScreenDisplay.show('Unable to auto tile window!\nReason: Window is transient');
+            }
+            return false;
+        }
+        if (window.desktops.length != 1) {
+            if (inform) {
+                onScreenDisplay.show('Unable to auto tile window!\nReason: Window is on multiple virtual desktops');
+            }
+            return false;
+        }
+        if (window.activities.length != 1) {
+            if (autoActivities.length == 1 && window.activities.length == 0) {
+                window.activities = [...autoActivities];
+            } else {
+                if (inform) {
+                    onScreenDisplay.show('Unable to auto tile window!\nReason: Window is on multiple activities');
+                }
+                return false;
+            }
+        }
+        if (configAutoTileBlacklist.includes(window.resourceClass)) {
+            if (inform) {
+                onScreenDisplay.show('Unable to auto tile window!\nReason: Application is blacklisted');
+            }
+            return false;
+        }
 
         return true;
     }
@@ -550,12 +589,12 @@ QtObject {
                 mapping.windows[windowIndex].minimized = false;
                 delete mapping.windows[windowIndex].mt_minimized
             }
-            if (config.sortZ) {
-                Workspace.activeWindow = mapping.windows[windowIndex];
+            if (autoLayoutConfigs[mapping.autoTilerIndex].sortZ) {
+                Workspace.raiseWindow(mapping.windows[windowIndex]);
             }
         }
 
-        if (!config.sortZ) {
+        if (!autoLayoutConfigs[mapping.autoTilerIndex].sortZ) {
             for (let i = 0; i < layout.autoMapping.length; i++) {
                 let windowIndex = layout.autoMapping[i];
                 if (windowIndex == '*') {
@@ -568,7 +607,7 @@ QtObject {
                 } else if (windowIndex >= mapping.windows.length) {
                     windowIndex -= mapping.windows.length;
                 }
-                Workspace.activeWindow = mapping.windows[windowIndex];
+                Workspace.raiseWindow(mapping.windows[windowIndex]);
             }
         }
 
@@ -798,7 +837,9 @@ QtObject {
 
         if (window.mt_auto == undefined) {
             logAutoTiler('windowDropped 1');
-            internalInsertNewWindow(window, index, true, tiler);
+            if (isValidAutoTileWindow(window, true)) {
+                internalInsertNewWindow(window, index, true, tiler);
+            }
         } else {
             logAutoTiler('windowDropped 2');
             let currentMapping = getMappingForCurrentScreenDesktopAndActivity();
