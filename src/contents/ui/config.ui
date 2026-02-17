@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1378</width>
-    <height>990</height>
+    <height>954</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -2178,7 +2178,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Meta&lt;/span&gt; key depends on your keyboard, but on most keyboards it is the Windows key.&lt;/p&gt;&lt;p&gt;Most of the shortcuts should be used while moving a window.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Meta&lt;/span&gt; key depends on your keyboard, but on most keyboards it is the Windows key. Most of the shortcuts should be used while moving a window.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
@@ -2406,7 +2406,7 @@
           <item>
            <widget class="QCheckBox" name="kcfg_autoTileNewWindows">
             <property name="text">
-             <string>Auto tile newly opened windows - will auto-tile all new valid windows. If you want to do it per desktop, use &quot;Auto tile for id&quot; instead. You can still auto tile using your mouse or keyboard shortcut (Ctrl+Alt+A)</string>
+             <string>Auto tile newly opened windows - will auto-tile all new valid windows. If you want to auto tile per desktop, use &quot;Auto tile for id&quot; below instead. You can still auto tile using your mouse or keyboard shortcut (Ctrl+Alt+A)</string>
             </property>
            </widget>
           </item>
@@ -2719,6 +2719,29 @@
         </widget>
        </item>
        <item>
+        <spacer name="verticalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_4">
+      <attribute name="icon">
+       <iconset theme="text-x-generic"/>
+      </attribute>
+      <attribute name="title">
+       <string>Auto Tiling Layouts</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_26">
+       <item>
         <widget class="QGroupBox" name="groupBox_15">
          <property name="title">
           <string/>
@@ -2727,7 +2750,7 @@
           <item>
            <widget class="QLabel" name="label_81">
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Configurations used for auto tiling - three different auto tiling configurations are possible if you want to use different config on different monitors or virtual desktops. Only one configuration can be used on same screen + virtual desktop at a time - if you try to mix them, the new configuration replaces the old one. You can view instructions, predefined layouts (including pictures to give you an idea what each one does) and user submitted layouts &lt;a href=&quot;https://github.com/rxappdev/MouseTiler/blob/main/AUTOTILERGUIDE.md&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5294e2;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Configurations used for auto tiling. Three different auto tiling configurations are possible if you want to use different config on different monitors, virtual desktops or simply toggle between them. Only one configuration can be used on same screen + virtual desktop + activity at a time - if you try to mix them, the new configuration replaces the old one. You can view instructions, predefined layouts (including pictures to give you an idea what each one does) and user submitted layouts &lt;a href=&quot;https://github.com/rxappdev/MouseTiler/blob/main/AUTOTILERGUIDE.md&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5294e2;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -2757,13 +2780,13 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>120</height>
+                <height>240</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>120</height>
+                <height>240</height>
                </size>
               </property>
               <property name="plainText">
@@ -2954,13 +2977,13 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>120</height>
+                <height>240</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>120</height>
+                <height>240</height>
                </size>
               </property>
               <property name="plainText">
@@ -2982,13 +3005,13 @@
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>120</height>
+                <height>240</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
-                <height>120</height>
+                <height>240</height>
                </size>
               </property>
               <property name="plainText">
