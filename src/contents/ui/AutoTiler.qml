@@ -17,7 +17,8 @@ QtObject {
     property int configAutoTileLayer: 0
     property int configMaxAutoTileDelay: 5
     property int configMaxAutoTileDelaySessionStart: 10
-    property var configAutoTileBlacklist: []
+    property var configAutoTileBlacklist: ([])
+    property var configAutoTileIds: ([])
 
     // Use to determine if people can auto-tile
     property bool autoTileInitialized: false
@@ -135,7 +136,8 @@ QtObject {
                         id: id,
                         screenName: Workspace.screens[i].name,
                         desktopId: Workspace.desktops[v].id,
-                        activity: Workspace.activities[a]
+                        activity: Workspace.activities[a],
+                        autoTileByDefault: configAutoTileNewWindows || configAutoTileIds.includes(id)
                     };
                 }
             }
@@ -146,12 +148,19 @@ QtObject {
         printCurrentInfo();
     }
 
+    function printAutoTileId() {
+        console.warn('MouseTiler: ###############################################################################################');
+        let currentMapping = getMappingForCurrentScreenDesktopAndActivity();
+        console.warn('MouseTiler: Auto-tiler id: ' + currentMapping.id);
+        console.warn('MouseTiler: ###############################################################################################');
+    }
+
     function autoTileWindowOnStart(window) {
         if (isValidAutoTileWindow(window)) {
-            if (configAutoTileNewWindows || ((window.mt_autoRestore & 256) == 256)) {
+            let currentMapping = getMappingForWindow(window);
+            if (currentMapping.autoTileByDefault || ((window.mt_autoRestore & 256) == 256)) {
                 if ((window.mt_autoRestore & 128) != 128) {
                     if (window.mt_auto == undefined) {
-                        let currentMapping = getMappingForWindow(window);
                         if (currentMapping.autoTilerIndex == -1) {
                             let tiler = (window.mt_autoRestore & 3);
                             logAutoTiler('autoTileWindowOnStart Restoring tiler: ' + tiler);
@@ -160,6 +169,8 @@ QtObject {
                             toggleAutoTile(window);
                         }
                     }
+                } else {
+                    window.mt_autoRestore = 128;
                 }
             }
         }
@@ -491,7 +502,7 @@ QtObject {
                 ignoreActivates = false;
             }
 
-            if (configAutoTileNewWindows) {
+            if (currentMapping.autoTileByDefault) {
                 window.mt_autoRestore = 128;
             } else {
                 delete window.mt_autoRestore;
@@ -1056,15 +1067,25 @@ QtObject {
 
         function windowOutputChanged() {
             logAutoTiler('Window output changed: ' + window.caption + ' currently moved window: ' + (window == root.currentlyMovedWindow));
-            if (window != root.currentlyMovedWindow) {
+            if (window != root.currentlyMovedWindow && window.mt_auto) {
+                let originalSize = window.mt_originalSize;
                 internalDisableAutoTiling(window);
+                toggleAutoTile(window);
+                if (configAutoTileRestoreSize && originalSize) {
+                    window.mt_originalSize = originalSize;
+                }
             }
         }
 
         function windowDesktopsChanged() {
             logAutoTiler('Window desktops changed: ' + window.caption + ' currently moved window: ' + (window == root.currentlyMovedWindow));
-            if (window != root.currentlyMovedWindow) {
+            if (window != root.currentlyMovedWindow && window.mt_auto) {
+                let originalSize = window.mt_originalSize;
                 internalDisableAutoTiling(window);
+                toggleAutoTile(window);
+                if (configAutoTileRestoreSize && originalSize) {
+                    window.mt_originalSize = originalSize;
+                }
             }
         }
 
@@ -1120,7 +1141,8 @@ QtObject {
                         id: id,
                         screenName: autoScreens[s],
                         desktopId: autoVirtualDesktops[v],
-                        activity: activity
+                        activity: activity,
+                        autoTileByDefault: configAutoTileNewWindows || configAutoTileIds.includes(id)
                     };
                 }
             }
@@ -1177,7 +1199,8 @@ QtObject {
                         id: id,
                         screenName: autoScreens[s],
                         desktopId: desktopId,
-                        activity: autoActivities[a]
+                        activity: autoActivities[a],
+                        autoTileByDefault: configAutoTileNewWindows || configAutoTileIds.includes(id)
                     };
                 }
             }
@@ -1234,7 +1257,8 @@ QtObject {
                         id: id,
                         screenName: screenName,
                         desktopId: autoVirtualDesktops[v],
-                        activity: autoActivities[a]
+                        activity: autoActivities[a],
+                        autoTileByDefault: configAutoTileNewWindows || configAutoTileIds.includes(id)
                     };
                 }
             }
@@ -1307,6 +1331,7 @@ QtObject {
         configMaxAutoTileDelay = KWin.readConfig("maxAutoTileDelay", 5);
         configMaxAutoTileDelaySessionStart = KWin.readConfig("maxAutoTileDelaySessionStart", 10);
         configAutoTileBlacklist = KWin.readConfig("autoTileBlacklist", defaultBlacklist).replace(/\s+/g, '').split(',');
+        configAutoTileIds = KWin.readConfig("autoTileIds", "").replace(/\s+/g, '').split(',');
 
         initAutoTilerLayout(1);
         initAutoTilerLayout(2);

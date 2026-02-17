@@ -733,6 +733,7 @@ SPECIAL_AUTO_TILER_3`;
         }
 
         function onInteractiveMoveResizeStarted() {
+            currentlyMovedWindow = client;
             if (client.move) {
                 if (!useMouseCursor) {
                     windowCursor = Qt.point(client.x + client.width / 2, client.y);
@@ -746,7 +747,6 @@ SPECIAL_AUTO_TILER_3`;
                 virtualDesktopIndexAtMoveStart = Workspace.desktops.indexOf(virtualDesktopAtMoveStart);
                 virtualDesktopChangedSinceMoveStart = false;
                 moving = true;
-                currentlyMovedWindow = client;
                 showTiler(true);
                 if (config.tilerVisibility == 1 || config.tilerVisibility == 4) {
                     autoHideTimer.startAutoHideTimer();
@@ -1555,6 +1555,7 @@ SPECIAL_AUTO_TILER_3`;
         sequence: "Ctrl+Alt+A"
         onActivated: {
             log('Toggle Auto Tile For Active Window triggered!');
+            autoTiler.printAutoTileId();
             if (autoTiler.isValidAutoTileWindow(Workspace.activeWindow, true)) {
                 autoTiler.toggleAutoTile(Workspace.activeWindow);
             }

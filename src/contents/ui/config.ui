@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1250</width>
-    <height>886</height>
+    <width>1378</width>
+    <height>990</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -2386,7 +2386,7 @@
           <item>
            <widget class="QLabel" name="label_74">
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Auto Tiling&lt;/span&gt;: Configure the auto tilier behavior. &lt;span style=&quot; color:#ffaa00;&quot;&gt;TIP&lt;/span&gt; You can use the &lt;a href=&quot;https://rxweb.epizy.com/mousetiler/editor.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5294e2;&quot;&gt;graphical web editor&lt;/span&gt;&lt;/a&gt; to edit layouts - but need to manually add prefixes (such as the 0: or *: )&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Auto Tiling&lt;/span&gt;: Configure the auto tilier behavior. &lt;span style=&quot; color:#ffaa00;&quot;&gt;TIP&lt;/span&gt; You can use the &lt;a href=&quot;https://rxweb.epizy.com/mousetiler/editor.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5294e2;&quot;&gt;graphical web editor&lt;/span&gt;&lt;/a&gt; to edit layouts - but need to manually add prefixes (such as 0:, 1:, 2:, -1 or *: )&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="openExternalLinks">
              <bool>true</bool>
@@ -2396,7 +2396,7 @@
           <item>
            <widget class="QLabel" name="label_91">
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;WARNING&lt;/span&gt; Enable &amp;quot;Auto tile newly opened windows&amp;quot; at own risk especially if you got a lot of windows open. It is preferrable to manually auto tile each app/window and save/restore the auto tile status with Remember Window Positions (v5.3.1 or newer). Please report problematic apps in the #auto-tiler-problematic-apps channel on Discord so I can add them to default blacklist.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;WARNING&lt;/span&gt; Add &amp;quot;Auto tile for id&amp;quot; and enable &amp;quot;Auto tile newly opened windows&amp;quot; at own risk especially if you got a lot of windows open. It is preferrable to manually auto tile each app/window and save/restore the auto tile status with Remember Window Positions (v5.3.1 or newer). Please report problematic apps on Discord so I can add them to default blacklist.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -2406,7 +2406,7 @@
           <item>
            <widget class="QCheckBox" name="kcfg_autoTileNewWindows">
             <property name="text">
-             <string>Auto tile newly opened windows - if not enabled, you can still auto tile using your mouse or keyboard shortcut (Ctrl+Alt+A). SPECIAL_AUTO_TILER_1 is the default tiler</string>
+             <string>Auto tile newly opened windows - if not enabled, and &quot;Auto tile for id&quot; is not set, you can still auto tile using your mouse or keyboard shortcut (Ctrl+Alt+A) (SPECIAL_AUTO_TILER_1 is default)</string>
             </property>
            </widget>
           </item>
@@ -2439,13 +2439,30 @@
           </item>
           <item>
            <layout class="QFormLayout" name="formLayout_9">
-            <item row="0" column="1">
+            <item row="1" column="1">
              <widget class="QLineEdit" name="kcfg_autoTileBlacklist"/>
             </item>
-            <item row="0" column="0">
+            <item row="1" column="0">
              <widget class="QLabel" name="label_90">
               <property name="text">
                <string>Black list - will not auto tile these apps (comma separated)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_103">
+              <property name="text">
+               <string>Auto tile for id (each screen+virtual desktop+activity has an unique id)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="kcfg_autoTileIds">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Will auto tile new windows on the desktop with specified id even if &amp;quot;Auto tile newly opened windows&amp;quot; is not enabled.&lt;/p&gt;&lt;p&gt;Comma separated - click Ctrl+Alt+A to toggle auto tiling for current window and print id to logs. Check logs by running this command in a terminal/konsole:&lt;/p&gt;&lt;p&gt;journalctl -f | grep MouseTiler&lt;/p&gt;&lt;p&gt;And copy the id here. Each screen + virtual desktop + activity have their own unique id (screen name + dektop id + activity id smashed together into a long string).&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Example &lt;/span&gt;(2 ids, one on screen HDMI-A-1 and one on DP-1):&lt;/p&gt;&lt;p&gt;HDMI-A-11a35dac2-5432-4011-c65f-e36d11c00345f436e08c-e9df-438e-3d74-401cb56dd6bb,DP-16c35dac2-7955-4053-a66b-e36d11c00345f436e08c-e9df-438e-3d74-401cb56dd6bb&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="placeholderText">
+               <string>READ TOOLTIP. Comma separated - click Ctrl+Alt+A to toggle auto tiling for current window and print id to journalctl -f | grep MouseTiler</string>
               </property>
              </widget>
             </item>
