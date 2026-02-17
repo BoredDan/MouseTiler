@@ -61,6 +61,7 @@ QtObject {
         if (window.deleted) return false;
         if (window.transient) return false;
         if (window.desktops.length != 1) return false;
+        if (window.activities.length != 1) return false;
         if (configAutoTileBlacklist.includes(window.resourceClass)) return false;
 
         return true;
@@ -69,29 +70,35 @@ QtObject {
     function initAll() {
         logAutoTiler('initAll');
 
+        for (let i = 0; i < Workspace.activities.length; i++) {
+            autoActivities.push(Workspace.activities[i]);
+        }
+
         for (let i = 0; i < Workspace.desktops.length; i++) {
             autoVirtualDesktops.push(Workspace.desktops[i].id);
         }
 
         for (let i = 0; i < Workspace.screens.length; i++) {
             autoScreens.push(Workspace.screens[i].name);
-            // autoWindowMapping[Workspace.screens[i].name] = {};
-            for (let v = 0; v < Workspace.desktops.length; v++) {
-                // autoWindowMapping[Workspace.screens[i].name][Workspace.desktops[v].id] = {
-                let id = Workspace.screens[i].name + Workspace.desktops[v].id;
-                autoWindowMapping[id] = {
-                    windows: [],
-                    geometries: [],
-                    layoutIndex: 0,
-                    geometryIndex: -1,
-                    windowCount: 0,
-                    primaryWindowIndex: 0,
-                    isCarousel: false,
-                    autoTilerIndex: -1,
-                    id: id,
-                    screenName: Workspace.screens[i].name,
-                    desktopId: Workspace.desktops[v].id
-                };
+
+            for (let a = 0; a < Workspace.activities.length; a++) {
+                for (let v = 0; v < Workspace.desktops.length; v++) {
+                    let id = Workspace.screens[i].name + Workspace.desktops[v].id + Workspace.activities[a];
+                    autoWindowMapping[id] = {
+                        windows: [],
+                        geometries: [],
+                        layoutIndex: 0,
+                        geometryIndex: -1,
+                        windowCount: 0,
+                        primaryWindowIndex: 0,
+                        isCarousel: false,
+                        autoTilerIndex: -1,
+                        id: id,
+                        screenName: Workspace.screens[i].name,
+                        desktopId: Workspace.desktops[v].id,
+                        activity: Workspace.activities[a]
+                    };
+                }
             }
         }
 
@@ -124,20 +131,20 @@ QtObject {
     }
 
     function getMappingForWindow(window) {
-        return autoWindowMapping[window.output.name + window.desktops[0].id];
+        return autoWindowMapping[window.output.name + window.desktops[0].id + window.activities[0]];
     }
 
-    function getMappingByScreenNameAndVirtualDesktopId(screenName, virtualDesktopId) {
-        return autoWindowMapping[screenName + virtualDesktopId];
+    function getMappingByScreenNameDesktopIdAndActivity(screenName, virtualDesktopId, activity) {
+        return autoWindowMapping[screenName + virtualDesktopId + activity];
     }
 
-    function getMappingForCurrentScreenAndDesktop() {
-        return autoWindowMapping[Workspace.activeScreen.name + Workspace.currentDesktop.id];
+    function getMappingForCurrentScreenDesktopAndActivity() {
+        return autoWindowMapping[Workspace.activeScreen.name + Workspace.currentDesktop.id + Workspace.currentActivity];
     }
 
     function updateAutoTilersInPopupTiler() {
         logAutoTiler('updateAutoTilersInPopupTiler 1');
-        let currentScreenMapping = getMappingForCurrentScreenAndDesktop();
+        let currentScreenMapping = getMappingForCurrentScreenDesktopAndActivity();
         let currentScreenAutoTilerIndex = currentScreenMapping.autoTilerIndex;
         let currentScreenLayoutIndex = currentScreenMapping.layoutIndex;
         let nextLayoutIndex = currentScreenMapping.windowCount;
@@ -202,7 +209,7 @@ QtObject {
     }
 
     function shouldShowAutoTileScroll() {
-        let currentMapping = getMappingForCurrentScreenAndDesktop();
+        let currentMapping = getMappingForCurrentScreenDesktopAndActivity();
         if (currentMapping.autoTilerIndex == -1) return {left: false, right: false};
         if (currentMapping.windows.length < 2) return {left: false, right: false};
         if (currentMapping.isCarousel) return {left: true, right: true};
@@ -363,7 +370,7 @@ QtObject {
     }
 
     function modifyPrimaryIndex(offset, forcedMapping = null) {
-        let currentMapping = forcedMapping || getMappingForCurrentScreenAndDesktop();
+        let currentMapping = forcedMapping || getMappingForCurrentScreenDesktopAndActivity();
         if (currentMapping.windowCount > 0) {
             let primaryWindowIndexBefore = currentMapping.primaryWindowIndex;
             currentMapping.primaryWindowIndex += offset;
@@ -456,7 +463,7 @@ QtObject {
 
     function printCurrentInfo() {
         logAutoTiler('##########################################################');
-        let currentMapping = getMappingForCurrentScreenAndDesktop();
+        let currentMapping = getMappingForCurrentScreenDesktopAndActivity();
         logAutoTiler('Tiler: ' + currentMapping.autoTilerIndex + ' windowCount: ' + currentMapping.windowCount + '(' + currentMapping.windows.length + ') isCarousel: ' + currentMapping.isCarousel);
         logAutoTiler('primaryWindowIndex: ' + currentMapping.primaryWindowIndex + ' geometryIndex: ' + currentMapping.geometryIndex + ' geometries #: ' + currentMapping.geometries.length);
         if (Workspace.activeWindow != null) {
@@ -597,6 +604,7 @@ QtObject {
     }
 
     function internalIsFullyOnScreen(window, mapping) {
+        if (window.activities && window.activities[0] != mapping.activity) return false;
         let screenIndex = Workspace.screens.findIndex(screen => screen.name == mapping.screenName);
         let desktopIndex = Workspace.desktops.findIndex(desktop => desktop.id == mapping.desktopId);
 
@@ -609,9 +617,9 @@ QtObject {
 
     function internalInsertNewWindow(window, index, lookUpIndex = false, tiler = -1, forcedMapping = null) {
         if (isValidAutoTileWindow(window)) {
-            let currentMapping = forcedMapping || getMappingForCurrentScreenAndDesktop();
+            let currentMapping = forcedMapping || getMappingForCurrentScreenDesktopAndActivity();
             logAutoTiler('INSERT Window mapping: ' + getMappingForWindow(window).id);
-            logAutoTiler('INSERT Screen mapping: ' + getMappingForCurrentScreenAndDesktop().id);
+            logAutoTiler('INSERT Screen mapping: ' + getMappingForCurrentScreenDesktopAndActivity().id);
             logAutoTiler('INSERT Forced mapping: ' + (forcedMapping ? forcedMapping.id : forcedMapping));
             logAutoTiler('INSERT 1.0 insert index: ' + index + ' tiler: ' + tiler + ' currentMapping.autoTilerIndex: ' + currentMapping.autoTilerIndex + ' lookUpIndex: ' + lookUpIndex);
             if (currentMapping.autoTilerIndex == -1 && index == 0) {
@@ -793,7 +801,7 @@ QtObject {
             internalInsertNewWindow(window, index, true, tiler);
         } else {
             logAutoTiler('windowDropped 2');
-            let currentMapping = getMappingForCurrentScreenAndDesktop();
+            let currentMapping = getMappingForCurrentScreenDesktopAndActivity();
             logAutoTiler('windowDropped 3 ' + currentMapping.id);
             let previousMapping = getMappingById(window.mt_auto);
             logAutoTiler('windowDropped 4 ' + previousMapping.id);
@@ -863,7 +871,7 @@ QtObject {
     }
 
     function changeToPreviousTiler() {
-        let mapping = getMappingForCurrentScreenAndDesktop();
+        let mapping = getMappingForCurrentScreenDesktopAndActivity();
         let nextTiler = mapping.autoTilerIndex - 1;
         if (nextTiler >= 0) {
             changeToTiler(nextTiler, mapping);
@@ -871,7 +879,7 @@ QtObject {
     }
 
     function changeToNextTiler() {
-        let mapping = getMappingForCurrentScreenAndDesktop();
+        let mapping = getMappingForCurrentScreenDesktopAndActivity();
         let nextTiler = mapping.autoTilerIndex + 1;
         if (mapping.autoTilerIndex != -1 && nextTiler < 3) {
             changeToTiler(nextTiler, mapping);
@@ -932,6 +940,7 @@ QtObject {
         window.transientChanged.connect(windowTransientChanged);
         window.outputChanged.connect(windowOutputChanged);
         window.desktopsChanged.connect(windowDesktopsChanged);
+        window.activitiesChanged.connect(windowActivitiesChanged);
 
         delete window.mt_auto;
 
@@ -1017,6 +1026,11 @@ QtObject {
                 internalDisableAutoTiling(window);
             }
         }
+
+        function windowActivitiesChanged() {
+            logAutoTiler('Window activities changed: ' + window.caption);
+            internalDisableAutoTiling(window);
+        }
     }
 
     function windowClosed(window) {
@@ -1032,6 +1046,63 @@ QtObject {
     function windowResized(window) {
         logAutoTiler('Window resized: ' + window.caption);
         internalDisableAutoTiling(window);
+    }
+
+    function activitiesChanged() {
+        let removed = [...autoActivities];
+        let added = [];
+
+        for (let i = 0; i < Workspace.activities.length; i++) {
+            let activity = Workspace.activities[i];
+            if (autoActivities.indexOf(activity) == -1) {
+                added.push(activity);
+            } else {
+                removed.splice(removed.indexOf(activity), 1);
+            }
+        }
+
+        for (let i = 0; i < added.length; i++) {
+            let activity = added[i];
+            autoActivities.push(activity);
+            for (let s = 0; s < autoScreens.length; s++) {
+                for (let v = 0; v < autoVirtualDesktops.length; v++) {
+                    let id = autoScreens[s] + autoVirtualDesktops[v] + activity;
+                    autoWindowMapping[id] = {
+                        windows: [],
+                        geometries: [],
+                        layoutIndex: 0,
+                        geometryIndex: -1,
+                        windowCount: 0,
+                        primaryWindowIndex: 0,
+                        isCarousel: false,
+                        autoTilerIndex: -1,
+                        id: id,
+                        screenName: autoScreens[s],
+                        desktopId: autoVirtualDesktops[v],
+                        activity: activity
+                    };
+                }
+            }
+        }
+
+        for (let i = 0; i < removed.length; i++) {
+            let activity = removed[i];
+            let index = autoActivities.indexOf(activity);
+            if (index != -1) {
+                autoActivities.splice(index, 1);
+                for (let s = 0; s < autoScreens.length; s++) {
+                    for (let v = 0; v < autoVirtualDesktops.length; v++) {
+                        let currentMapping = getMappingByScreenNameDesktopIdAndActivity(autoScreens[s], autoVirtualDesktops[v], activity);
+                        for (let w = 0; w < currentMapping.windows.length; w++) {
+                            delete currentMapping.windows[w].mt_auto;
+                        }
+                        delete autoWindowMapping[autoScreens[s] + autoVirtualDesktops[v] + activity];
+                    }
+                }
+            }
+        }
+
+        log('activitiesChanged added: ' + JSON.stringify(added) + ' removed: ' + JSON.stringify(removed) + ' all: ' + JSON.stringify(autoActivities));
     }
 
     function virtualDesktopsChanged() {
@@ -1051,20 +1122,23 @@ QtObject {
             let desktopId = added[i];
             autoVirtualDesktops.push(desktopId);
             for (let s = 0; s < autoScreens.length; s++) {
-                let id = autoScreens[s] + desktopId;
-                autoWindowMapping[id] = {
-                    windows: [],
-                    geometries: [],
-                    layoutIndex: 0,
-                    geometryIndex: -1,
-                    windowCount: 0,
-                    primaryWindowIndex: 0,
-                    isCarousel: false,
-                    autoTilerIndex: -1,
-                    id: id,
-                    screenName: autoScreens[s],
-                    desktopId: desktopId
-                };
+                for (let a = 0; a < autoActivities.length; a++) {
+                    let id = autoScreens[s] + desktopId + autoActivities[a];
+                    autoWindowMapping[id] = {
+                        windows: [],
+                        geometries: [],
+                        layoutIndex: 0,
+                        geometryIndex: -1,
+                        windowCount: 0,
+                        primaryWindowIndex: 0,
+                        isCarousel: false,
+                        autoTilerIndex: -1,
+                        id: id,
+                        screenName: autoScreens[s],
+                        desktopId: desktopId,
+                        activity: autoActivities[a]
+                    };
+                }
             }
         }
 
@@ -1074,11 +1148,13 @@ QtObject {
             if (index != -1) {
                 autoVirtualDesktops.splice(index, 1);
                 for (let s = 0; s < autoScreens.length; s++) {
-                    let currentMapping = getMappingByScreenNameAndVirtualDesktopId(autoScreens[s], desktopId);
-                    for (let w = 0; w < currentMapping.windows.length; w++) {
-                        delete currentMapping.windows[w].mt_auto;
+                    for (let a = 0; a < autoActivities.length; a++) {
+                        let currentMapping = getMappingByScreenNameDesktopIdAndActivity(autoScreens[s], desktopId, autoActivities[a]);
+                        for (let w = 0; w < currentMapping.windows.length; w++) {
+                            delete currentMapping.windows[w].mt_auto;
+                        }
+                        delete autoWindowMapping[autoScreens[s] + desktopId + autoActivities[a]];
                     }
-                    delete autoWindowMapping[autoScreens[s] + desktopId];
                 }
             }
         }
@@ -1102,21 +1178,24 @@ QtObject {
         for (let i = 0; i < added.length; i++) {
             let screenName = added[i];
             autoScreens.push(screenName);
-            for (let v = 0; v < autoVirtualDesktops.length; v++) {
-                let id = screenName + autoVirtualDesktops[v];
-                autoWindowMapping[id] = {
-                    windows: [],
-                    geometries: [],
-                    layoutIndex: 0,
-                    geometryIndex: -1,
-                    windowCount: 0,
-                    primaryWindowIndex: 0,
-                    isCarousel: false,
-                    autoTilerIndex: -1,
-                    id: id,
-                    screenName: screenName,
-                    desktopId: autoVirtualDesktops[v]
-                };
+            for (let a = 0; a < autoActivities.length; a++) {
+                for (let v = 0; v < autoVirtualDesktops.length; v++) {
+                    let id = screenName + autoVirtualDesktops[v] + autoActivities[a];
+                    autoWindowMapping[id] = {
+                        windows: [],
+                        geometries: [],
+                        layoutIndex: 0,
+                        geometryIndex: -1,
+                        windowCount: 0,
+                        primaryWindowIndex: 0,
+                        isCarousel: false,
+                        autoTilerIndex: -1,
+                        id: id,
+                        screenName: screenName,
+                        desktopId: autoVirtualDesktops[v],
+                        activity: autoActivities[a]
+                    };
+                }
             }
         }
 
@@ -1125,12 +1204,14 @@ QtObject {
             let index = autoScreens.indexOf(screenName);
             if (index != -1) {
                 autoScreens.splice(index, 1);
-                for (let v = 0; v < autoVirtualDesktops.length; v++) {
-                    let currentMapping = getMappingByScreenNameAndVirtualDesktopId(screenName, autoVirtualDesktops[v]);
-                    for (let w = 0; w < currentMapping.windows.length; w++) {
-                        delete currentMapping.windows[w].mt_auto;
+                for (let a = 0; a < autoActivities.length; a++) {
+                    for (let v = 0; v < autoVirtualDesktops.length; v++) {
+                        let currentMapping = getMappingByScreenNameDesktopIdAndActivity(screenName, autoVirtualDesktops[v], autoActivities[a]);
+                        for (let w = 0; w < currentMapping.windows.length; w++) {
+                            delete currentMapping.windows[w].mt_auto;
+                        }
+                        delete autoWindowMapping[screenName + autoVirtualDesktops[v] + autoActivities[a]];
                     }
-                    delete autoWindowMapping[screenName + autoVirtualDesktops[v]];
                 }
             }
         }

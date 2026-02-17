@@ -1325,6 +1325,10 @@ SPECIAL_AUTO_TILER_3`;
             setCurrentVirtualDesktop();
         }
 
+        function onActivitiesChanged(id) {
+            autoTiler.activitiesChanged();
+        }
+
         function onDesktopsChanged() {
             autoTiler.virtualDesktopsChanged();
             updateVirtualDesktops();
