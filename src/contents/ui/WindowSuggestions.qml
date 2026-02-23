@@ -115,7 +115,7 @@ Window {
         cellBottomMargin = Kirigami.Units.iconSizes.large / 4;
         previewHeight = (usableHeight - gridSpacing * (rowCount + 1)) / Math.max(colCount, 2);
         cellHeight = previewHeight - cellBottomMargin - textSize;
-        totalWidth = cellWidth * Math.max(colCount, 1) + gridSpacing * (colCount + 1);
+        totalWidth = cellWidth * Math.max(colCount, 2) + gridSpacing * (colCount + 1);
         totalHeight = previewHeight * rowCount + gridSpacing * (rowCount + 1);
         cellRatio = cellWidth / previewHeight;
         log('Count: ' + count + ' rowCount: ' + rowCount + ' colCount: ' + colCount + ' width: ' + usableWidth + ' height: ' + usableHeight + ' ratio: ' + ratio + ' wanted ratio: ' + wantedRatio + ' cell width: ' + cellWidth + ' cell height: ' + cellHeight);
