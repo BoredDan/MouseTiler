@@ -50,6 +50,8 @@ Window {
     property list<var> popupGridAllLayouts: ([])
     property bool autoTilerEdgeScroll: false
 
+    property list<var> allConnections: ([])
+
     function log(string) {
         if (!debugLogs) return;
         console.warn('MouseTiler: ' + string);
@@ -202,12 +204,14 @@ SPECIAL_AUTO_TILER_3`;
             shortcutInputType: KWin.readConfig("shortcutInputType", "Ctrl+Alt+I"),
             shortcutCenterInTile: KWin.readConfig("shortcutCenterInTile", "Meta+Ctrl+C"),
             shortcutMoveOnDrop: KWin.readConfig("shortcutMoveOnDrop", "Meta+Ctrl+V"),
+            shortcutToggleTilingSuggestions: KWin.readConfig("shortcutToggleTilingSuggestions", "Meta+Ctrl+S"),
             hintChangeMode: KWin.readConfig("hintChangeMode", true),
             hintShowAllSpan: KWin.readConfig("hintShowAllSpan", true),
             hintVisibility: KWin.readConfig("hintVisibility", true),
             hintInputType: KWin.readConfig("hintInputType", true),
             hintCenterInTile: KWin.readConfig("hintCenterInTile", true),
             hintMoveOnDrop: KWin.readConfig("hintMoveOnDrop", true),
+            hintToggleTilingSuggestions: KWin.readConfig("hintToggleTilingSuggestions", true),
             showHintHint: KWin.readConfig("showHintHint", true),
             showPositionHint: KWin.readConfig("showPositionHint", false),
             showPositionHintInPixels: KWin.readConfig("positionHintFormat", 0) == 0,
@@ -230,6 +234,22 @@ SPECIAL_AUTO_TILER_3`;
         autoTiler.loadAutoTilerConfig();
         autoTiler.updateLayoutMapping();
         autoTiler.initAll();
+        windowSuggestions.init();
+
+        setDefaultSuggestionsVisibility();
+    }
+
+    function setDefaultSuggestionsVisibility() {
+        switch (windowSuggestions.suggestionsVisibility) {
+            case 0:
+                break;
+            case 1:
+                settings.showTilingSuggestions = true;
+                break;
+            case 2:
+                settings.showTilingSuggestions = false;
+                break;
+        }
     }
 
     function setDefaultTiler() {
@@ -708,6 +728,8 @@ SPECIAL_AUTO_TILER_3`;
         if (client.popupWindow) return false;
         if (client.deleted) return false;
         if (!config.allowTransient && client.transient) return false;
+        if (!client.resourceClass) return false;
+        if (client.resourceClass.trim().length == 0) return false;
 
         return true;
     }
@@ -723,12 +745,22 @@ SPECIAL_AUTO_TILER_3`;
         client.interactiveMoveResizeStepped.connect(onInteractiveMoveResizeStepped);
         client.interactiveMoveResizeFinished.connect(onInteractiveMoveResizeFinished);
 
-        function onClosed() {
-            autoTiler.windowClosed(client);
+        allConnections.push(disconnectAll);
+
+        function disconnectAll() {
             client.closed.disconnect(onClosed);
             client.interactiveMoveResizeStarted.disconnect(onInteractiveMoveResizeStarted);
             client.interactiveMoveResizeStepped.disconnect(onInteractiveMoveResizeStepped);
             client.interactiveMoveResizeFinished.disconnect(onInteractiveMoveResizeFinished);
+            let indexOf = allConnections.indexOf(disconnectAll);
+            if (indexOf != -1) {
+                allConnections.splice(indexOf, 1);
+            }
+        }
+
+        function onClosed() {
+            autoTiler.windowClosed(client);
+            disconnectAll();
             removeEmptyVirtualDesktops();
         }
 
@@ -738,7 +770,7 @@ SPECIAL_AUTO_TILER_3`;
                 if (!useMouseCursor) {
                     windowCursor = Qt.point(client.x + client.width / 2, client.y);
                 }
-                if ((config.restoreSize || autoTiler.configAutoTileRestoreSize) && client.mt_originalSize) {
+                if ((config.restoreSize || autoTiler.configAutoTileRestoreSize && client.mt_auto) && client.mt_originalSize) {
                     client.frameGeometry = Qt.rect(getCursorPosition().x - client.mt_originalSize.xOffset, client.frameGeometry.y, client.mt_originalSize.width, client.mt_originalSize.height);
                     delete client.mt_originalSize;
                 }
@@ -789,30 +821,35 @@ SPECIAL_AUTO_TILER_3`;
                     var activeVirtualDesktopIndex = currentTiler.getActiveVirtualDesktopIndex();
                     if (activeVirtualDesktopIndex != -1) {
                         let desktop;
-                        autoTiler.virtualDesktopAboutToChange(); // Notify to remove window from current virtual desktop auto-tiler
-                        if (virtualDesktops[activeVirtualDesktopIndex].isAdd) {
-                            Workspace.createDesktop(Workspace.desktops.length, "");
-                            desktop = Workspace.desktops[Workspace.desktops.length - 1];
+                        if (activeVirtualDesktopIndex == virtualDesktopIndexAtMoveStart && config.virtualDesktopDropAction == 0 && client.mt_auto) {
+                            moveHandledByAutoTiler = true;
+                            autoTiler.cancelMove(client);
                         } else {
-                            desktop = virtualDesktops[activeVirtualDesktopIndex].desktop;
-                        }
-                        client.desktops = [virtualDesktops[activeVirtualDesktopIndex].desktop];
-                        switch (config.virtualDesktopDropAction) {
-                            case 0:
-                                client.frameGeometry = Qt.rect(positionAtMoveStart.x, positionAtMoveStart.y, client.width, client.height);
-                                if (moveToVirtualDesktopOnDrop) {
-                                    Workspace.currentDesktop = desktop;
-                                } else {
-                                    Workspace.currentDesktop = virtualDesktopAtMoveStart;
-                                }
-                                break;
-                            case 1:
-                                Workspace.activeWindow = client;
-                                Workspace.slotWindowMaximize();
-                                if (!moveToVirtualDesktopOnDrop) {
-                                    Workspace.currentDesktop = virtualDesktopAtMoveStart;
-                                }
-                                break;
+                            autoTiler.virtualDesktopAboutToChange(); // Notify to remove window from current virtual desktop auto-tiler
+                            if (virtualDesktops[activeVirtualDesktopIndex].isAdd) {
+                                Workspace.createDesktop(Workspace.desktops.length, "");
+                                desktop = Workspace.desktops[Workspace.desktops.length - 1];
+                            } else {
+                                desktop = virtualDesktops[activeVirtualDesktopIndex].desktop;
+                            }
+                            client.desktops = [virtualDesktops[activeVirtualDesktopIndex].desktop];
+                            switch (config.virtualDesktopDropAction) {
+                                case 0:
+                                    client.frameGeometry = Qt.rect(positionAtMoveStart.x, positionAtMoveStart.y, client.width, client.height);
+                                    if (moveToVirtualDesktopOnDrop) {
+                                        Workspace.currentDesktop = desktop;
+                                    } else {
+                                        Workspace.currentDesktop = virtualDesktopAtMoveStart;
+                                    }
+                                    break;
+                                case 1:
+                                    Workspace.activeWindow = client;
+                                    Workspace.slotWindowMaximize();
+                                    if (!moveToVirtualDesktopOnDrop) {
+                                        Workspace.currentDesktop = virtualDesktopAtMoveStart;
+                                    }
+                                    break;
+                            }
                         }
 
                         setCurrentVirtualDesktop();
@@ -884,6 +921,10 @@ SPECIAL_AUTO_TILER_3`;
                                 default:
                                     addMargins(geometry, true, true, true, true);
                                     moveAndResizeWindow(client, geometry);
+                                    if (settings.showTilingSuggestions && geometry.defaultLayouts !== undefined) {
+                                        windowSuggestions.showSuggestions(client, Workspace.activeScreen, Workspace.currentDesktop, Workspace.currentActivity, geometry.defaultLayouts, geometry.layoutIndex, geometry.tileIndex);
+                                    }
+                                    setDefaultSuggestionsVisibility();
                                     break;
                             }
                             if (virtualDesktopChangedSinceMoveStart && !moveToVirtualDesktopOnTile) {
@@ -1311,7 +1352,7 @@ SPECIAL_AUTO_TILER_3`;
     Settings {
         // Saved in default settings file ~/.config/kde.org/kwin.conf
         id: settings
-        property string mousetiler_config: "{}"
+        property bool showTilingSuggestions: true
     }
 
     Connections {
@@ -1360,6 +1401,17 @@ SPECIAL_AUTO_TILER_3`;
 
     Component.onDestruction: {
         log('Closing...');
+
+        for (let i = allConnections.length - 1; i >= 0; i--) {
+            allConnections[i]();
+        }
+
+        let keys = Object.keys(autoTiler.allConnections);
+        for (let i = keys.length -1; i >= 0; i--) {
+            autoTiler.allConnections[keys[i]]();
+        }
+
+        log('Closed!');
     }
 
     function showMainMenu() {
@@ -1393,9 +1445,9 @@ SPECIAL_AUTO_TILER_3`;
             id: autoTiler
         }
 
-        // WindowSuggestions {
-        //     id: windowSuggestions
-        // }
+        WindowSuggestions {
+            id: windowSuggestions
+        }
     }
 
     Component {
@@ -1579,6 +1631,21 @@ SPECIAL_AUTO_TILER_3`;
         onActivated: {
             log('Change To Next Auto Tiler triggered!');
             autoTiler.changeToNextTiler();
+        }
+    }
+
+    ShortcutHandler {
+        name: "Mouse Tiler: Toggle Tiling Suggestions"
+        text: "Mouse Tiler: Toggle Tiling Suggestions"
+        sequence: "Meta+Ctrl+S"
+        onActivated: {
+            log('Toggle Tiling Suggestions triggered!');
+            settings.showTilingSuggestions = !settings.showTilingSuggestions;
+
+            if (!settings.showTilingSuggestions && windowSuggestions.visible) {
+                windowSuggestions.visible = false;
+                setDefaultSuggestionsVisibility();
+            }
         }
     }
 

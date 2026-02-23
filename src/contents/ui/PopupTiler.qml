@@ -197,7 +197,10 @@ Window {
                     x: clientArea.x + popupDropHintX,
                     y: clientArea.y + popupDropHintY,
                     width: popupDropHintWidth,
-                    height: popupDropHintHeight
+                    height: popupDropHintHeight,
+                    defaultLayouts: !showAll,
+                    layoutIndex: activeLayoutIndex,
+                    tileIndex: activeTileIndex
                 };
             }
         }
@@ -464,6 +467,10 @@ Window {
             }
             if (root.config.hintCenterInTile) {
                 defaultHint += (hasShortcutHint ? " - " : "") + "Center in tile (<b>" + root.config.shortcutCenterInTile + "</b>)";
+                hasShortcutHint = true;
+            }
+            if (root.config.hintToggleTilingSuggestions) {
+                defaultHint += (hasShortcutHint ? " - " : "") + "Toggle suggestions (<b>" + root.config.shortcutToggleTilingSuggestions + "</b>)";
                 hasShortcutHint = true;
             }
 

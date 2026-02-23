@@ -45,6 +45,8 @@ QtObject {
 
     property var activeWindow: Workspace.activeWindow
 
+    property var allConnections: ({})
+
     function logDev(text) {
         root.logDev('AutoTiler - ' + text);
     }
@@ -462,7 +464,7 @@ QtObject {
 
     }
 
-    function internalDisableAutoTiling(window) {
+    function disableAutoTiling(window) {
         logAutoTiler('### Disable 1');
         if (window.mt_auto) {
             let previousWindow = Workspace.activeWindow;
@@ -528,7 +530,7 @@ QtObject {
 
     function virtualDesktopAboutToChange() {
         if (root.currentlyMovedWindow != null && root.currentlyMovedWindow.mt_auto) {
-            internalDisableAutoTiling(root.currentlyMovedWindow);
+            disableAutoTiling(root.currentlyMovedWindow);
         }
     }
 
@@ -843,6 +845,10 @@ QtObject {
         }
     }
 
+    function cancelMove(window) {
+        internalRetileAll(getMappingById(window.mt_auto));
+    }
+
     function windowDropped(window, index, tiler) {
         logAutoTiler('Window auto tiled: ' + window.caption + ' index: ' + index + ' tiler: ' + tiler);
 
@@ -870,7 +876,7 @@ QtObject {
                 internalUpdateGeometries(currentMapping, false);
                 logAutoTiler('windowDropped 4.5 geometryIndex: ' + geometryIndex + ' length: ' + currentMapping.geometries.length);
                 let geometry = JSON.parse(JSON.stringify(currentMapping.geometries[geometryIndex]));
-                internalDisableAutoTiling(window);
+                disableAutoTiling(window);
                 root.addMargins(geometry, true, true, true, true);
                 root.moveAndResizeWindow(window, geometry);
             } else if (currentMapping.id == previousMapping.id) {
@@ -897,7 +903,7 @@ QtObject {
             } else {
                 logAutoTiler('windowDropped 9');
 
-                internalDisableAutoTiling(window);
+                disableAutoTiling(window);
                 internalInsertNewWindow(window, index, true, tiler, currentMapping);
             }
             logAutoTiler('windowDropped 10');
@@ -975,7 +981,7 @@ QtObject {
             //     internalSetActiveWindow(window, currentMapping.autoTilerIndex);
             // }
         } else {
-            internalDisableAutoTiling(window);
+            disableAutoTiling(window);
             if (configAutoTileRestoreSize && window.mt_originalSize) {
                 window.frameGeometry = Qt.rect(window.frameGeometry.x, window.frameGeometry.y, window.mt_originalSize.width, window.mt_originalSize.height);
                 delete window.mt_originalSize;
@@ -995,6 +1001,20 @@ QtObject {
         window.activitiesChanged.connect(windowActivitiesChanged);
 
         delete window.mt_auto;
+
+        allConnections[window.internalId] = disconnectAll;
+
+        function disconnectAll() {
+            window.minimizedChanged.disconnect(windowMinimizedChanged);
+            window.maximizedAboutToChange.disconnect(windowMaximizedAboutToChange);
+            window.maximizedChanged.disconnect(windowMaximizedChanged);
+            window.transientChanged.disconnect(windowTransientChanged);
+            window.outputChanged.disconnect(windowOutputChanged);
+            window.desktopsChanged.disconnect(windowDesktopsChanged);
+            window.activitiesChanged.disconnect(windowActivitiesChanged);
+
+            delete allConnections[window.internalId];
+        }
 
         let now = Date.now();
         if (configMaxAutoTileDelaySessionStart > 0 && (now < sessionStartTime + configMaxAutoTileDelaySessionStart * 1000)) {
@@ -1025,7 +1045,7 @@ QtObject {
                     if (window.mt_auto && configAutoTileMinimizedMaximized) {
                         window.mt_autoRestoreMinMax = true;
                     }
-                    internalDisableAutoTiling(window);
+                    disableAutoTiling(window);
                     delete window.mt_minimized;
                 }
             } else {
@@ -1044,7 +1064,7 @@ QtObject {
                     logAutoTiler('11111111111111111111111111111');
                     window.mt_autoRestoreMinMax = true;
                 }
-                internalDisableAutoTiling(window);
+                disableAutoTiling(window);
             } else if (configAutoTileMinimizedMaximized && window.mt_autoRestoreMinMax) {
                 currentWindowUnMaximized = true;
             }
@@ -1062,14 +1082,14 @@ QtObject {
         function windowTransientChanged() {
             logAutoTiler('Window transient: ' + window.caption + ' ' + window.transient);
             // TODO:
-            internalDisableAutoTiling(window);
+            disableAutoTiling(window);
         }
 
         function windowOutputChanged() {
             logAutoTiler('Window output changed: ' + window.caption + ' currently moved window: ' + (window == root.currentlyMovedWindow));
             if (window != root.currentlyMovedWindow && window.mt_auto) {
                 let originalSize = window.mt_originalSize;
-                internalDisableAutoTiling(window);
+                disableAutoTiling(window);
                 toggleAutoTile(window);
                 if (configAutoTileRestoreSize && originalSize) {
                     window.mt_originalSize = originalSize;
@@ -1081,7 +1101,7 @@ QtObject {
             logAutoTiler('Window desktops changed: ' + window.caption + ' currently moved window: ' + (window == root.currentlyMovedWindow));
             if (window != root.currentlyMovedWindow && window.mt_auto) {
                 let originalSize = window.mt_originalSize;
-                internalDisableAutoTiling(window);
+                disableAutoTiling(window);
                 toggleAutoTile(window);
                 if (configAutoTileRestoreSize && originalSize) {
                     window.mt_originalSize = originalSize;
@@ -1091,23 +1111,26 @@ QtObject {
 
         function windowActivitiesChanged() {
             logAutoTiler('Window activities changed: ' + window.caption);
-            internalDisableAutoTiling(window);
+            disableAutoTiling(window);
         }
     }
 
     function windowClosed(window) {
         logAutoTiler('Window closed: ' + window.caption);
-        internalDisableAutoTiling(window);
+        disableAutoTiling(window);
+        if (allConnections[window.internalId]) {
+            allConnections[window.internalId]();
+        }
     }
 
     function windowMoved(window) {
         logAutoTiler('Window moved: ' + window.caption);
-        internalDisableAutoTiling(window);
+        disableAutoTiling(window);
     }
 
     function windowResized(window) {
         logAutoTiler('Window resized: ' + window.caption);
-        internalDisableAutoTiling(window);
+        disableAutoTiling(window);
     }
 
     function activitiesChanged() {
