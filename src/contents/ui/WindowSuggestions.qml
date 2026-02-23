@@ -196,14 +196,15 @@ Window {
         log('Selected window caption: ' + window.caption);
 
         if (activeIndex != -1 && validWindows.length > 0) {
+            let localWindows = [...validWindows];
             let overlays = JSON.parse(JSON.stringify(windowSuggestions.convertedOverlay)); // Workaround for a strange bug where wrong item is fetched even if activeIndex is correct
             let geometry = overlays.splice(activeIndex, 1)[0];
             windowSuggestions.convertedOverlay = [...overlays];
             geometry.x += clientArea.x;
             geometry.y += clientArea.y;
-            let index = validWindows.indexOf(window);
+            let index = localWindows.indexOf(window);
             if (index != -1) {
-                validWindows.splice(index, 1);
+                localWindows.splice(index, 1);
             }
 
             if (!window.desktops.includes(currentDesktop)) {
@@ -220,10 +221,11 @@ Window {
 
             activeIndex = 0;
 
-            if (validWindows.length == 0 || convertedOverlay.length == 0) {
+            if (localWindows.length == 0 || convertedOverlay.length == 0) {
                 windowSuggestions.visible = false;
                 validWindows = [];
             } else {
+                validWindows = localWindows;
                 updateOffsets();
             }
         }
