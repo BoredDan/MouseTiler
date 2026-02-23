@@ -179,6 +179,7 @@ QtObject {
     }
 
     function reinitialize() {
+        logAutoTiler('reinitialize called...');
         autoWindowMapping = [];
         autoActivities = [];
         autoScreens = [];
@@ -214,9 +215,9 @@ QtObject {
         return mapping;
     }
 
-    function getMappingForCurrentScreenDesktopAndActivity() {
+    function getMappingForCurrentScreenDesktopAndActivity(shouldReinitialize = true) {
         let mapping = autoWindowMapping[Workspace.activeScreen.name + Workspace.currentDesktop.id + Workspace.currentActivity];
-        if (!mapping) {
+        if (!mapping && shouldReinitialize) {
             reinitialize();
             mapping = autoWindowMapping[Workspace.activeScreen.name + Workspace.currentDesktop.id + Workspace.currentActivity];
         }
@@ -545,15 +546,19 @@ QtObject {
 
     function printCurrentInfo() {
         logAutoTiler('##########################################################');
-        let currentMapping = getMappingForCurrentScreenDesktopAndActivity();
-        logAutoTiler('Tiler: ' + currentMapping.autoTilerIndex + ' windowCount: ' + currentMapping.windowCount + '(' + currentMapping.windows.length + ') isCarousel: ' + currentMapping.isCarousel);
-        logAutoTiler('primaryWindowIndex: ' + currentMapping.primaryWindowIndex + ' geometryIndex: ' + currentMapping.geometryIndex + ' geometries #: ' + currentMapping.geometries.length);
-        if (Workspace.activeWindow != null) {
-            logAutoTiler('Current window auto-tiled: ' + Workspace.activeWindow.mt_auto  + ' autoRestore: ' + Workspace.activeWindow.mt_autoRestore);
-            logAutoTiler('Current window id: ' + Workspace.activeWindow.internalId);
-        }
-        for (let i = 0; i < currentMapping.windows.length; i++) {
-            logAutoTiler('Window #' + i + ': ' + currentMapping.windows[i].internalId);
+        let currentMapping = getMappingForCurrentScreenDesktopAndActivity(false);
+        if (currentMapping) {
+            logAutoTiler('Tiler: ' + currentMapping.autoTilerIndex + ' windowCount: ' + currentMapping.windowCount + '(' + currentMapping.windows.length + ') isCarousel: ' + currentMapping.isCarousel);
+            logAutoTiler('primaryWindowIndex: ' + currentMapping.primaryWindowIndex + ' geometryIndex: ' + currentMapping.geometryIndex + ' geometries #: ' + currentMapping.geometries.length);
+            if (Workspace.activeWindow != null) {
+                logAutoTiler('Current window auto-tiled: ' + Workspace.activeWindow.mt_auto  + ' autoRestore: ' + Workspace.activeWindow.mt_autoRestore);
+                logAutoTiler('Current window id: ' + Workspace.activeWindow.internalId);
+            }
+            for (let i = 0; i < currentMapping.windows.length; i++) {
+                logAutoTiler('Window #' + i + ': ' + currentMapping.windows[i].internalId);
+            }
+        } else {
+            logAutoTiler('Invalid mapping... not initialized correctly!');
         }
         logAutoTiler('##########################################################');
     }
