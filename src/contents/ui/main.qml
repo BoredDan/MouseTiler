@@ -1433,20 +1433,20 @@ SPECIAL_AUTO_TILER_3`;
     Item {
         id: main
 
-        PopupTiler {
-            id: popupTiler
-        }
-
-        OverlayTiler {
-            id: overlayTiler
-        }
-
         AutoTiler {
             id: autoTiler
         }
 
         WindowSuggestions {
             id: windowSuggestions
+        }
+
+        PopupTiler {
+            id: popupTiler
+        }
+
+        OverlayTiler {
+            id: overlayTiler
         }
     }
 

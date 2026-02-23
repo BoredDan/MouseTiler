@@ -178,25 +178,55 @@ QtObject {
         }
     }
 
+    function reinitialize() {
+        autoWindowMapping = [];
+        autoActivities = [];
+        autoScreens = [];
+        autoVirtualDesktops = [];
+
+        initAll();
+    }
+
     function getMappingById(id) {
-        return autoWindowMapping[id];
+        let mapping = autoWindowMapping[id];
+        if (!mapping) {
+            reinitialize();
+            mapping = autoWindowMapping[id];
+        }
+        return mapping;
     }
 
     function getMappingForWindow(window) {
-        return autoWindowMapping[window.output.name + window.desktops[0].id + window.activities[0]];
+        let mapping = autoWindowMapping[window.output.name + window.desktops[0].id + window.activities[0]];
+        if (!mapping) {
+            reinitialize();
+            mapping = autoWindowMapping[window.output.name + window.desktops[0].id + window.activities[0]];
+        }
+        return mapping;
     }
 
     function getMappingByScreenNameDesktopIdAndActivity(screenName, virtualDesktopId, activity) {
-        return autoWindowMapping[screenName + virtualDesktopId + activity];
+        let mapping = autoWindowMapping[screenName + virtualDesktopId + activity];
+        if (!mapping) {
+            reinitialize();
+            mapping = autoWindowMapping[screenName + virtualDesktopId + activity];
+        }
+        return mapping;
     }
 
     function getMappingForCurrentScreenDesktopAndActivity() {
-        return autoWindowMapping[Workspace.activeScreen.name + Workspace.currentDesktop.id + Workspace.currentActivity];
+        let mapping = autoWindowMapping[Workspace.activeScreen.name + Workspace.currentDesktop.id + Workspace.currentActivity];
+        if (!mapping) {
+            reinitialize();
+            mapping = autoWindowMapping[Workspace.activeScreen.name + Workspace.currentDesktop.id + Workspace.currentActivity];
+        }
+        return mapping;
     }
 
     function updateAutoTilersInPopupTiler() {
         logAutoTiler('updateAutoTilersInPopupTiler 1');
         let currentScreenMapping = getMappingForCurrentScreenDesktopAndActivity();
+        if (!currentScreenMapping) return;
         let currentScreenAutoTilerIndex = currentScreenMapping.autoTilerIndex;
         let currentScreenLayoutIndex = currentScreenMapping.layoutIndex;
         let nextLayoutIndex = currentScreenMapping.windowCount;
