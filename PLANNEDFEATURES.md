@@ -35,7 +35,7 @@ For each feature - even if it's just a minor 5 line change, I need to do most (i
 - Release it on KDE store
 - Possibly create a demo animation, video, and reddit post
 
-# Current donation amount: $105
+# Current donation amount: $206
 You can donate anywhere, github, buy me a coffee or patreon (see links on the right).
 
 ## How voting works
