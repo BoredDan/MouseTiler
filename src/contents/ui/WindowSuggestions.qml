@@ -121,9 +121,9 @@ Window {
         log('CellWidth before: ' + cellWidth);
         if (suggestionsInsideTile) {
             if (cellWidth < 320) {
-                colCount = Math.floor(convertedOverlay[activeIndex].width / 320);
+                colCount = Math.min(count, Math.floor(convertedOverlay[activeIndex].width / 320));
             } else {
-                colCount = Math.floor(convertedOverlay[activeIndex].width / cellWidth);
+                colCount = Math.min(count, Math.floor(convertedOverlay[activeIndex].width / cellWidth));
             }
             cellWidth = (convertedOverlay[activeIndex].width - gridSpacing * (colCount + 1)) / Math.max(colCount, 2);
         }
