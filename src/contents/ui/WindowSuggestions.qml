@@ -22,10 +22,11 @@ Window {
     property int activeIndex: -1
 
     property int suggestionsVisibility: 0
+    property bool suggestionsInsideTile: true
     property bool excludeOtherScreens: true
     property bool excludeOtherDesktops: true
     property bool excludeOtherActivities: true
-    property bool excludeAutoTiled: false
+    property bool excludeAutoTiled: true
     property bool excludeMinimized: true
 
     property int sortMode: 2
@@ -57,6 +58,7 @@ Window {
 
     function init() {
         suggestionsVisibility = KWin.readConfig("suggestionsVisibility", 0);
+        suggestionsInsideTile = KWin.readConfig("suggestionsMode", 0) == 0;
         excludeOtherScreens = !KWin.readConfig("suggestOtherScreens", false);
         excludeOtherDesktops = !KWin.readConfig("suggestOtherDesktops", false);
         excludeOtherActivities = !KWin.readConfig("suggestOtherActivities", false);
@@ -91,34 +93,52 @@ Window {
         }
 
         validWindows = valid;
+    }
 
-        log('Valid count: ' + valid.length);
+    function updateSizes() {
+        let count = validWindows.length;
 
-        let usableHeight = clientArea.height - 180;
-        let usableWidth = clientArea.width / 2;
+        log('Valid count: ' + count);
+
+        let usableHeight = suggestionsInsideTile ? convertedOverlay[activeIndex].height : clientArea.height - 180;
+        let usableWidth = suggestionsInsideTile ? convertedOverlay[activeIndex].width : clientArea.width / 2;
         let wantedRatio = 16 / 9;
         let ratio = usableWidth / usableHeight;
 
-        if (ratio < wantedRatio) {
-            usableWidth = parseInt(usableWidth);
-            usableHeight = parseInt(usableWidth / wantedRatio);
-        } else {
-            usableHeight = parseInt(usableHeight);
-            usableWidth = parseInt(usableHeight * wantedRatio);
+        if (!suggestionsInsideTile) {
+            if (ratio < wantedRatio) {
+                usableWidth = parseInt(usableWidth);
+                usableHeight = parseInt(usableWidth / wantedRatio);
+            } else {
+                usableHeight = parseInt(usableHeight);
+                usableWidth = parseInt(usableHeight * wantedRatio);
+            }
         }
-
-        let count = valid.length;
 
         colCount = Math.ceil(Math.sqrt(count));
         rowCount = Math.ceil(count / colCount);
         cellWidth = (usableWidth - gridSpacing * (colCount + 1)) / Math.max(colCount, 2);
+        log('CellWidth before: ' + cellWidth);
+        if (suggestionsInsideTile) {
+            if (cellWidth < 320) {
+                colCount = Math.floor(convertedOverlay[activeIndex].width / 320);
+            } else {
+                colCount = Math.floor(convertedOverlay[activeIndex].width / cellWidth);
+            }
+            cellWidth = (convertedOverlay[activeIndex].width - gridSpacing * (colCount + 1)) / Math.max(colCount, 2);
+        }
+        log('ColCount: ' + colCount + ' width: ' + cellWidth + ' gridSpacing: ' + gridSpacing + ' width: ' + convertedOverlay[activeIndex].width + ' usable: ' + usableWidth);
         cellBottomMargin = Kirigami.Units.iconSizes.large / 4;
         previewHeight = (usableHeight - gridSpacing * (rowCount + 1)) / Math.max(colCount, 2);
+        if (suggestionsInsideTile && previewHeight < 200) {
+            rowCount = Math.ceil(count / colCount);
+            previewHeight = 200;
+        }
         cellHeight = previewHeight - cellBottomMargin - textSize;
-        totalWidth = cellWidth * Math.max(colCount, 2) + gridSpacing * (colCount + 1);
-        totalHeight = previewHeight * rowCount + gridSpacing * (rowCount + 1);
+        totalWidth = suggestionsInsideTile ? convertedOverlay[activeIndex].width : cellWidth * Math.max(colCount, 2) + gridSpacing * (colCount + 1);
+        totalHeight = suggestionsInsideTile ? convertedOverlay[activeIndex].height : previewHeight * rowCount + gridSpacing * (rowCount + 1);
         cellRatio = cellWidth / previewHeight;
-        log('Count: ' + count + ' rowCount: ' + rowCount + ' colCount: ' + colCount + ' width: ' + usableWidth + ' height: ' + usableHeight + ' ratio: ' + ratio + ' wanted ratio: ' + wantedRatio + ' cell width: ' + cellWidth + ' cell height: ' + cellHeight);
+        log('Count: ' + count + ' rowCount: ' + rowCount + ' colCount: ' + colCount + ' width: ' + usableWidth + ' height: ' + usableHeight + ' ratio: ' + ratio + ' wanted ratio: ' + wantedRatio + ' cell width: ' + cellWidth + ' cell height: ' + cellHeight + ' totalHeight: ' + totalHeight);
     }
 
     function showSuggestions(window, screen, virtualDesktop, activity, isDefault, layoutIndex, tileIndex) {
@@ -139,6 +159,7 @@ Window {
         updateValid(window);
 
         if (validWindows.length > 0 && convertedOverlay.length > 0) {
+            updateSizes();
             updateOffsets();
             windowSuggestions.visible = true;
         }
@@ -169,19 +190,24 @@ Window {
 
     function updateOffsets() {
         if (activeIndex < convertedOverlay.length) {
-            let overlay = convertedOverlay[activeIndex];
-            let rightSpace = clientArea.width - overlay.x - overlay.width;
-            if (overlay.x < rightSpace) {
-                offsetX = Math.min(clientArea.width - rightSpace + 2, clientArea.width - totalWidth - 2);
+            if (suggestionsInsideTile) {
+                offsetX = convertedOverlay[activeIndex].x;
+                offsetY = convertedOverlay[activeIndex].y;
             } else {
-                offsetX = Math.max(overlay.x - totalWidth - 2, 2);
-            }
+                let overlay = convertedOverlay[activeIndex];
+                let rightSpace = clientArea.width - overlay.x - overlay.width;
+                if (overlay.x < rightSpace) {
+                    offsetX = Math.min(clientArea.width - rightSpace + 2, clientArea.width - totalWidth - 2);
+                } else {
+                    offsetX = Math.max(overlay.x - totalWidth - 2, 2);
+                }
 
-            offsetY = overlay.y - ((totalHeight + 80 - overlay.height) / 2);
-            if (offsetY < 0) {
-                offsetY = 0;
-            } else if (offsetY + totalHeight + 80 > clientArea.height) {
-                offsetY = clientArea.height - totalHeight - 80;
+                offsetY = overlay.y - ((totalHeight + 80 - overlay.height) / 2);
+                if (offsetY < 0) {
+                    offsetY = 0;
+                } else if (offsetY + totalHeight + 80 > clientArea.height) {
+                    offsetY = clientArea.height - totalHeight - 80;
+                }
             }
         }
     }
@@ -189,6 +215,9 @@ Window {
     function selectSuggestion(index, tileIndex) {
         log('Select suggestion: ' + index + ' ' + tileIndex);
         activeIndex = index;
+        if (suggestionsInsideTile) {
+            updateSizes();
+        }
         updateOffsets();
     }
 
@@ -216,6 +245,9 @@ Window {
             if (window.mt_auto) {
                 autoTiler.disableAutoTiling(window);
             }
+            if (window.minimized) {
+                window.minimized = false;
+            }
             root.moveAndResizeWindow(window, geometry);
             Workspace.raiseWindow(window);
 
@@ -226,6 +258,9 @@ Window {
                 validWindows = [];
             } else {
                 validWindows = localWindows;
+                if (suggestionsInsideTile) {
+                    updateSizes();
+                }
                 updateOffsets();
             }
         }
@@ -274,7 +309,7 @@ Window {
                         font.pixelSize: 16
                         font.family: "Noto Sans"
                         horizontalAlignment: Text.AlignHCenter
-                        visible: active
+                        visible: active && !suggestionsInsideTile
                     }
 
                     TapHandler {
@@ -286,7 +321,7 @@ Window {
         }
 
         Item {
-            height: totalHeight + 80
+            height: suggestionsInsideTile ? totalHeight : totalHeight + 80
             width: totalWidth
             anchors.top: parent.top
             // anchors.topMargin: (clientArea.height - height) / 2
@@ -297,24 +332,26 @@ Window {
             Rectangle {
                 id: cellWrapper
                 width: totalWidth
-                height: totalHeight + 80
-                color: "#BB000000"
+                height: suggestionsInsideTile ? totalHeight : totalHeight + 80
+                color: suggestionsInsideTile ? "transparent" : "#BB000000"
                 border.width: 1
-                border.color: "#80FFFFFF"
+                border.color: suggestionsInsideTile ? "transparent" : "#80FFFFFF"
                 radius: 6
 
                 GridView {
                     id: listView
-                    anchors.top: parent.top
-                    anchors.topMargin: 40 + gridSpacing
-                    anchors.left: parent.left
-                    anchors.leftMargin: gridSpacing
                     model: validWindows
                     width: colCount * (windowSuggestions.cellWidth + gridSpacing)
-                    height: rowCount * (previewHeight + gridSpacing)
+                    // height: rowCount * (previewHeight + gridSpacing)
+                    height: suggestionsInsideTile ? Math.min((previewHeight + gridSpacing) * rowCount, totalHeight - 80 - gridSpacing * 2) : totalHeight - 80 - gridSpacing * 2
                     cellWidth: windowSuggestions.cellWidth + gridSpacing
                     cellHeight: previewHeight + gridSpacing
-                    interactive: false
+                    interactive: suggestionsInsideTile ? true : false
+                    clip: suggestionsInsideTile
+                    anchors.top: parent.top
+                    anchors.topMargin: suggestionsInsideTile ? (cellWrapper.height - height) / 2 : 40 + gridSpacing
+                    anchors.left: parent.left
+                    anchors.leftMargin: suggestionsInsideTile ? (cellWrapper.width + gridSpacing - width) / 2 : gridSpacing
 
                     delegate: Rectangle {
                         width: windowSuggestions.cellWidth
@@ -374,19 +411,19 @@ Window {
             }
             Rectangle {
                 anchors.top: parent.top
-                anchors.topMargin: 1
+                anchors.topMargin: suggestionsInsideTile ? 4 : 1
                 anchors.left: parent.left
-                anchors.leftMargin: 1
-                width: totalWidth - 2
+                anchors.leftMargin: suggestionsInsideTile ? 4 : 1
+                width: suggestionsInsideTile ? totalWidth - 8 : totalWidth - 2
                 height: 40;
                 color: "#EE333333"
-                radius: 6
+                radius: suggestionsInsideTile ? 12 : 6
 
                 Text {
                     anchors.centerIn: parent
                     color: "white"
                     textFormat: Text.StyledText
-                    text: "Select a window to place in the highlighted tile"
+                    text: suggestionsInsideTile ? "Select a window to place here" : "Select a window to place in the highlighted tile"
                     font.pixelSize: 16
                     font.family: "Noto Sans"
                     horizontalAlignment: Text.AlignHCenter
@@ -412,13 +449,13 @@ Window {
             }
             Rectangle {
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 1
+                anchors.bottomMargin: suggestionsInsideTile ? 4 : 1
                 anchors.left: parent.left
-                anchors.leftMargin: 1
-                width: totalWidth - 2
+                anchors.leftMargin: suggestionsInsideTile ? 4 : 1
+                width: suggestionsInsideTile ? totalWidth - 8 : totalWidth - 2
                 height: 40;
                 color: "#EE333333"
-                radius: 6
+                radius: suggestionsInsideTile ? 12 : 6
 
                 Text {
                     anchors.centerIn: parent

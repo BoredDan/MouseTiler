@@ -1423,6 +1423,33 @@
               </item>
              </widget>
             </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_108">
+              <property name="text">
+               <string>Show suggestions</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="kcfg_suggestionsMode">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>Inside the tile to place the window in</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>In a separate window next to the tile</string>
+               </property>
+              </item>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
