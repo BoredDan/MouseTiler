@@ -1645,6 +1645,8 @@ SPECIAL_AUTO_TILER_3`;
             if (!settings.showTilingSuggestions && windowSuggestions.visible) {
                 windowSuggestions.visible = false;
                 setDefaultSuggestionsVisibility();
+            } else if (popupTiler.visible) {
+                popupTiler.updateHintContent();
             }
         }
     }

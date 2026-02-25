@@ -470,7 +470,7 @@ Window {
                 hasShortcutHint = true;
             }
             if (root.config.hintToggleTilingSuggestions) {
-                defaultHint += (hasShortcutHint ? " - " : "") + "Toggle suggestions (<b>" + root.config.shortcutToggleTilingSuggestions + "</b>)";
+                defaultHint += (hasShortcutHint ? " - " : "") + "Suggestions: <b>" + (settings.showTilingSuggestions ? "Enabled": "Disabled") + "</b> (<b>" + root.config.shortcutToggleTilingSuggestions + "</b>)";
                 hasShortcutHint = true;
             }
 

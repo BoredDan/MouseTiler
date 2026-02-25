@@ -424,7 +424,7 @@ Window {
                     anchors.centerIn: parent
                     color: "white"
                     textFormat: Text.StyledText
-                    text: "Click a tile to switch to it. Click anywhere else to close suggestions. Toggle (<b>" + config.shortcutToggleTilingSuggestions + "</b>)"
+                    text: "Click a tile to switch to it. Click anywhere else to close suggestions. Disable suggestions (<b>" + config.shortcutToggleTilingSuggestions + "</b>)"
                     font.pixelSize: 16
                     font.family: "Noto Sans"
                     horizontalAlignment: Text.AlignHCenter
