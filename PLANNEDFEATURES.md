@@ -90,7 +90,7 @@ Add shortcuts and possibility to move already tiled windows. Example Ctrl+Meta+N
 ### 10. M - Mouse Tiler: Add a toolbar to the UI (things like Cancel Move, Close, Keep Above, Maximize)
 Add a customizable toolbar that can be placed on left | top | right side of the tiler that gives access to common actions
 
-### 11. M - Mouse Tiler: Enable auto-tiling per screen, virtual desktop, activity
+### 11. DONE (did it for free) - M - Mouse Tiler: Enable auto-tiling per screen, virtual desktop, activity
 Have all windows auto-tile on specific screens/desktop instead for a global on/off switch
 
 ### 12. M - Mouse Tiler: Add support for decimal and fractional values for x, y, width, height and anchor values on the website
@@ -130,6 +130,12 @@ See: https://github.com/rxappdev/RememberWindowPositions/issues/12
 
 ### 21. XL - Remember Window Positions: Current saved window editor (delete currently saved settings for app/window)
 Add an editor (list of currently saved apps and their windows) when pressing Ctrl+Meta+W. Add ability to delete individual window data, app data or whole data for all saved apps.
+
+### 22. DONE (did it for free) - S - Remember Window Positions: Add shortcut to block restoring of applications
+Add a shortcut to block restoring of a single window or multiple windows.
+
+### 23. L - Remember Window Positions: Add support for Firefox and Chrome "Profiles". Automatically save and detect which profile is being restored.
+Chrome and Firefox have recently added support for profiles, some people have started using these features, and if it gets popular, it might be useful to restore correct profile only.
 
 ## Thank you!
 The future of the upcoming features is in your hands. Thanks to everyone who has supported me until now - I really apreciate it. You have kept me motivated to keep going (was planning to stop back in December 2025, but kept going until February 2026 instead).
