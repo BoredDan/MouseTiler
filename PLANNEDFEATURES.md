@@ -137,5 +137,13 @@ Add a shortcut to block restoring of a single window or multiple windows.
 ### 23. L - Remember Window Positions: Add support for Firefox and Chrome "Profiles". Automatically save and detect which profile is being restored.
 Chrome and Firefox have recently added support for profiles, some people have started using these features, and if it gets popular, it might be useful to restore correct profile only.
 
+### 24. L - Mouse Tiler: Maximize/Minimize restore action
+Make it possible to decide where the window goes after being manually maximized or mimimzed and then restored. New windows might be added or removed while the window is minimized/maximized which complicates this a bit.
+Suggested options (with an optional index box for last two):
+- Insert at exact index the window had before (do not scroll to it)
+- Insert at exact index the window had before and scroll to it
+- Insert window before window at index
+- Insert window after window at index
+
 ## Thank you!
 The future of the upcoming features is in your hands. Thanks to everyone who has supported me until now - I really apreciate it. You have kept me motivated to keep going (was planning to stop back in December 2025, but kept going until February 2026 instead).
