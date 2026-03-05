@@ -168,6 +168,7 @@ SPECIAL_AUTO_TILER_3`;
             rememberTiler: KWin.readConfig("rememberTiler", false),
             restoreSize: KWin.readConfig("restoreSize", false),
             allowTransient: KWin.readConfig("allowTransient", false),
+            displayAs: KWin.readConfig("displayAs", 0),
             tilerVisibility: KWin.readConfig("tilerVisibility", 0),
             revealMargin: KWin.readConfig("revealMargin", 200),
             windowVisibility: KWin.readConfig("windowVisibility", 0),

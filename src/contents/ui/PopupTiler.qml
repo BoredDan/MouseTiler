@@ -41,7 +41,8 @@ PlasmaCore.Dialog {
     x: clientArea.x
     y: clientArea.y
     //flags: Qt.Popup | Qt.BypassWindowManagerHint | Qt.FramelessWindowHint
-    flags: Qt.Tool | Qt.BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.WindowDoesNotAcceptFocus
+    // flags: Qt.Tool | Qt.BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.WindowDoesNotAcceptFocus
+    flags: (root.config.displayAs == 0 ? 0 : Qt.Popup) | (Qt.BypassWindowManagerHint | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.WindowDoesNotAcceptFocus)
     // color: "transparent" // Window
     visible: false
     backgroundHints: PlasmaCore.Types.NoBackground // PlasmaCore.Dialog
