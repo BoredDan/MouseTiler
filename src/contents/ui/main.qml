@@ -760,7 +760,37 @@ SPECIAL_AUTO_TILER_3`;
             }
         }
 
+        function doCleanup() {
+            if (currentTiler.visible) {
+                hideTiler();
+                popupTiler.resetVirtualDesktopOverride();
+                if (!config.rememberTiler) {
+                    setDefaultTiler();
+                }
+                if (!config.rememberCenterInTile) {
+                    setDefaultCenterInTile();
+                }
+                setDefaultMoveToVirtualDesktop();
+
+                removeEmptyVirtualDesktops();
+            }
+
+            moving = false;
+            moved = false;
+            resizing = false;
+            resized = false;
+            if (currentlyMovedWindow != null) {
+                if (currentlyMovedWindow.opacity != 1) {
+                    currentlyMovedWindow.opacity = 1;
+                }
+                currentlyMovedWindow = null;
+            }
+        }
+
         function onClosed() {
+            if (currentlyMovedWindow == client) {
+                doCleanup();
+            }
             autoTiler.windowClosed(client);
             disconnectAll();
             removeEmptyVirtualDesktops();
@@ -940,28 +970,10 @@ SPECIAL_AUTO_TILER_3`;
                         autoTiler.windowMoved(client);
                     }
                 }
-                hideTiler();
-                popupTiler.resetVirtualDesktopOverride();
-                if (!config.rememberTiler) {
-                    setDefaultTiler();
-                }
-                if (!config.rememberCenterInTile) {
-                    setDefaultCenterInTile();
-                }
-                setDefaultMoveToVirtualDesktop();
-
-                removeEmptyVirtualDesktops();
             } else if (moved) {
                 autoTiler.windowMoved(client);
             }
-            moving = false;
-            moved = false;
-            resizing = false;
-            resized = false;
-            if (currentlyMovedWindow != null) {
-                currentlyMovedWindow.opacity = 1;
-                currentlyMovedWindow = null;
-            }
+            doCleanup();
         }
     }
 
