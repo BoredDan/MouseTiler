@@ -84,6 +84,24 @@ QtObject {
             }
             return false;
         }
+        if (window.modal) {
+            if (inform) {
+                onScreenDisplay.show('Unable to auto tile window!\nReason: Window is modal');
+            }
+            return false;
+        }
+        if (window.maximizeMode > 0) {
+            if (inform) {
+                onScreenDisplay.show('Unable to auto tile window!\nReason: Window is maximized');
+            }
+            return false;
+        }
+        if (window.fullScreen) {
+            if (inform) {
+                onScreenDisplay.show('Unable to auto tile window!\nReason: Window is fullscreen');
+            }
+            return false;
+        }
         if (window.desktops.length != 1) {
             if (inform) {
                 onScreenDisplay.show('Unable to auto tile window!\nReason: Window is on multiple virtual desktops');
@@ -1033,9 +1051,11 @@ QtObject {
         window.maximizedAboutToChange.connect(windowMaximizedAboutToChange);
         window.maximizedChanged.connect(windowMaximizedChanged);
         window.transientChanged.connect(windowTransientChanged);
+        window.modalChanged.connect(windowModalChanged);
         window.outputChanged.connect(windowOutputChanged);
         window.desktopsChanged.connect(windowDesktopsChanged);
         window.activitiesChanged.connect(windowActivitiesChanged);
+        window.fullScreenChanged.connect(windowFullScreenChanged);
 
         delete window.mt_auto;
 
@@ -1046,9 +1066,11 @@ QtObject {
             window.maximizedAboutToChange.disconnect(windowMaximizedAboutToChange);
             window.maximizedChanged.disconnect(windowMaximizedChanged);
             window.transientChanged.disconnect(windowTransientChanged);
+            window.modalChanged.disconnect(windowModalChanged);
             window.outputChanged.disconnect(windowOutputChanged);
             window.desktopsChanged.disconnect(windowDesktopsChanged);
             window.activitiesChanged.disconnect(windowActivitiesChanged);
+            window.fullScreenChanged.disconnect(windowFullScreenChanged);
 
             delete allConnections[window.internalId];
         }
@@ -1118,8 +1140,16 @@ QtObject {
 
         function windowTransientChanged() {
             logAutoTiler('Window transient: ' + window.caption + ' ' + window.transient);
-            // TODO:
-            disableAutoTiling(window);
+            if (window.transient) {
+                disableAutoTiling(window);
+            }
+        }
+
+        function windowModalChanged() {
+            logAutoTiler('Window modal: ' + window.caption + ' ' + window.modal);
+            if (window.modal) {
+                disableAutoTiling(window);
+            }
         }
 
         function windowOutputChanged() {
@@ -1147,8 +1177,33 @@ QtObject {
         }
 
         function windowActivitiesChanged() {
-            logAutoTiler('Window activities changed: ' + window.caption);
-            disableAutoTiling(window);
+            logAutoTiler('Window activities changed: ' + window.caption + ' ' + JSON.stringify(window.activities));
+
+            if (window.mt_auto) {
+                if (window.activities.length == 1) {
+                    let currentMapping = getMappingById(window.mt_auto);
+                    if (window.activities[0] == currentMapping.activity) {
+                        // Activity not changed...
+                        return;
+                    }
+                }
+                disableAutoTiling(window);
+            }
+        }
+
+        function windowFullScreenChanged() {
+            logAutoTiler('Window fullscreen: ' + window.caption + ' ' + window.fullScreen);
+            if (window.fullScreen) {
+                if (window.mt_auto && configAutoTileMinimizedMaximized) {
+                    window.mt_autoRestoreMinMax = true;
+                }
+                disableAutoTiling(window);
+            } else {
+                if (configAutoTileMinimizedMaximized && window.mt_autoRestoreMinMax) {
+                    toggleAutoTile(window);
+                    delete window.mt_autoRestoreMinMax;
+                }
+            }
         }
     }
 

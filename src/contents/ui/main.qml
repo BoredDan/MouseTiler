@@ -168,6 +168,7 @@ SPECIAL_AUTO_TILER_3`;
             rememberTiler: KWin.readConfig("rememberTiler", false),
             restoreSize: KWin.readConfig("restoreSize", false),
             allowTransient: KWin.readConfig("allowTransient", false),
+            allowModal: KWin.readConfig("allowModal", false),
             displayAs: KWin.readConfig("displayAs", 0),
             tilerVisibility: KWin.readConfig("tilerVisibility", 0),
             revealMargin: KWin.readConfig("revealMargin", 200),
@@ -730,6 +731,7 @@ SPECIAL_AUTO_TILER_3`;
         if (client.popupWindow) return false;
         if (client.deleted) return false;
         if (!config.allowTransient && client.transient) return false;
+        if (!config.allowModal && client.modal) return false;
         if (!client.resourceClass) return false;
         if (client.resourceClass.trim().length == 0) return false;
 

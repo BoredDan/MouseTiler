@@ -131,7 +131,14 @@
           <item>
            <widget class="QCheckBox" name="kcfg_allowTransient">
             <property name="text">
-             <string>Allow tiling of transient windows (certain confirmation dialogs, toolbars, and other temporary sub-windows apps might create).</string>
+             <string>Allow tiling of transient windows (certain confirmation dialogs, toolbars, and other temporary sub-windows apps might create - some are transient, some are modal, some are both, and some are none of the two).</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="kcfg_allowModal">
+            <property name="text">
+             <string>Allow tiling of modal windows (certain confirmation dialogs, toolbars, and other temporary sub-windows apps might create - some are transient, some are modal, some are both, and some are none of the two).</string>
             </property>
            </widget>
           </item>
@@ -2586,7 +2593,7 @@
           <item>
            <widget class="QLabel" name="label_91">
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;WARNING&lt;/span&gt; Add &amp;quot;Auto tile for id&amp;quot; or enable &amp;quot;Auto tile newly opened windows&amp;quot; at own risk especially if you got a lot of windows open. It is preferrable to manually auto tile each app/window and save/restore the auto tile status with Remember Window Positions (v5.4.1 or newer). Please report problematic apps on Discord so I can add them to default blacklist.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffaa00;&quot;&gt;WARNING&lt;/span&gt; Add &amp;quot;Auto tile for id&amp;quot; or enable &amp;quot;Auto tile newly opened windows&amp;quot; at own risk. It should be safe now since auto-tiling received a lot of fixes and all known bugs have been fixed. But it is preferrable to manually auto tile each app/window and save/restore the auto tile status with Remember Window Positions (v5.4.1 or newer) if you can. Please report problematic apps on Discord so I can add them to default blacklist.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -2610,7 +2617,7 @@
           <item>
            <widget class="QCheckBox" name="kcfg_autoTileMinimizedMaximized">
             <property name="text">
-             <string>Auto tile windows that have been manually minimized or maximized once they return to default state</string>
+             <string>Auto tile windows that have been manually minimized, maximized or set to fullscreen once they return to default state</string>
             </property>
             <property name="checked">
              <bool>true</bool>
