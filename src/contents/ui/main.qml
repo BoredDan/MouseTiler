@@ -806,7 +806,7 @@ SPECIAL_AUTO_TILER_3`;
                     windowCursor = Qt.point(client.x + client.width / 2, client.y);
                 }
                 if ((config.restoreSize || autoTiler.configAutoTileRestoreSize && client.mt_auto) && client.mt_originalSize) {
-                    client.frameGeometry = Qt.rect(getCursorPosition().x - client.mt_originalSize.xOffset, client.frameGeometry.y, client.mt_originalSize.width, client.mt_originalSize.height);
+                    client.frameGeometry = Qt.rect(getCursorPosition().x, client.frameGeometry.y, client.mt_originalSize.width, client.mt_originalSize.height);
                     delete client.mt_originalSize;
                 }
                 positionAtMoveStart = {x: client.x, y: client.y};
@@ -891,8 +891,7 @@ SPECIAL_AUTO_TILER_3`;
                     } else {
                         var geometry = currentTiler.getGeometry();
                         if (geometry != null) {
-                            let xOffset = (getCursorPosition().x - client.x) / client.width;
-                            client.mt_originalSize = {xOffset: xOffset, x: client.x, y: client.y, width: client.width, height: client.height};
+                            client.mt_originalSize = {x: client.x, y: client.y, width: client.width, height: client.height};
 
                             switch (geometry.special) {
                                 case 'SPECIAL_FILL':
@@ -1034,6 +1033,9 @@ SPECIAL_AUTO_TILER_3`;
                 } else {
                     addMargins(geometryFirst, false, true, false, false);
                     addMargins(geometrySecond, true, false, false, false);
+                }
+                if (!window.mt_originalSize) {
+                    window.mt_originalSize = {x: window.x, y: window.y, width: window.width, height: window.height};
                 }
                 moveAndResizeWindow(window, leftOrTop ? geometrySecond : geometryFirst);
             }

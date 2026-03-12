@@ -1003,7 +1003,7 @@ QtObject {
 
     function toggleAutoTile(window, tiler = -1) {
         if (window.mt_auto == undefined) {
-            window.mt_originalSize = {xOffset: 0, x: window.x, y: window.y, width: window.width, height: window.height};
+            window.mt_originalSize = {x: window.x, y: window.y, width: window.width, height: window.height};
             let currentMapping = getMappingForWindow(window);
             let configIndex = tiler != -1 ? tiler : (currentMapping.autoTilerIndex != -1 ? currentMapping.autoTilerIndex : 0);
             let insertIndex = autoLayoutConfigs[configIndex].autoTileIndex;
