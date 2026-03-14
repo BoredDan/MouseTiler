@@ -719,7 +719,7 @@ QtObject {
 
         if (screenIndex != -1 && desktopIndex != -1) {
             let clientArea = Workspace.clientArea(KWin.FullScreenArea, Workspace.screens[screenIndex], Workspace.desktops[desktopIndex]);
-            return (window.frameGeometry.left + 0.01 > clientArea.left && window.frameGeometry.right - 0.01 < clientArea.right && window.frameGeometry.top + 0.01 > clientArea.top && window.frameGeometry.bottom - 0.01 < clientArea.bottom);
+            return (window.frameGeometry.x + 0.01 > clientArea.left && window.frameGeometry.x + window.frameGeometry.width - 0.01 < clientArea.right && window.frameGeometry.y + 0.01 > clientArea.top && window.frameGeometry.y + window.frameGeometry.height - 0.01 < clientArea.bottom);
         }
         return false;
     }

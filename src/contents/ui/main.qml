@@ -1053,7 +1053,8 @@ SPECIAL_AUTO_TILER_3`;
         for (var i = 0; i < windows.length; i++) {
             let window = windows[i];
             if (client.internalId != window.internalId && isValidWindow(window) && !window.minimized && (window.onAllDesktops || window.desktops.includes(Workspace.currentDesktop)) && (window.activities.length == 0 || window.activities.includes(Workspace.currentActivity))) {
-                removeUsedAreas(freeAreas, window.frameGeometry);
+                let area = Qt.rect(window.frameGeometry.x, window.frameGeometry.y, window.frameGeometry.width, window.frameGeometry.height);
+                removeUsedAreas(freeAreas, area);
                 removeOverlappingSmallerAreas(freeAreas);
             }
         }
