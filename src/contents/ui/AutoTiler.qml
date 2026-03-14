@@ -1038,7 +1038,7 @@ QtObject {
         } else {
             disableAutoTiling(window);
             if (configAutoTileRestoreSize && window.mt_originalSize) {
-                window.frameGeometry = Qt.rect(window.frameGeometry.x, window.frameGeometry.y, window.mt_originalSize.width, window.mt_originalSize.height);
+                window.frameGeometry = Qt.rect(window.mt_originalSize.x, window.mt_originalSize.y, window.mt_originalSize.width, window.mt_originalSize.height);
                 delete window.mt_originalSize;
             }
         }

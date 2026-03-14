@@ -80,6 +80,8 @@ PlasmaCore.Dialog {
             let window = Workspace.stackingOrder[i];
             if (window == addedWindow) continue;
             if (!root.isValidWindow(window)) continue;
+            if (window.fullScreen) continue;
+            if (window.maximizeMode > 0) continue;
             if (excludeAutoTiled && window.mt_auto) continue;
             if (excludeMinimized && window.minimized) continue;
             if (excludeOtherScreens && window.output != activeScreen) continue;
@@ -256,6 +258,9 @@ PlasmaCore.Dialog {
                 }
                 if (window.minimized) {
                     window.minimized = false;
+                }
+                if (!window.mt_originalSize) {
+                    window.mt_originalSize = {x: window.x, y: window.y, width: window.width, height: window.height};
                 }
                 root.moveAndResizeWindow(window, geometry);
                 Workspace.raiseWindow(window);

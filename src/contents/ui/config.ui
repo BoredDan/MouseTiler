@@ -2627,7 +2627,7 @@
           <item>
            <widget class="QCheckBox" name="kcfg_autoTileRestoreSize">
             <property name="text">
-             <string>Restore size after a window stops being auto tiled</string>
+             <string>Restore size (and position if possible) when a window stops being auto tiled</string>
             </property>
             <property name="checked">
              <bool>true</bool>
