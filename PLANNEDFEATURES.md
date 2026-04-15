@@ -35,7 +35,7 @@ For each feature - even if it's just a minor 5 line change, I need to do most (i
 - Release it on KDE store
 - Possibly create a demo animation, video, and reddit post
 
-# Current donation amount: $215
+# Current donation amount: -$191 ($299 total)
 You can donate anywhere, github, buy me a coffee or patreon (see links on the right).
 
 ## How voting works
@@ -51,6 +51,10 @@ L = 2 days      - $970
 XL = 3-5 days   - $1900
 XXL = 6-10 days - $3700
 ```
+
+## Current implementation progress
+
+First goal was more or less reached (well $191 short but I already started), and I have started implementing #10 (It was tied for most requested feature at the time I started working on it).
 
 ## Current vote results (click to place your vote)
 
