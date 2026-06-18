@@ -3124,6 +3124,16 @@
                 <string>❌ Multi-monitor friendly - 50% + 50% CAROUSEL</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string>✅ Multi-monitor friendly - 3 COLUMNS</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>✅ Multi-monitor friendly - SPIRAL 6</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item row="2" column="0">
@@ -3325,6 +3335,16 @@
                 <string>❌ Multi-monitor friendly - 50% + 50% CAROUSEL</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string>✅ Multi-monitor friendly - 3 COLUMNS</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>✅ Multi-monitor friendly - SPIRAL 6</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item row="1" column="2">
@@ -3422,6 +3442,16 @@
               <item>
                <property name="text">
                 <string>❌ Multi-monitor friendly - 50% + 50% CAROUSEL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>✅ Multi-monitor friendly - 3 COLUMNS</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>✅ Multi-monitor friendly - SPIRAL 6</string>
                </property>
               </item>
              </widget>
